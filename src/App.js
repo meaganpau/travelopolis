@@ -1,19 +1,33 @@
 import React, { Component } from 'react';
+import Trips from "./components/Trips";
 import axios from 'axios';
 
 class App extends Component {
-  async componentDidMount () {
-    try {
-      const response = await axios.get('/api');
-      console.log(response.data);
-    } catch (error) {
-      console.log(error);
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      trips: ''
+    };
   }
-  render () {
+
+  showTrips = () => {
+    axios.get('/api/trips').then(res => {
+      if (res.data) {
+        this.setState({ trips: res.data });
+      }
+    });
+  };
+
+  componentDidMount () {
+    this.showTrips();
+  }
+
+  render() {
     return (
-      <div>Hello world!</div>
-    )
+      <div>
+        <Trips trips={this.state.trips} />
+      </div>
+    );
   }
 }
 
