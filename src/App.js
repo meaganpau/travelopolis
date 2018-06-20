@@ -1,32 +1,29 @@
 import React, { Component } from 'react';
-import Trips from "./components/Trips";
-import axios from 'axios';
+import ReactDOM from 'react-dom';
+import { 
+    BrowserRouter as Router, 
+    Route, Link } from 'react-router-dom';
+import Trips from "./pages/trips";
+import home from './pages/home';
+import trips from './pages/trips';
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      trips: ''
-    };
-  }
+  // state = {
+  //     userLoggedIn: false
+  // };
 
-  showTrips = () => {
-    axios.get('/api/trips').then(res => {
-      if (res.data) {
-        this.setState({ trips: res.data });
-      }
-    });
-  };
-
-  componentDidMount () {
-    this.showTrips();
-  }
+  // componentDidMount() {
+  //   this.checkUserLogin();
+  // }
 
   render() {
     return (
-      <div>
-        <Trips trips={this.state.trips} />
-      </div>
+      <Router>
+          <div>
+            <Route exact path="/" component={home} />
+            <Route exact path="/trips" component={trips} />
+          </div>
+      </Router>
     );
   }
 }

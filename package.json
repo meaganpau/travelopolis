@@ -8,9 +8,9 @@
     "mongoose": "^5.1.5",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
+    "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.4"
   },
-  "proxy": "http://localhost:9000",
   "scripts": {
     "client": "react-scripts start",
     "build": "react-scripts build",
@@ -19,6 +19,7 @@
     "server": "nodemon lib/server.js --ignore src/",
     "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
   },
+  "proxy": "http://localhost:8080",
   "devDependencies": {
     "concurrently": "^3.5.1",
     "nodemon": "^1.17.5"
