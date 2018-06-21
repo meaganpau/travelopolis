@@ -1,14 +1,11 @@
 import React, { Component } from "react";
-import Trip from "../components/Trip";
-import ReactDOM from 'react-dom';
+import Trip from "../components/trip_link";
 import axios from 'axios';
-import { 
-    BrowserRouter as Router, 
-    Route, Link } from 'react-router-dom';
 
 class Trips extends Component {
     state = {
-        trips: ''
+        trips: '',
+        status: 'Loading trips...'
     };
 
     getTrips = () => {
@@ -16,11 +13,12 @@ class Trips extends Component {
         .then(res => {
           if (res.data) {
             this.setState({ trips: res.data });
+            this.props.handleGet(this.state.trips)
           }
         })
         .catch(e => {
           console.log(e);
-          let results = 'Nope';
+          this.setState({ status: 'Error loading trips.' });
         })
     } 
 
@@ -30,7 +28,10 @@ class Trips extends Component {
                 <ul className="Trips">
                     { Object.keys(this.state.trips).map((trip, i) => (
                         <li key={this.state.trips[i]._id}>
-                            <Link to="/trip">{this.state.trips[i].name}</Link>
+                            <Trip 
+                                name={this.state.trips[i].name} 
+                                slug={this.state.trips[i].slug}
+                            />
                         </li>
                     )) }
                 </ul>
@@ -38,7 +39,7 @@ class Trips extends Component {
             )
         } else {
             return (
-                <div>Nope</div>
+                <div>{this.state.status}</div>
             )
         }
     }
