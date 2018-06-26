@@ -1,7 +1,7 @@
 import React from "react";
 import { Route } from 'react-router-dom';
-import GetJournals from "../components/list_journals";
-import JournalPage from "../pages/journal_page";
+import GetJournals from "../pages/list_journals";
+import JournalSingle from "../routes/journal_single";
 
 const Journals = props => {
   const tripSlug = props.match.params.trip;
@@ -9,7 +9,7 @@ const Journals = props => {
   return (
     <div>
         <Route exact path={`/${tripSlug}`} render={props => <GetJournals slug={tripSlug}/>}/>
-        <Route path={`/${tripSlug}/:journal`} component={JournalPage}/>
+        <Route path={`/${tripSlug}/:journal`} render={props => <JournalSingle trip={tripSlug} {...props} />}/>
     </div>
   )
 }

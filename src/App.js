@@ -2,20 +2,22 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import TripListing from "./routes/trips_listing";
 import Trip from "./routes/journal_listing";
-import JournalPage from "./pages/journal_page";
+import JournalSingle from "./routes/journal_single";
 import LoginPage from './pages/login_page';
+import Admin from './pages/cms/admin';
 
 class App extends Component {
   state = {
-      userLoggedIn: true,
+      user: null,
   };
 
-  login = () => {
-    this.setState({ userLoggedIn: true });
+  login = user => {
+    this.setState({ user: user.data });
+    console.log(this.state.user);
   }
 
   getHomePage = () => {
-    return this.state.userLoggedIn ? <TripListing /> : <LoginPage handleChange={this.login}/>;
+    return this.state.user ? <TripListing /> : <LoginPage handleChange={this.login}/>;
   }
 
   render() {
@@ -23,8 +25,9 @@ class App extends Component {
       <Router>
           <Switch>
             <Route exact path="/" render={props => this.getHomePage()}/>
+            <Route path={'/admin'} render={props => <Admin user={this.state.user} {...props} /> } />      
             <Route path={'/:trip'} component={Trip}/>
-            <Route path={'/:trip/:journal'} component={JournalPage}/>
+            <Route path={'/:trip/:journal'} component={JournalSingle}/>
           </Switch>  
       </Router>
     );
