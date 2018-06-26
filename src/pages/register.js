@@ -8,7 +8,7 @@ const LoginPage = props => {
         axios.get('/api/users')
         .then(res => {
           if (res.status === 200) {
-            props.handleChange(res.data);
+            // props.handleChange(res);
           }
         })
         .catch(e => {
@@ -18,10 +18,10 @@ const LoginPage = props => {
 
     return(
         <div>
-            <h1>Login</h1>
-            <button onClick={userLogin}>Login</button>
-            <li><Link to={'/'}>Home</Link></li>
-            <li><Link to={'/register'}>Register</Link></li>            
+            <h1>Register</h1>
+            <button onClick={userLogin}>Register</button>
+            <li><Link to={'/login'}>Login</Link></li>
+            <li><Link to={'/explore'}>Explore</Link></li>
         </div>
     )
 }

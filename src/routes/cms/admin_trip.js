@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Route } from 'react-router-dom';
-import GetJournals from "../pages/list_journals";
-import JournalSingle from "../routes/journal_single";
+import GetJournals from "../pages/cms/admin_trips";
+import JournalSingle from "../routes/admin_journal_single";
 
 class Journals extends Component {
   state = {

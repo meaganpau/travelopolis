@@ -1,18 +1,22 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 class Trip extends Component {
     state = {
         trips: '',
-        status: 'Loading...'
+        status: 'Loading...',
+        user: null,
+        slug: null
     };  
   
-    getTrips = () => {
-      axios.get('/api/trips')
+    getTrips = userID => {
+      axios.get(`/api/trips/user/${userID}`)
         .then(res => {
-          if (res.data) {
+          if (res.data.length) {
             this.setState({ trips: res.data });
+          } else {
+            this.setState({ status: 'No trips found.' });
           }
         })
         .catch(e => {
@@ -21,8 +25,31 @@ class Trip extends Component {
         })
     } 
 
+    getUser = userSlug => {
+      axios.get(`/api/users/slug${userSlug}`)
+        .then(res => {
+            if (res.data) {
+                this.setState({ user: res.data[0] });
+                this.getTrips(this.state.user._id);
+            }
+        })
+        .catch (e => {
+            console.log(e);
+            this.setState({ status: 'Error loading user.' });
+        });
+    }
+
     componentDidMount() {
-      this.getTrips();
+      const location = this.props.location.pathname;
+      if (location !== '/login/' || location !== '/admin/' || location !== '/explore/' || location !== '/register/') {
+          this.setState({ location }, () => {
+              this.getUser(this.state.location)
+          })
+      }
+      this.setState({ 
+        user: this.props.user, 
+        slug: this.props.slug
+      })
     }
 
     render() {
@@ -31,7 +58,7 @@ class Trip extends Component {
           {this.state.trips !== '' ?
               this.state.trips.map(trip => (
                 <li key={trip.slug}>
-                  <Link to={`/${trip.slug}`}>{trip.name}</Link>
+                  <Link to={`/${this.state.user.slug}/${trip.slug}`}>{trip.name}</Link>
                 </li>
               )) 
             : `${this.state.status}`}

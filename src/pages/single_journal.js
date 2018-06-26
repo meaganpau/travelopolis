@@ -15,8 +15,10 @@ class Journal extends Component {
   getJournal = journalSlug => {
     axios.get(`/api/journals/slug/${journalSlug}`)
       .then(res => {
-        if (res.data) {
+        if (res.data.length) {
           this.setState({ journal: res.data[0] });
+        } else {
+          this.setState({ status: 'Nothing found.' });
         }
       })
       .catch (e => {
@@ -41,7 +43,7 @@ class Journal extends Component {
             <h1>{title}</h1>
             <p>{content}</p>
           </article> : null }
-        <Link to={`/${this.props.trip}`}>Back</Link>
+        <Link to={`/${this.props.user}/${this.props.trip}`}>Back</Link>
       </div>
     )
   }
