@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Trips from './admin_trips';
-import { Link } from 'react-router-dom';
+import { Link, Route } from 'react-router-dom';
+import AdminTrip from '../../routes/cms/admin_trips';
 
 class Admin extends Component {
     state = {

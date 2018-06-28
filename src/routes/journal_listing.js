@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Route } from 'react-router-dom';
-import GetJournals from "../pages/list_journals";
+import GetJournals from "../components/list_journals";
 import JournalSingle from "../routes/journal_single";
 
 class Journals extends Component {

@@ -33,20 +33,20 @@ class App extends Component {
       <Router>
           <Switch>
             <Route exact path="/" component={Homepage}/>
-            <Route path="/login" render={() => (
+            <Route exact path="/login" render={() => (
               this.state.user ? (
                 <Redirect to={{pathname: '/admin', state: { user: this.state.user }}} />
               ) : (
                 <LoginPage handleChange={this.login}/>)
             )}/>
-            <Route path={'/explore'} component={Explore} />      
-            <Route path={'/register'} component={Register} />      
-            <Route path={'/admin'} render={props => <Admin user={this.state.user} {...props} /> } />      
-            <Route path={'/admin/add_trip'} render={props => <AdminAddTrip user={this.state.user} {...props} /> } />      
-            <Route path={'/admin/add_journal'} render={props => <AdminAddJournal user={this.state.user} {...props} /> } />      
-            <Route path={'/admin/:trip'} render={props => <AdminTrip user={this.state.user} {...props} /> } /> } />      
-            <Route path={'/admin/:journal'} render={props => <AdminJournal user={this.state.user} {...props} /> } /> } />      
-            <Route path={'/admin/:user'} render={props => <AdminUser user={this.state.user} {...props} /> } /> } />      
+            <Route exact path={'/explore'} component={Explore} />      
+            <Route exact path={'/register'} component={Register} />      
+            <Route exact path={'/admin'} render={props => <Admin user={this.state.user} {...props} /> } />      
+            <Route exact path={'/admin/add_trip'} render={props => <AdminAddTrip user={this.state.user} {...props} /> } />      
+            <Route exact path={'/admin/add_journal'} render={props => <AdminAddJournal user={this.state.user} {...props} /> } />      
+            <Route exact path={'/admin/trip/:trip'} render={props => <AdminTrip user={this.state.user} {...props} /> } /> 
+            <Route exact path={'/admin/journal/:journal'} render={props => <AdminJournal user={this.state.user} {...props} /> } /> } /> 
+            <Route exact path={'/admin/user/:user'} render={props => <AdminUser user={this.state.user} {...props} /> } /> } />      
             <Route path={'/:userSlug'} component={TripListing}/>
             <Route path={'/:userSlug/:trip'} component={Trip}/>
             <Route path={'/:userSlug/:trip/:journal'} component={JournalSingle}/>

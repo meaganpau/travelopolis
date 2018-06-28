@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import Menu from '../components/menu';
 
 const LoginPage = props => {
     const userLogin = () => {
@@ -18,10 +18,9 @@ const LoginPage = props => {
 
     return(
         <div>
+            <Menu />
             <h1>Login</h1>
-            <button onClick={userLogin}>Login</button>
-            <li><Link to={'/'}>Home</Link></li>
-            <li><Link to={'/register'}>Register</Link></li>            
+            <button onClick={userLogin}>Login</button>   
         </div>
     )
 }

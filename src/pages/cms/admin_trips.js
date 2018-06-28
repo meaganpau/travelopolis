@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Route } from 'react-router-dom';
 import axios from 'axios';
 
 class Trips extends Component {
@@ -34,13 +34,13 @@ class Trips extends Component {
             <div>
                 <Link to='/admin/add_trip'>Add Trip</Link>
                 <ul>
-                {this.state.trips !== '' ?
-                    this.state.trips.map(trip => (
-                        <li key={trip.slug}>
-                            <Link to={`/admin/${trip.slug}`}>{trip.name}</Link>
-                            <button onClick={this.editTrip}>Edit</button>
-                        </li>
-                    )) 
+                    {this.state.trips !== '' ?
+                        this.state.trips.map(trip => (
+                            <li key={trip._id}>
+                                <Link to={`/admin/trip/${trip._id}`}>{trip.name}</Link>
+                                <button onClick={this.editTrip}>Edit</button>
+                            </li>
+                        )) 
                     : `${this.state.status}`}
                 </ul>
             </div>

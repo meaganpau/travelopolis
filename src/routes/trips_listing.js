@@ -1,6 +1,6 @@
 import React from "react";
 import { Route } from 'react-router-dom';
-import GetTrips from "../pages/list_trips";
+import GetTrips from "../components/list_trips";
 import JournalListing from "../routes/journal_listing";
 
 const Trips = () => (

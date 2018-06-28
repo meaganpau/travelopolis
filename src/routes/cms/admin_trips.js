@@ -1,33 +1,50 @@
 import React, { Component } from "react";
-import { Route } from 'react-router-dom';
-import GetJournals from "../../pages/cms/admin_trip";
-// import JournalSingle from "../routes/admin_journal_single";
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 class Journals extends Component {
   state = {
-    tripSlug: null,
-    userSlug: null
+    tripID: null,
+    user: null,
+    journals: null,
+    status: null
   }
 
   componentDidMount() {
-    console.log(this.props);
-    // const location = this.props.location.pathname;
-    // const userSlug = location.split("/")[1];
-    // const tripSlug = location.split("/")[2];
-    // this.setState({
-    //   tripSlug,
-    //   userSlug
-    // })
+    const tripID = this.props.match.params.trip;
+    this.setState({
+      tripID
+    }, () => {
+      this.getTripJournals(this.state.tripID)
+    })
+  }
+
+  getTripJournals = tripId => {
+    axios.get(`/api/journals/tripid/${tripId}`)
+      .then(res => {
+        if (res.data.length) {
+          this.setState({ journals: res.data });
+        } else {
+          this.setState({ status: 'No journals found' });
+        }
+      })
+      .catch (e => {
+        console.log(e);
+        this.setState({ status: e });
+      });
   }
   
   render() {
-    const { tripSlug, userSlug } = this.state;
 
     return (
       <div>
-        hello
-        <Route exact path={`/admin/${tripSlug}`} component={GetJournals}/>
-        {/* <Route path={`/admin/${tripSlug}/:journal`} component={props => <JournalSingle trip={tripSlug} userSlug={userSlug} {...props} />}/> */}
+        {this.state.journals ? 
+          this.state.journals.map(journal => (
+            <li key={journal._id}>
+              <Link to={`/admin/journal/${journal._id}`}>{journal.title}</Link>
+            </li>
+          ))   
+        : `${this.state.status}`}
       </div>
     )
   }

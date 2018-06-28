@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Route } from 'react-router-dom';
 import GetJournals from "../pages/cms/admin_trips";
-import JournalSingle from "../routes/admin_journal_single";
+// import JournalSingle from "./admin_journal_single";
 
 class Journals extends Component {
   state = {
@@ -10,6 +10,7 @@ class Journals extends Component {
   }
 
   componentDidMount() {
+    console.log('routes/cms/admin_trips');
     const location = this.props.location.pathname;
     const userSlug = location.split("/")[1];
     const tripSlug = location.split("/")[2];
@@ -24,8 +25,8 @@ class Journals extends Component {
 
     return (
       <div>
-          <Route exact path={`/${userSlug}/${tripSlug}`} component={GetJournals}/>
-          <Route path={`/${userSlug}/${tripSlug}/:journal`} component={props => <JournalSingle trip={tripSlug} userSlug={userSlug} {...props} />}/>
+          <Route exact path={`/admin/trip/:trip`} component={GetJournals}/>
+          {/* <Route path={`/admin/trip/:trip`} component={props => <JournalSingle trip={tripSlug} userSlug={userSlug} {...props} />}/> */}
       </div>
     )
   }
