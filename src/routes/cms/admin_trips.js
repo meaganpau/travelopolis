@@ -38,6 +38,7 @@ class Journals extends Component {
 
     return (
       <div>
+        <Link to='/admin/add_journal'>Add Journal</Link>
         {this.state.journals ? 
           this.state.journals.map(journal => (
             <li key={journal._id}>

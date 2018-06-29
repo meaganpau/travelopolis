@@ -16,7 +16,15 @@ import AdminJournal from './routes/cms/admin_journal';
 
 class App extends Component {
   state = {
-      user: null,
+    // user: null,
+    user: {
+      __v: 0,
+      _id: "5b3128269c8098228a577b0f",
+      email: "meagan.pau@gmail.com",
+      firstName: "Meagan",
+      lastName: "Pau",
+      slug: "user1"
+    }
   };
 
   login = user => {

@@ -14,16 +14,9 @@ class Explore extends Component {
     }
 
     componentDidMount() {
-        // this.getUsers();
-        this.getJournals(30);
+        this.getJournals(10);
     }
 
-    // componentDidUpdate() {
-    //     if (this.state.journals) {
-
-    //     }
-    // }
-    
     getJournals = qty => {
         axios.get(`/api/journals/${qty}`)
             .then(res => {
@@ -43,7 +36,7 @@ class Explore extends Component {
                 <h1>Explore</h1>
                 {journals ? 
                     <ul>
-                        {journals.map(journal => <JournalCard journal={...journal}/>)}
+                        {journals.map(journal => <JournalCard {...journal} key={journal._id} />)}
                     </ul>
                 : null
                 }
