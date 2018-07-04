@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import Menu from '../components/menu';
+import Menu from '../components/Menu';
 
 const LoginPage = props => {
     const userLogin = () => {

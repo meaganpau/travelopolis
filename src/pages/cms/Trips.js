@@ -38,7 +38,6 @@ class Trips extends Component {
                         this.state.trips.map(trip => (
                             <li key={trip._id}>
                                 <Link to={`/admin/trip/${trip._id}`}>{trip.name}</Link>
-                                <button onClick={this.editTrip}>Edit</button>
                             </li>
                         )) 
                     : `${this.state.status}`}

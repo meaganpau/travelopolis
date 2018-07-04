@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { Editor } from '@tinymce/tinymce-react';
 
 class AddTrip extends Component {
     state = {
@@ -95,6 +96,10 @@ class AddTrip extends Component {
         })
     }
 
+    handleEditorChange = content => {
+        this.setState({ content });
+    }
+
     createSelectItems = trips =>
         trips.map( trip => 
             <option key={trip._id} value={trip._id}>
@@ -124,7 +129,14 @@ class AddTrip extends Component {
                         : null }
                         <input onChange={this.handleChange} placeholder="Title" name="title"/>
                         <input onChange={this.handleChange} placeholder="Slug" name="slug"/>
-                        <textarea onChange={this.handleChange} placeholder="Content" name="content"/>
+                        <Editor 
+                            apiKey='l7cj16c6ogw6qliwdw0raotb8c7rn35yf587ad1ertzdc965'
+                            init={{
+                                value: this.state.content,
+                                onEditorChange: this.handleEditorChange, 
+                                id: "journal-content"
+                            }}
+                            />
                         <button onClick={this.handleFormSubmit}>Create Journal</button>
                     </div>
                 }

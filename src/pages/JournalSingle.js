@@ -28,22 +28,27 @@ class Journal extends Component {
   }
 
   componentDidMount() {
-    this.setState({ journalSlug: this.props.journal }, () =>{
+    const { userSlug, match, trip } = this.props;
+    this.setState({ 
+      journalSlug: match.params.journal,
+      userSlug,
+      trip
+    }, () =>{
       this.getJournal(this.state.journalSlug);
     });
   }
 
   render() {
-    const { title, content } = this.state.journal;
-
+    const { journal, userSlug, trip } = this.state;
+    const { title, content } = journal;
     return (
       <div>
-        { this.state.journal ? 
+        { journal ? 
           <article>
             <h1>{title}</h1>
-            <p>{content}</p>
+            <p dangerouslySetInnerHTML={{__html: content}} />
           </article> : null }
-        <Link to={`/${this.props.user}/${this.props.trip}`}>Back</Link>
+        <Link to={`/${userSlug}/${trip}`}>Back</Link>
       </div>
     )
   }

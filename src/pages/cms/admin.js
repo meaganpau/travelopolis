@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Trips from './admin_trips';
+import Trips from './Trips';
 import { Link } from 'react-router-dom';
 
 class Admin extends Component {

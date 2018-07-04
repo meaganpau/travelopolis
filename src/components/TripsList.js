@@ -26,7 +26,7 @@ class Trip extends Component {
     } 
 
     getUser = userSlug => {
-      axios.get(`/api/users/slug${userSlug}`)
+      axios.get(`/api/users/slug/${userSlug}`)
         .then(res => {
             if (res.data) {
                 this.setState({ user: res.data[0] });
@@ -40,10 +40,10 @@ class Trip extends Component {
     }
 
     componentDidMount() {
-      const location = this.props.location.pathname;
-      if (location !== '/login/' || location !== '/admin/' || location !== '/explore/' || location !== '/register/') {
-          this.setState({ location }, () => {
-              this.getUser(this.state.location)
+      const { userSlug } = this.props.match.params;
+      if (userSlug !== '/login/' || userSlug !== '/admin/' || userSlug !== '/explore/' || userSlug !== '/register/') {
+          this.setState({ userSlug }, () => {
+              this.getUser(this.state.userSlug)
           })
       }
       this.setState({ 

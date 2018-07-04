@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Menu from '../components/menu';
-import JournalCard from '../components/journal_card';
+import Menu from '../components/Menu';
+import JournalCard from '../components/JournalCard';
 import axios from 'axios';
 
 // show cards of journals with username and trip name

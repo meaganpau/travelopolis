@@ -1,18 +1,16 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
-import LoginPage from './pages/login_page';
-import Homepage from './pages/home';
-import Explore from './pages/explore';
-import Register from './pages/register';
-import TripListing from "./routes/trips_listing";
-import Trip from "./routes/journal_listing";
-import JournalSingle from "./routes/journal_single";
-import AdminAddTrip from './pages/cms/add_trip';
-import AdminAddJournal from './pages/cms/add_journal';
-import AdminUser from './pages/cms/admin_user';
-import Admin from './pages/cms/admin';
-import AdminTrip from './routes/cms/admin_trips';
-import AdminJournal from './routes/cms/admin_journal';
+import LoginPage from './pages/LoginPage';
+import Homepage from './pages/Home';
+import Explore from './pages/Explore';
+import Register from './pages/Register';
+import TripListing from "./routes/TripListing";
+import AdminAddTrip from './pages/cms/AddTrip';
+import AdminAddJournal from './pages/cms/AddJournal';
+import AdminUser from './pages/cms/User';
+import Admin from './pages/cms/Admin';
+import AdminTrip from './routes/cms/AdminTrips';
+import AdminJournal from './routes/cms/UpdateJournal';
 
 class App extends Component {
   state = {
@@ -56,8 +54,6 @@ class App extends Component {
             <Route exact path={'/admin/journal/:journal'} render={props => <AdminJournal user={this.state.user} {...props} /> } /> } /> 
             <Route exact path={'/admin/user/:user'} render={props => <AdminUser user={this.state.user} {...props} /> } /> } />      
             <Route path={'/:userSlug'} component={TripListing}/>
-            <Route path={'/:userSlug/:trip'} component={Trip}/>
-            <Route path={'/:userSlug/:trip/:journal'} component={JournalSingle}/>
           </Switch>  
       </Router>
     );

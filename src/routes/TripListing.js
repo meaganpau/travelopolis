@@ -1,7 +1,7 @@
 import React from "react";
 import { Route } from 'react-router-dom';
-import GetTrips from "../components/list_trips";
-import JournalListing from "../routes/journal_listing";
+import GetTrips from "../components/TripsList";
+import JournalListing from "../routes/JournalListing";
 
 const Trips = () => (
     <div>
