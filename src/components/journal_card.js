@@ -32,7 +32,7 @@ class JournalCard extends Component {
                                 <h2>{this.state.title}</h2>
                             </Link>
                             <Link to={this.state.author_url}>
-                            <h3>{this.state.author_name}</h3>
+                                <h3>{this.state.author_name}</h3>
                             </Link>
                         </div>
                     : null }

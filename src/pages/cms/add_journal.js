@@ -1,20 +1,34 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 class AddTrip extends Component {
     state = {
         user: null,
-        title: null,
-        slug: null,
-        content: null,
+        title: '',
+        slug: '',
+        content: '',
         trip: null,
         trips: null,
-        status: null
+        status: '', 
+        newJournal: null,
+        newJournalURL: ''
     }
 
     handleFormSubmit = () => {
-        //fix default select value not working
+        const { trip } = this.state;
+        if (!trip) {
+            this.setState({trip: document.getElementById('select-trip').value }, () => {
+                this.addJournal();
+            })
+        } else {
+            this.addJournal();
+        }
+    }
+    
+    addJournal() {
         const { user, title, slug, content, trip } = this.state;
+
         axios.post('/api/journals', {
             user,
             title,
@@ -23,17 +37,39 @@ class AddTrip extends Component {
             trip
         })
         .then(res => {
-            console.log('then res', res);
-            // do a thing
+            if (res.data.errors || res.data.errmsg) {
+                this.setState({ status: res.data.message });
+            } else {
+                this.setState({
+                    newJournal: res.data, 
+                    status: 'New journal created!'
+                })
+                this.getJournalURL();
+            }
         })
         .catch(e => {
             console.log(e);
+            this.setState({ status: 'Error creating journal.' });
         })
+    }
+    
+    getJournalURL = () => {
+        const { newJournal, user, trip } = this.state;
+        axios.get(`/api/trips/id/${trip}`)
+            .then(res => {
+                this.setState({
+                    newJournalURL: `/${user.slug}/${res.data.slug}/${newJournal.slug}`
+                });
+            })
+            .catch(e => {
+                console.log(e);
+                this.setState({ status: 'An error occurred.' });
+            })
     }
 
     componentDidMount() {
-        this.setState({ user: this.props.user._id }, () => {
-            this.getTrips(this.state.user)
+        this.setState({ user: this.props.user }, () => {
+            this.getTrips(this.state.user._id)
         })
     }
 
@@ -59,30 +95,39 @@ class AddTrip extends Component {
         })
     }
 
-    createSelectItems = trips => 
-        trips.map(
-            trip => 
-                <option key={trip._id} value={trip._id}>
-                    {trip.name}
-                </option>)
+    createSelectItems = trips =>
+        trips.map( trip => 
+            <option key={trip._id} value={trip._id}>
+                {trip.name}
+            </option>
+        )
    
     onDropdownSelected = e => {
         this.setState({ trip: e.target.value })
     }
 
     render() {
-        const { trips } = this.state;
+        const { trips, status, newJournalURL, title } = this.state;
         return(
             <div>
-                {trips ?
-                    <select onChange={this.onDropdownSelected} label="Select Trip">
-                        {this.createSelectItems(trips)}
-                    </select>
-                : null }
-                <input onChange={this.handleChange} placeholder="Title" name="title"/>
-                <input onChange={this.handleChange} placeholder="Slug" name="slug"/>
-                <textarea onChange={this.handleChange} placeholder="Content" name="content"/>
-                <button onClick={this.handleFormSubmit}>Create Journal</button>
+                {status ? 
+                    <div>
+                        <p>{status}</p>
+                        {newJournalURL ? <Link to={`${newJournalURL}`}>View Journal > {title}</Link>: null}
+                    </div>
+                    :
+                    <div>
+                        { trips ?
+                            <select id="select-trip" onChange={this.onDropdownSelected} label="Select Trip">
+                                {this.createSelectItems(trips)}
+                            </select>
+                        : null }
+                        <input onChange={this.handleChange} placeholder="Title" name="title"/>
+                        <input onChange={this.handleChange} placeholder="Slug" name="slug"/>
+                        <textarea onChange={this.handleChange} placeholder="Content" name="content"/>
+                        <button onClick={this.handleFormSubmit}>Create Journal</button>
+                    </div>
+                }
             </div>
         )
     }

@@ -11,18 +11,14 @@ class AddTrip extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props);
-    // this.setState({ journalID })
+    this.setState({ journalID })
   }
 
   addTrip = () => {
     axios.post(`/api/trip/`, {
-        name: 'New Trip test',
-        user: 123456,
-        slug: 'newtrip'
-        // name: this.state.tripName,
-        // user: this.state.user,
-        // slug: this.state.tripSlug
+        name: this.state.tripName,
+        user: this.state.user,
+        slug: this.state.tripSlug
     })
       .then(res => {
           console.log(res);

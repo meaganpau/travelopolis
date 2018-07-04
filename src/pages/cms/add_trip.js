@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 class AddTrip extends Component {
     state = {
         user: null,
-        name: null,
-        slug: null
+        name: '',
+        slug: '',
+        status: '',
+        newTrip: null,
+        newTripURL: ''
     }
 
     handleClick = () => {
@@ -16,8 +20,15 @@ class AddTrip extends Component {
             slug
         })
         .then(res => {
-            console.log('then res', res);
-            //do a thing
+            if (res.data.errors || res.data.errmsg) {
+                this.setState({ status: res.data.message });
+            } else {
+                this.setState({
+                    newTrip: res.data, 
+                    status: 'New journal created!',
+                    newTripURL: `/${user.slug}/${res.data.slug}`
+                })
+            }
         })
         .catch(e => {
             console.log(e);
@@ -25,7 +36,7 @@ class AddTrip extends Component {
     }
 
     componentDidMount() {
-        this.setState({ user: this.props.user._id })
+        this.setState({ user: this.props.user })
     }
 
     handleChange = e => {
@@ -36,11 +47,22 @@ class AddTrip extends Component {
     }
 
     render() {
+        const { name, status, newTripURL } = this.state;
+
         return(
             <div>
-                <input onChange={this.handleChange} placeholder="Trip Name" name="name"/>
-                <input onChange={this.handleChange} placeholder="Trip Slug" name="slug"/>
-                <button onClick={this.handleClick}>Create Trip</button>
+                {status ? 
+                    <div>
+                        <p>{status}</p>
+                        {newTripURL ? <Link to={`${newTripURL}`}>View Trip > {name}</Link>: null}
+                    </div>
+                    :
+                    <div>
+                        <input onChange={this.handleChange} placeholder="Trip Name" name="name"/>
+                        <input onChange={this.handleChange} placeholder="Trip Slug" name="slug"/>
+                        <button onClick={this.handleClick}>Create Trip</button>
+                    </div>
+                }
             </div>
         )
     }

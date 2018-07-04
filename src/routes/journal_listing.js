@@ -10,11 +10,9 @@ class Journals extends Component {
   }
 
   componentDidMount() {
-    const location = this.props.location.pathname;
-    const userSlug = location.split("/")[1];
-    const tripSlug = location.split("/")[2];
+    const { userSlug, trip } = this.props.match.params;
     this.setState({
-      tripSlug,
+      tripSlug: trip,
       userSlug
     })
   }
