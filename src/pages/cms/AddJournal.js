@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { Editor } from '@tinymce/tinymce-react';
+import TinyMCE from '../../components/TinyMCE';
 
 class AddTrip extends Component {
     state = {
@@ -112,7 +112,7 @@ class AddTrip extends Component {
     }
 
     render() {
-        const { trips, status, newJournalURL, title } = this.state;
+        const { trips, status, newJournalURL, title, content } = this.state;
         return(
             <div>
                 {status ? 
@@ -129,15 +129,7 @@ class AddTrip extends Component {
                         : null }
                         <input onChange={this.handleChange} placeholder="Title" name="title"/>
                         <input onChange={this.handleChange} placeholder="Slug" name="slug"/>
-                        <Editor 
-                            apiKey='l7cj16c6ogw6qliwdw0raotb8c7rn35yf587ad1ertzdc965'
-                            init={{
-                                value: this.state.content,
-                                onEditorChange: this.handleEditorChange, 
-                                id: "journal-content"
-                            }}
-                            />
-                        <button onClick={this.handleFormSubmit}>Create Journal</button>
+                        <TinyMCE value={content} onEditorChange={this.handleEditorChange} onFormSubmit={this.handleFormSubmit}/>
                     </div>
                 }
             </div>

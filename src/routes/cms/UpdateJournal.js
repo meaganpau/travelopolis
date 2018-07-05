@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from 'axios';
-import { Editor } from '@tinymce/tinymce-react';
+import TinyMCE from '../../components/TinyMCE';
 
 class Journal extends Component {
   state = {
@@ -8,7 +8,8 @@ class Journal extends Component {
     user: null,
     status: 'Loading...',
     title: '',
-    newJournal: null
+    newJournal: null,
+    slug: ''
   }
 
   componentDidMount() {
@@ -70,7 +71,7 @@ class Journal extends Component {
     }
 
   render() {
-    const { title, content, status, newJournal } = this.state;
+    const { title, content, status, newJournal, slug } = this.state;
     return (
       <div>
         {newJournal ? 
@@ -79,8 +80,8 @@ class Journal extends Component {
         {title ? 
           <div>
             <input onChange={this.handleChange} placeholder="Title" name="title" value={title}/>
-            <Editor value={content} onEditorChange={this.handleEditorChange} id="journal-content"/>
-            <button onClick={this.handleFormSubmit}>Update Journal</button>
+            <input onChange={this.handleChange} placeholder="Slug" name="slug" value={slug}/>
+            <TinyMCE value={content} onEditorChange={this.handleEditorChange} onFormSubmit={this.handleFormSubmit} />
           </div>
         : `${status}`}
       </div>

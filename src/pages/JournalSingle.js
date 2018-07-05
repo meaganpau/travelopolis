@@ -39,15 +39,15 @@ class Journal extends Component {
   }
 
   render() {
-    const { journal, userSlug, trip } = this.state;
+    const { journal, userSlug, trip, status } = this.state;
     const { title, content } = journal;
     return (
       <div>
-        { journal ? 
+        { journal.title ? 
           <article>
             <h1>{title}</h1>
             <p dangerouslySetInnerHTML={{__html: content}} />
-          </article> : null }
+          </article> : <p>{status}</p> }
         <Link to={`/${userSlug}/${trip}`}>Back</Link>
       </div>
     )
