@@ -61,7 +61,8 @@ class Journals extends Component {
     })
   }
   
-  handleFormSubmit = () => {
+  handleFormSubmit = e => {
+    e.preventDefault();
     const { name, slug, tripID } = this.state;
 
     axios.post('/api/trips/id', {
@@ -89,13 +90,13 @@ class Journals extends Component {
     const { journals, name, status, updated, slug } = this.state;
     return (
       <div>
-        <div>
+        <form onSubmit={this.handleFormSubmit}>
           <h3>Name</h3>
           <input onChange={this.handleChange} placeholder="Name" name="name" value={name}/>
           <h3>Slug</h3>
           <input onChange={this.handleChange} placeholder="Slug" name="slug" value={slug}/>
-          <button onClick={this.handleFormSubmit}>Update Trip</button>
-        </div>
+          <input type="submit" value="Update Trip"/>
+        </form>
         {updated ? <p>{status}</p> : null}
         <Link to='/admin/add_journal'>Add Journal</Link>
         {journals ? 

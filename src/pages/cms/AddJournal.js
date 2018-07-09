@@ -16,7 +16,8 @@ class AddTrip extends Component {
         newJournalURL: ''
     }
 
-    handleFormSubmit = () => {
+    handleFormSubmit = e => {
+        e.preventDefault();
         const { trip } = this.state;
         if (!trip) {
             this.setState({trip: document.getElementById('select-trip').value }, () => {
@@ -121,16 +122,17 @@ class AddTrip extends Component {
                         {newJournalURL ? <Link to={`${newJournalURL}`}>View Journal > {title}</Link>: null}
                     </div>
                     :
-                    <div>
+                    <form onSubmit={this.handleFormSubmit}>
                         { trips ?
                             <select id="select-trip" onChange={this.onDropdownSelected} label="Select Trip">
                                 {this.createSelectItems(trips)}
                             </select>
                         : null }
-                        <input onChange={this.handleChange} placeholder="Title" name="title"/>
-                        <input onChange={this.handleChange} placeholder="Slug" name="slug"/>
-                        <TinyMCE value={content} onEditorChange={this.handleEditorChange} onFormSubmit={this.handleFormSubmit}/>
-                    </div>
+                        <input type="text" onChange={this.handleChange} placeholder="Title" name="title"/>
+                        <input type="text" onChange={this.handleChange} placeholder="Slug" name="slug"/>
+                        <TinyMCE value={content} onEditorChange={this.handleEditorChange}/>
+                        <input type="submit" value="Save"/>
+                    </form>
                 }
             </div>
         )

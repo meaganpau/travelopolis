@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import TinyMCE from '../../components/TinyMCE';
 
 class Journal extends Component {
@@ -8,13 +9,16 @@ class Journal extends Component {
     user: null,
     status: 'Loading...',
     title: '',
-    newJournal: null,
+    updatedJournal: null,
     slug: ''
   }
 
   componentDidMount() {
-    const journalID = this.props.match.params.journal;
-    this.setState({ journalID }, () => {
+    const { match, user } = this.props;
+    this.setState({ 
+      journalID: match.params.journal, 
+      user 
+    }, () => {
       this.getJournalContent(this.state.journalID)
     })
   }
@@ -38,7 +42,8 @@ class Journal extends Component {
     this.setState({ content });
   }
   
-  handleFormSubmit = () => {
+  handleFormSubmit = e => {
+    e.preventDefault();
     const { journalID, title, slug, content } = this.state;
 
     axios.post('/api/journals/id', {
@@ -52,7 +57,7 @@ class Journal extends Component {
             this.setState({ status: res.data.message });
         } else {
             this.setState({
-                newJournal: res.data, 
+                updatedJournal: res.data, 
                 status: 'Journal updated!'
             })
         }
@@ -71,18 +76,22 @@ class Journal extends Component {
     }
 
   render() {
-    const { title, content, status, newJournal, slug } = this.state;
+    const { title, content, status, updatedJournal, slug, user, trip } = this.state;
     return (
       <div>
-        {newJournal ? 
-            <p>{status}</p>    
+        {updatedJournal ? 
+          <div>
+            <p>{status}</p>
+            <Link to={`/${user.slug}/${trip.slug}/${slug}`}>Preview {title}</Link>
+          </div>
         : null}
         {title ? 
-          <div>
+          <form onSubmit={this.handleFormSubmit}>
             <input onChange={this.handleChange} placeholder="Title" name="title" value={title}/>
             <input onChange={this.handleChange} placeholder="Slug" name="slug" value={slug}/>
-            <TinyMCE value={content} onEditorChange={this.handleEditorChange} onFormSubmit={this.handleFormSubmit} />
-          </div>
+            <TinyMCE value={content} onEditorChange={this.handleEditorChange} />
+            <input type="submit" value="Save"/>
+          </form>
         : `${status}`}
       </div>
     )

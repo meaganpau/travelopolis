@@ -12,7 +12,8 @@ class AddTrip extends Component {
         newTripURL: ''
     }
 
-    handleClick = () => {
+    handleSubmit = e => {
+        e.preventDefault();
         const { user, name, slug } = this.state;
         axios.post('/api/trips', {
             user,
@@ -57,11 +58,11 @@ class AddTrip extends Component {
                         {newTripURL ? <Link to={`${newTripURL}`}>View Trip > {name}</Link>: null}
                     </div>
                     :
-                    <div>
-                        <input onChange={this.handleChange} placeholder="Trip Name" name="name"/>
-                        <input onChange={this.handleChange} placeholder="Trip Slug" name="slug"/>
-                        <button onClick={this.handleClick}>Create Trip</button>
-                    </div>
+                    <form onSubmit={this.handleSubmit}>
+                        <input type="text" onChange={this.handleChange} placeholder="Trip Name" name="name"/>
+                        <input type="text" onChange={this.handleChange} placeholder="Trip Slug" name="slug"/>
+                        <input type="submit" value="Create Trip"/>                        
+                    </form>
                 }
             </div>
         )

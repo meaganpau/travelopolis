@@ -14,7 +14,8 @@ class AddTrip extends Component {
     this.setState({ journalID })
   }
 
-  addTrip = () => {
+  handleSubmit = e => {
+    e.preventDefault();
     axios.post(`/api/trip/`, {
         name: this.state.tripName,
         user: this.state.user,
@@ -32,11 +33,11 @@ class AddTrip extends Component {
   render() {
 
     return (
-      <div>
+      <form onSubmit={this.handleSubmit}>
         <input onChange={this.handleTripNameChange} />
         <input onChange={this.handleTripSlugChange} />
-        <button onClick={this.addTrip}>Add Trip</button>
-      </div>
+        <input type="submit" value="Add Trip"/>
+      </form>
     )
   }
 }
