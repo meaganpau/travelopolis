@@ -51,8 +51,8 @@ class App extends Component {
             <Route exact path={'/admin/add_trip'} render={props => <AdminAddTrip user={this.state.user} {...props} /> } />      
             <Route exact path={'/admin/add_journal'} render={props => <AdminAddJournal user={this.state.user} {...props} /> } />      
             <Route exact path={'/admin/trip/:trip'} render={props => <AdminTrip user={this.state.user} {...props} /> } /> 
-            <Route exact path={'/admin/journal/:journal'} render={props => <AdminJournal user={this.state.user} {...props} /> } /> } /> 
-            <Route exact path={'/admin/user/:user'} render={props => <AdminUser user={this.state.user} {...props} /> } /> } />      
+            <Route exact path={'/admin/journal/:journal'} render={props => <AdminJournal user={this.state.user} {...props} /> } />
+            <Route exact path={'/admin/user/:user'} render={props => <AdminUser user={this.state.user} {...props} /> } />
             <Route path={'/:userSlug'} component={TripListing}/>
           </Switch>  
       </Router>
