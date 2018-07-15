@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { getToken } from '../../services/tokenServices'
 
 class Trips extends Component {
     state = {
@@ -8,22 +9,30 @@ class Trips extends Component {
         status: 'Loading...'
     };  
 
-    getTrips = userID => {
-        axios.get(`/api/trips/user/${userID}`)
-            .then(res => {
-                if (res.data.length) {
-                    this.setState({ trips: res.data });
-                } else {
-                    this.setState({ status: 'No trips found.' });
+    getTrips = async userID => {
+        const token = getToken();
+
+        try {
+            const res = await axios.get(`/api/trips/user/${userID}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
                 }
             })
-            .catch(e => {
-                console.log(e);
-                this.setState({ status: 'Error loading trips.' });
-            })
+
+            if (res.data.length) {
+                this.setState({ trips: res.data });
+            } else {
+                this.setState({ status: 'No trips found.' });
+            }
+
+        } catch (e) {
+            console.log(e);
+            this.setState({ status: 'Error loading trips.' });
+        }
     }
 
     componentDidMount() {
+
         this.setState({ user: this.props.user}, () => { 
             this.getTrips(this.state.user._id);
         })

@@ -14,7 +14,7 @@ class LoginPage extends Component {
         const { email, password } = this.state;
         try {
             const res = await axios.post('/api/login', { email, password });
-            setToken(res.data.token);
+            setToken('userToken', res.data.token);
             this.props.getCurrentUser();
         } catch (e) {
             console.log(e);
@@ -34,8 +34,8 @@ class LoginPage extends Component {
                 <Menu />
                 <h1>Login</h1>
                 <form onSubmit={this.handleSubmit}>
-                    <input type="email" placeholder="Email" onChange={this.handleChange}/>
-                    <input type="password" placeholder="Password" onChange={this.handleChange}/>
+                    <input type="email" placeholder="Email" name="email" onChange={this.handleChange}/>
+                    <input type="password" placeholder="Password" name="password" onChange={this.handleChange}/>
                     <input type="submit" value="Login" />
                 </form>
             </React.Fragment>

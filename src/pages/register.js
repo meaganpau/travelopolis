@@ -31,7 +31,7 @@ class Register extends Component {
                 lastName,
                 slug
             })
-            setToken(res.data.token);
+            setToken('userToken', res.data.token);
             this.props.setUser(res.data);
         } catch (e) {
             console.log(e);

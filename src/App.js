@@ -4,7 +4,7 @@ import axios from 'axios';
 import LoginPage from './pages/LoginPage';
 import Homepage from './pages/Home';
 import Explore from './pages/Explore';
-import Register from './pages/register';
+import Register from './pages/Register';
 import TripListing from "./routes/TripListing";
 import AdminAddTrip from './pages/cms/AddTrip';
 import AdminAddJournal from './pages/cms/AddJournal';
@@ -44,8 +44,7 @@ class App extends Component {
             Authorization: `Bearer ${token}`
           }
         });
-        const user = res.data;
-        this.setUser(user);
+        this.setUser(res.data.user);
       } catch (e) {
         console.log(e);
       }
@@ -64,8 +63,15 @@ class App extends Component {
                 <LoginPage getCurrentUser={this.getCurrentUser}/>)
             )}/>
             <Route exact path={'/explore'} component={Explore} />      
-            <Route exact path={'/register'} render={() => <Register setUser={this.setUser}/>} />      
-            <Route exact path={'/admin'} render={props => <Admin user={this.state.user} {...props} /> } />      
+            <Route exact path={'/register'} render={() => 
+              this.state.user ? <Redirect to={{pathname: '/admin', state: { user: this.state.user }}} />
+              : <Register setUser={this.setUser}/>} 
+            />     
+            <Route exact path={'/admin'} render={props => 
+              this.state.user ? 
+                <Admin user={this.state.user} setUser={this.setUser} {...props} />
+              : <Redirect to='/login' />
+            } />
             <Route exact path={'/admin/add_trip'} render={props => <AdminAddTrip user={this.state.user} {...props} /> } />      
             <Route exact path={'/admin/add_journal'} render={props => <AdminAddJournal user={this.state.user} {...props} /> } />      
             <Route exact path={'/admin/trip/:trip'} render={props => <AdminTrip user={this.state.user} {...props} /> } /> 

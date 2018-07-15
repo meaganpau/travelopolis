@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Trips from './Trips';
-import { Link } from 'react-router-dom';
+import LogoutButton from '../../components/LogoutButton'
 
 class Admin extends Component {
     state = {
@@ -14,7 +14,14 @@ class Admin extends Component {
     render() {
         return (
             <div>
-                { this.state.user ? <Trips user={this.state.user}/> : <div><p>Please log in</p><Link to={'/login'}>Login</Link></div> }
+                { this.state.user ? 
+                    <React.Fragment>
+                        <h1>Hello {this.state.user.firstName}</h1>
+                        <Trips user={this.state.user}/>
+                    </React.Fragment>
+                    : null
+                }
+                <LogoutButton setUser={this.props.setUser} />
             </div>
         )
     }
