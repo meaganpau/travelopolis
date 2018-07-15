@@ -1,28 +1,46 @@
-import React from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
 import Menu from '../components/Menu';
+import { setToken } from '../services/tokenServices';
 
-const LoginPage = props => {
-    const userLogin = () => {
-        // axios.post('/api/login')
-        axios.get('/api/users')
-        .then(res => {
-          if (res.status === 200) {
-            props.handleChange(res.data);
-          }
-        })
-        .catch(e => {
-          console.log(e);
-        })
+class LoginPage extends Component {
+    state = {
+        email: '',
+        password: ''
+    }
+
+    handleSubmit = async e => {
+        e.preventDefault();
+        const { email, password } = this.state;
+        try {
+            const res = await axios.post('/api/login', { email, password });
+            setToken(res.data.token);
+            this.props.getCurrentUser();
+        } catch (e) {
+            console.log(e);
+        }
     } 
 
-    return(
-        <div>
-            <Menu />
-            <h1>Login</h1>
-            <button onClick={userLogin}>Login</button>   
-        </div>
-    )
+    handleChange = e => {
+        const { name, value } = e.target;
+        this.setState({ 
+            [name]: value
+        })
+    }
+
+    render() {
+        return(
+            <React.Fragment>
+                <Menu />
+                <h1>Login</h1>
+                <form onSubmit={this.handleSubmit}>
+                    <input type="email" placeholder="Email" onChange={this.handleChange}/>
+                    <input type="password" placeholder="Password" onChange={this.handleChange}/>
+                    <input type="submit" value="Login" />
+                </form>
+            </React.Fragment>
+        )
+    }
 }
 
 export default LoginPage;

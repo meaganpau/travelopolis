@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Menu from '../components/Menu';
+import { setToken } from '../services/tokenServices'
 
 class Register extends Component {
     state = {
@@ -18,23 +19,23 @@ class Register extends Component {
         })
     }
 
-    handleSubmit(e) {
+    handleSubmit = async e => {
         e.preventDefault();
-        console.log('click');
-        // const { email, password, firstName, lastName, slug } = this.state;
-        // axios.post('/api/users', {
-        //     email,
-        //     password,
-        //     firstName,
-        //     lastName,
-        //     slug
-        // })
-        //     .then(res => {
-        //         console.log(res);
-        //     })
-        //     .catch(e => {
-        //         console.log(e);
-        //     })
+        const { email, password, firstName, lastName, slug } = this.state;
+
+        try {
+            const res = await axios.post('/api/users', {
+                email,
+                password,
+                firstName,
+                lastName,
+                slug
+            })
+            setToken(res.data.token);
+            this.props.setUser(res.data);
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     render() {
