@@ -6,7 +6,7 @@ import JournalListing from "../routes/JournalListing";
 const Trips = () => (
     <div>
         <Route exact path='/:userSlug' component={GetTrips}/>
-        <Route path='/:userSlug/:trip' render={props => <JournalListing {...props}/>}/>
+        <Route path='/:userSlug/:trip' component={JournalListing}/>
     </div>
 )
 

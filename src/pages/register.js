@@ -9,7 +9,8 @@ class Register extends Component {
         password: '',
         firstName: '',
         lastName: '',
-        slug: ''
+        slug: '',
+        status: ''
     }
 
     handleChange = e => {
@@ -33,24 +34,35 @@ class Register extends Component {
             })
             setToken('userToken', res.data.token);
             this.props.setUser(res.data);
+            this.setState({ 
+                newUser: res.data.email, 
+                status: 'Registered successfully!'
+            });
         } catch (e) {
             console.log(e);
         }
     }
 
     render() {
+        const { status, newUser } = this.state;
         return(
             <div>
                 <Menu />
                 <h1>Register</h1>
-                <form onSubmit={this.handleSubmit}>
-                    <input type="email" onChange={this.handleChange} placeholder="Email" name="email"/>
-                    <input type="text" onChange={this.handleChange} placeholder="First Name" name="firstName"/>
-                    <input type="text" onChange={this.handleChange} placeholder="Last Name" name="lastName"/>
-                    <input type="password" onChange={this.handleChange} placeholder="Password" name="password"/>
-                    <input type="text" onChange={this.handleChange} placeholder="Slug" name="slug"/>
-                    <input type="submit" value="Register"/>
-                </form>
+                { status ? 
+                    <div>
+                        <p>{status}</p>
+                        <p>{newUser}</p>
+                    </div> : 
+                    <form onSubmit={this.handleSubmit}>
+                        <input type="email" onChange={this.handleChange} placeholder="Email" name="email"/>
+                        <input type="text" onChange={this.handleChange} placeholder="First Name" name="firstName"/>
+                        <input type="text" onChange={this.handleChange} placeholder="Last Name" name="lastName"/>
+                        <input type="password" onChange={this.handleChange} placeholder="Password" name="password"/>
+                        <input type="text" onChange={this.handleChange} placeholder="Slug" name="slug"/>
+                        <input type="submit" value="Register"/>
+                    </form>
+                }
             </div>
         )
     }

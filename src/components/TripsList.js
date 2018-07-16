@@ -53,16 +53,23 @@ class Trip extends Component {
     }
 
     render() {
+      const { trips, user, status } = this.state;
       return (
-        <ul>
-          {this.state.trips !== '' ?
-              this.state.trips.map(trip => (
-                <li key={trip.slug}>
-                  <Link to={`/${this.state.user.slug}/${trip.slug}`}>{trip.name}</Link>
-                </li>
-              )) 
-            : `${this.state.status}`}
-        </ul>
+        <div>
+          { user ?
+            <h1>{user.firstName} {user.lastName}'s Trips</h1> 
+            : null
+          }
+          <ul>
+            {trips !== '' ?
+                trips.map(trip => (
+                  <li key={trip.slug}>
+                    <Link to={`/${user.slug}/${trip.slug}`}>{trip.name}</Link>
+                  </li>
+                )) 
+              : `${status}`}
+          </ul>
+        </div>
       )
     }
 };
