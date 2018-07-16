@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { getToken } from "../../services/tokenServices";
 
 class Journals extends Component {
   state = {
@@ -63,12 +64,17 @@ class Journals extends Component {
   
   handleFormSubmit = e => {
     e.preventDefault();
+    const token = getToken('userToken');
     const { name, slug, tripID } = this.state;
 
     axios.post('/api/trips/id', {
         tripID,
         name,
         slug
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     })
     .then(res => {
         if (res.data.errors || res.data.errmsg) {
