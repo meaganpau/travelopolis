@@ -6,25 +6,12 @@ import Homepage from './pages/Home';
 import Explore from './pages/Explore';
 import Register from './pages/Register';
 import TripListing from "./routes/TripListing";
-import AdminAddTrip from './pages/cms/AddTrip';
-import AdminAddJournal from './pages/cms/AddJournal';
-import AdminUser from './pages/cms/User';
-import Admin from './pages/cms/Admin';
-import AdminTrip from './routes/cms/AdminTrips';
-import AdminJournal from './routes/cms/UpdateJournal';
+import AdminRoutes from "./routes/AdminRoutes";
 import { getToken } from './services/tokenServices'
 
 class App extends Component {
   state = {
     user: null,
-    // user: {
-    //   __v: 0,
-    //   _id: "5b3128269c8098228a577b0f",
-    //   email: "meagan.pau@gmail.com",
-    //   firstName: "Meagan",
-    //   lastName: "Pau",
-    //   slug: "user1"
-    // }
   };
 
   setUser = user => {
@@ -67,16 +54,11 @@ class App extends Component {
               this.state.user ? <Redirect to={{pathname: '/admin', state: { user: this.state.user }}} />
               : <Register setUser={this.setUser}/>} 
             />     
-            <Route exact path={'/admin'} render={props => 
+            <Route path={'/admin'} render={props => 
               this.state.user ? 
-                <Admin user={this.state.user} setUser={this.setUser} {...props} />
+                <AdminRoutes user={this.state.user} setUser={this.setUser} {...props}/>
               : <Redirect to='/login' />
             } />
-            <Route exact path={'/admin/add_trip'} render={props => <AdminAddTrip user={this.state.user} {...props} /> } />      
-            <Route exact path={'/admin/add_journal'} render={props => <AdminAddJournal user={this.state.user} {...props} /> } />      
-            <Route exact path={'/admin/trip/:trip'} render={props => <AdminTrip user={this.state.user} {...props} /> } /> 
-            <Route exact path={'/admin/journal/:journal'} render={props => <AdminJournal user={this.state.user} {...props} /> } />
-            <Route exact path={'/admin/user/:user'} render={props => <AdminUser user={this.state.user} {...props} /> } />
             <Route path={'/:userSlug'} component={TripListing}/>
           </Switch>  
       </Router>

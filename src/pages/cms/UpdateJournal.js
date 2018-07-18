@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import TinyMCE from '../../components/TinyMCE';
+import { getToken } from '../../services/tokenServices'
 
 class Journal extends Component {
   state = {
@@ -24,18 +25,25 @@ class Journal extends Component {
   }
 
   getJournalContent = journalID => {
-    axios.get(`/api/journals/id/${journalID}`)
-      .then(res => {
-        if (res.data) {
-          this.setState({ ...res.data });
-        } else {
-          this.setState({ status: 'No data found' });
+    const token = getToken('userToken');
+    if (token) {
+      axios.get(`/api/journals/id/${journalID}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
         }
       })
-      .catch (e => {
-        console.log(e);
-        this.setState({ status: e });
-    });
+        .then(res => {
+          if (res.data) {
+            this.setState({ ...res.data });
+          } else {
+            this.setState({ status: 'No data found' });
+          }
+        })
+        .catch (e => {
+          console.log(e);
+          this.setState({ status: e });
+      });
+    }
   }
 
   handleEditorChange = content => {
@@ -45,27 +53,32 @@ class Journal extends Component {
   handleFormSubmit = e => {
     e.preventDefault();
     const { journalID, title, slug, content } = this.state;
-
-    axios.post('/api/journals/id', {
-        journalID,
-        title,
-        slug,
-        content
-    })
-    .then(res => {
-        if (res.data.errors || res.data.errmsg) {
-            this.setState({ status: res.data.message });
-        } else {
-            this.setState({
-                updatedJournal: res.data, 
-                status: 'Journal updated!'
-            })
+    const token = getToken('userToken');
+    if (token) {
+      axios.post('/api/journals/id', {
+          journalID,
+          title,
+          slug,
+          content
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
         }
-    })
-    .catch(e => {
-        console.log(e);
-        this.setState({ status: 'Error updating journal.' });
-    })
+      })
+      .then(res => {
+          if (res.data.errors || res.data.errmsg) {
+              this.setState({ status: res.data.message });
+          } else {
+              this.setState({
+                  updatedJournal: res.data, 
+                  status: 'Journal updated!'
+              })
+          }
+      })
+      .catch(e => {
+          console.log(e);
+      })
+    }
   }
 
     handleChange = e => {

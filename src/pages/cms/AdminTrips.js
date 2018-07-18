@@ -25,7 +25,13 @@ class Journals extends Component {
   }
 
   getTrip = tripId => {
-    axios.get(`/api/trips/id/${tripId}`)
+    const token = getToken('userToken');
+    if (token) {
+      axios.get(`/api/trips/id/${tripId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
       .then(res => {
         if (res.data) {
           const { name, slug } = res.data;
@@ -36,8 +42,8 @@ class Journals extends Component {
       })
       .catch(e => {
         console.log(e);
-        this.setState({ status: e });
       })
+    }
   }
 
   getTripJournals = tripId => {

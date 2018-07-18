@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import TinyMCE from '../../components/TinyMCE';
+import { getToken } from '../../services/tokenServices'
 
 class AddTrip extends Component {
     state = {
@@ -30,43 +31,56 @@ class AddTrip extends Component {
     
     addJournal() {
         const { user, title, slug, content, trip } = this.state;
-
-        axios.post('/api/journals', {
-            user,
-            title,
-            slug,
-            content,
-            trip
-        })
-        .then(res => {
-            if (res.data.errors || res.data.errmsg) {
-                this.setState({ status: res.data.message });
-            } else {
-                this.setState({
-                    newJournal: res.data, 
-                    status: 'New journal created!'
-                })
-                this.getJournalURL();
-            }
-        })
-        .catch(e => {
-            console.log(e);
-            this.setState({ status: 'Error creating journal.' });
-        })
+        const token = getToken('userToken');
+        if (token) {
+            axios.post('/api/journals', {
+                user,
+                title,
+                slug,
+                content,
+                trip
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            .then(res => {
+                if (res.data.errors || res.data.errmsg) {
+                    this.setState({ status: res.data.message });
+                } else {
+                    this.setState({
+                        newJournal: res.data, 
+                        status: 'New journal created!'
+                    })
+                    this.getJournalURL();
+                }
+            })
+            .catch(e => {
+                console.log(e);
+                this.setState({ status: 'Error creating journal.' });
+            })
+        }
     }
     
     getJournalURL = () => {
         const { newJournal, user, trip } = this.state;
-        axios.get(`/api/trips/id/${trip}`)
-            .then(res => {
-                this.setState({
-                    newJournalURL: `/${user.slug}/${res.data.slug}/${newJournal.slug}`
-                });
+        const token = getToken('userToken');
+        if (token) {
+            axios.get(`/api/trips/id/${trip}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             })
-            .catch(e => {
-                console.log(e);
-                this.setState({ status: 'An error occurred.' });
-            })
+                .then(res => {
+                    this.setState({
+                        newJournalURL: `/${user.slug}/${res.data.slug}/${newJournal.slug}`
+                    });
+                })
+                .catch(e => {
+                    console.log(e);
+                    this.setState({ status: 'An error occurred.' });
+                })
+        }
     }
 
     componentDidMount() {

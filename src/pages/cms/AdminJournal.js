@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from 'axios';
+import { getToken } from '../../services/tokenServices'
 
 class Journal extends Component {
   state = {
@@ -17,18 +18,25 @@ class Journal extends Component {
   }
 
   getJournalContent = journalID => {
-    axios.get(`/api/journals/id/${journalID}`)
-      .then(res => {
-        if (res.data) {
-          this.setState({ journalData: res.data });
-        } else {
-          this.setState({ status: 'No data found' });
+    const token = getToken('userToken');
+    if (token) {
+      axios.get(`/api/journals/id/${journalID}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
         }
       })
-      .catch (e => {
-        console.log(e);
-        this.setState({ status: e });
-    });
+        .then(res => {
+          if (res.data) {
+            this.setState({ journalData: res.data });
+          } else {
+            this.setState({ status: 'No data found' });
+          }
+        })
+        .catch (e => {
+          console.log(e);
+          this.setState({ status: e });
+      });
+    }
   }
   
   render() {
