@@ -22,7 +22,7 @@ class Journals extends Component {
 
     return (
       <div>
-          <Route exact path={`/${userSlug}/${tripSlug}`} component={GetJournals}/>
+          <Route exact path={`/${userSlug}/${tripSlug}`} component={props => <GetJournals userSlug={userSlug} tripSlug={tripSlug} {...props}/>}/>
           <Route path={`/${userSlug}/${tripSlug}/:journal`} component={props => <JournalSingle trip={tripSlug} userSlug={userSlug} {...props} />}/>
       </div>
     )

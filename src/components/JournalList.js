@@ -5,18 +5,19 @@ import axios from 'axios';
 class Journal extends Component {
   state = {
     journals: null,
-    tripSlug: this.props.slug,
-    tripID: null,
+    tripSlug: '',
+    trip: null,
     status: 'Loading...',
-    userSlug: null
+    userSlug: '',
+    user: null
   }
 
   getTripID = tripSlug => {
     axios.get(`/api/trips/slug/${tripSlug}`)
       .then(res => {
         if (res.data.length) {
-          this.setState({ tripID: res.data[0]._id });
-          this.getJournalData(this.state.tripID)
+          this.setState({ trip: res.data[0] });
+          this.getJournalData(this.state.trip._id)
         } else {
           this.setState({ status: 'No trips found' });
         }
@@ -43,28 +44,50 @@ class Journal extends Component {
   }
 
   componentDidMount() {
-    const location = this.props.location.pathname;
-    const userSlug = location.split("/")[1];
-    const tripSlug = location.split("/")[2];
+    const { userSlug, tripSlug } = this.props
     this.setState({
       tripSlug,
       userSlug
     }, () => {
       this.getTripID(this.state.tripSlug);
+      this.getUserData(this.state.userSlug);
     })
   }
 
+  getUserData = userSlug => {
+    axios.get(`/api/users/slug/${userSlug}`)
+      .then(res => {
+        console.log(res);
+          if (res.data) {
+              this.setState({ user: res.data[0] });
+              this.getTrips(this.state.user._id);
+          }
+      })
+      .catch (e => {
+          console.log(e);
+          this.setState({ status: 'Error loading user.' });
+      });
+  }
+
   render() {
+    const { trip, journals, status, user, userSlug } = this.state;
+    console.log(user);
     return (
       <div>
-        {this.state.journals ? 
-          this.state.journals.map(journal => (
+        {trip && user ? 
+          <div>            
+            <h1>{trip.name}</h1>
+            <h2>{user.firstName} {user.lastName}</h2>
+          </div>
+        : null} 
+        {journals ? 
+          journals.map(journal => (
             <li key={journal.slug}>
-              <Link to={`/${this.state.userSlug}/${this.state.tripSlug}/${journal.slug}`}>{journal.title}</Link>
+              <Link to={`/${user.slug}/${trip.slug}/${journal.slug}`}>{journal.title}</Link>
             </li>
           ))   
-        : `${this.state.status}`}
-        <Link to={`/${this.state.userSlug}`}>Back</Link>
+        : `${status}`}
+        <Link to={`/${userSlug}`}>Back</Link>
       </div>
     )
   }
