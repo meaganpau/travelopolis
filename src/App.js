@@ -20,7 +20,6 @@ class App extends Component {
 
   componentDidMount() {
     this.getCurrentUser();
-    console.log(process.env);
   }
 
   getCurrentUser = async () => {
