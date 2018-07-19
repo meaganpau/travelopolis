@@ -4,35 +4,37 @@ import axios from 'axios';
 
 class Journal extends Component {
   state = {
-    journalSlug: null,
+    journalSlug: '',
     journal: {
-      title: null,
-      content: null
+      title: '',
+      content: ''
     },
-    status: 'Loading...'
+    status: 'Loading...',
+    trip: {}
   }
 
-  getJournal = journalSlug => {
-    axios.get(`/api/journals/slug/${journalSlug}`)
-      .then(res => {
-        if (res.data.length) {
-          this.setState({ journal: res.data[0] });
-        } else {
-          this.setState({ status: 'Nothing found.' });
-        }
-      })
-      .catch (e => {
-        console.log(e);
-        this.setState({ status: e });
-      });
+  getJournal = async journalSlug => {
+    try {
+      const res = await axios.get(`/api/journals/slug/${journalSlug}`)
+      if (res.data.length) {
+        this.setState({ 
+          journal: res.data[0], 
+          trip: res.data[0].trip
+        });
+      } else {
+        this.setState({ status: 'Nothing found.' });
+      }
+    } catch (e) {
+      console.log(e);
+      this.setState({ status: e });
+    };
   }
 
   componentDidMount() {
-    const { userSlug, match, trip } = this.props;
+    const { userSlug, match } = this.props;
     this.setState({ 
       journalSlug: match.params.journal,
-      userSlug,
-      trip
+      userSlug
     }, () =>{
       this.getJournal(this.state.journalSlug);
     });
@@ -41,15 +43,25 @@ class Journal extends Component {
   render() {
     const { journal, userSlug, trip, status } = this.state;
     const { title, content } = journal;
-    return (
+    
+    const Breadcrumbs = () => (
       <div>
+        <Link to={`/`}>Home</Link> >&nbsp;
+        <Link to={`/${userSlug}`}>{userSlug}</Link> >&nbsp;
+        <Link to={`/${userSlug}/${trip.slug}`}>{trip.name}</Link>
+      </div>
+    )
+
+    return (
+      <React.Fragment>
+        <Breadcrumbs />
         { journal.title ? 
           <article>
             <h1>{title}</h1>
             <p dangerouslySetInnerHTML={{__html: content}} />
-          </article> : <p>{status}</p> }
-        <Link to={`/${userSlug}/${trip}`}>Back</Link>
-      </div>
+          </article>
+        : <p>{status}</p> }
+      </React.Fragment>
     )
   }
 }

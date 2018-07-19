@@ -6,14 +6,14 @@ import { getToken } from '../../services/tokenServices'
 
 class AddTrip extends Component {
     state = {
-        user: null,
+        user: {},
         title: '',
         slug: '',
         content: '',
-        trip: null,
-        trips: null,
+        trip: {},
+        trips: [],
         status: '', 
-        newJournal: null,
+        newJournal: {},
         newJournalURL: ''
     }
 
@@ -29,22 +29,22 @@ class AddTrip extends Component {
         }
     }
     
-    addJournal() {
+    async addJournal() {
         const { user, title, slug, content, trip } = this.state;
         const token = getToken('userToken');
         if (token) {
-            axios.post('/api/journals', {
-                user,
-                title,
-                slug,
-                content,
-                trip
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
-            .then(res => {
+            try { 
+                const res = await axios.post('/api/journals', {
+                    user,
+                    title,
+                    slug,
+                    content,
+                    trip
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
                 if (res.data.errors || res.data.errmsg) {
                     this.setState({ status: res.data.message });
                 } else {
@@ -54,32 +54,31 @@ class AddTrip extends Component {
                     })
                     this.getJournalURL();
                 }
-            })
-            .catch(e => {
+            
+            } catch (e) {
                 console.log(e);
                 this.setState({ status: 'Error creating journal.' });
-            })
+            }
         }
     }
     
-    getJournalURL = () => {
+    async getJournalURL() {
         const { newJournal, user, trip } = this.state;
         const token = getToken('userToken');
         if (token) {
-            axios.get(`/api/trips/id/${trip}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
-                .then(res => {
-                    this.setState({
-                        newJournalURL: `/${user.slug}/${res.data.slug}/${newJournal.slug}`
-                    });
+            try {
+                const res = await axios.get(`/api/trips/id/${trip}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
                 })
-                .catch(e => {
-                    console.log(e);
-                    this.setState({ status: 'An error occurred.' });
-                })
+                this.setState({
+                    newJournalURL: `/${user.slug}/${res.data.slug}/${newJournal.slug}`
+                });
+            } catch (e) {
+                console.log(e);
+                this.setState({ status: 'An error occurred.' });
+            }
         }
     }
 
@@ -89,19 +88,18 @@ class AddTrip extends Component {
         })
     }
 
-    getTrips = userID => {
-        axios.get(`/api/trips/user/${userID}`)
-          .then(res => {
+    getTrips = async userID => {
+        try {
+            const res = await axios.get(`/api/trips/user/${userID}`)
             if (res.data.length) {
               this.setState({ trips: res.data });
             } else {
               this.setState({ status: 'No trips found.' });
             }
-          })
-          .catch(e => {
+        } catch (e) {
             console.log(e);
             this.setState({ status: 'Error loading trips.' });
-          })
+        }
       } 
 
     handleChange = e => {

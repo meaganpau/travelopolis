@@ -5,28 +5,28 @@ import { getToken } from '../../services/tokenServices'
 
 class AddTrip extends Component {
     state = {
-        user: null,
+        user: {},
         name: '',
         slug: '',
         status: '',
-        newTrip: null,
+        newTrip: {},
         newTripURL: ''
     }
 
-    handleSubmit = e => {
+    handleSubmit = async e => {
         e.preventDefault();
         const token = getToken('userToken');
         const { user, name, slug } = this.state;
-        axios.post('/api/trips', {
-            user,
-            name,
-            slug
-        }, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-        .then(res => {
+        try { 
+            const res = await axios.post('/api/trips', {
+                user,
+                name,
+                slug
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
             if (res.data.errors || res.data.errmsg) {
                 this.setState({ status: res.data.message });
             } else {
@@ -36,10 +36,9 @@ class AddTrip extends Component {
                     newTripURL: `/${user.slug}/${res.data.slug}`
                 })
             }
-        })
-        .catch(e => {
+        } catch(e) {
             console.log(e);
-        })
+        }
     }
 
     componentDidMount() {
@@ -59,11 +58,12 @@ class AddTrip extends Component {
         return(
             <div>
                 {status ? 
-                    <div>
-                        <p>{status}</p>
-                        {newTripURL ? <Link to={`${newTripURL}`}>View Trip > {name}</Link>: null}
+                    <React.Fragment>
                         <Link to='/admin/add_journal'>Add Journal</Link>
-                    </div>
+                        <Link to='/admin'>Back to Admin</Link>
+                        <p>{status}</p>                 
+                        { newTripURL ? <Link to={`${newTripURL}`}>View {name}</Link>: null }
+                    </React.Fragment>
                     :
                     <form onSubmit={this.handleSubmit}>
                         <input type="text" onChange={this.handleChange} placeholder="Trip Name" name="name"/>

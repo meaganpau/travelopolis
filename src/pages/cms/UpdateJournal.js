@@ -24,25 +24,24 @@ class Journal extends Component {
     })
   }
 
-  getJournalContent = journalID => {
+  getJournalContent = async journalID => {
     const token = getToken('userToken');
     if (token) {
-      axios.get(`/api/journals/id/${journalID}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-        .then(res => {
-          if (res.data) {
-            this.setState({ ...res.data });
-          } else {
-            this.setState({ status: 'No data found' });
+      try {
+        const res = await axios.get(`/api/journals/id/${journalID}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
           }
         })
-        .catch (e => {
-          console.log(e);
-          this.setState({ status: e });
-      });
+        if (res.data) {
+          this.setState({ ...res.data });
+        } else {
+          this.setState({ status: 'No data found' });
+        }
+      }catch (e) {
+        console.log(e);
+        this.setState({ status: e });
+      };
     }
   }
 
@@ -50,34 +49,33 @@ class Journal extends Component {
     this.setState({ content });
   }
   
-  handleFormSubmit = e => {
+  handleFormSubmit = async e => {
     e.preventDefault();
     const { journalID, title, slug, content } = this.state;
     const token = getToken('userToken');
     if (token) {
-      axios.post('/api/journals/id', {
-          journalID,
-          title,
-          slug,
-          content
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      .then(res => {
-          if (res.data.errors || res.data.errmsg) {
-              this.setState({ status: res.data.message });
-          } else {
-              this.setState({
-                  updatedJournal: res.data, 
-                  status: 'Journal updated!'
-              })
+      try {
+        const res = await axios.post('/api/journals/id', {
+            journalID,
+            title,
+            slug,
+            content
+        }, {
+          headers: {
+            Authorization: `Bearer ${token}`
           }
-      })
-      .catch(e => {
-          console.log(e);
-      })
+        })
+        if (res.data.errors || res.data.errmsg) {
+          this.setState({ status: res.data.message });
+        } else {
+          this.setState({
+            updatedJournal: res.data, 
+            status: 'Journal updated!'
+          })
+        }
+      } catch(e) {
+        console.log(e);
+      }
     }
   }
 

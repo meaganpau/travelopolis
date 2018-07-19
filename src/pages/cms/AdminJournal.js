@@ -4,9 +4,9 @@ import { getToken } from '../../services/tokenServices'
 
 class Journal extends Component {
   state = {
-    journalID: null,
-    user: null,
-    journalData: null,
+    journalID: '',
+    user: '',
+    journalData: '',
     status: 'Loading...'
   }
 
@@ -17,25 +17,24 @@ class Journal extends Component {
     })
   }
 
-  getJournalContent = journalID => {
+  getJournalContent = async journalID => {
     const token = getToken('userToken');
     if (token) {
-      axios.get(`/api/journals/id/${journalID}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-        .then(res => {
-          if (res.data) {
-            this.setState({ journalData: res.data });
-          } else {
-            this.setState({ status: 'No data found' });
+      try {
+        const res = await axios.get(`/api/journals/id/${journalID}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
           }
         })
-        .catch (e => {
-          console.log(e);
-          this.setState({ status: e });
-      });
+        if (res.data) {
+          this.setState({ journalData: res.data });
+        } else {
+          this.setState({ status: 'No data found' });
+        }
+      } catch (e) {
+        console.log(e);
+        this.setState({ status: e });
+      };
     }
   }
   

@@ -24,41 +24,39 @@ class Journals extends Component {
     })
   }
 
-  getTrip = tripId => {
+  getTrip = async tripId => {
     const token = getToken('userToken');
     if (token) {
-      axios.get(`/api/trips/id/${tripId}`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
+      try {
+        const res = await axios.get(`/api/trips/id/${tripId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
         })
-      .then(res => {
         if (res.data) {
           const { name, slug } = res.data;
           this.setState({ name, slug });
         } else {
           this.setState({ status: 'Trip not found' });
         }
-      })
-      .catch(e => {
+      } catch(e) {
         console.log(e);
-      })
+      }
     }
   }
 
-  getTripJournals = tripId => {
-    axios.get(`/api/journals/tripid/${tripId}`)
-      .then(res => {
-        if (res.data.length) {
-          this.setState({ journals: res.data });
-        } else {
-          this.setState({ status: 'No journals found' });
-        }
-      })
-      .catch (e => {
-        console.log(e);
-        this.setState({ status: e });
-      });
+  getTripJournals = async tripId => {
+    try {
+      const res = await axios.get(`/api/journals/tripid/${tripId}`)
+      if (res.data.length) {
+        this.setState({ journals: res.data });
+      } else {
+        this.setState({ status: 'No journals found' });
+      }
+    } catch (e) {
+      console.log(e);
+      this.setState({ status: e });
+    };
   }
 
   handleChange = e => {
@@ -68,34 +66,33 @@ class Journals extends Component {
     })
   }
   
-  handleFormSubmit = e => {
+  handleFormSubmit = async e => {
     e.preventDefault();
     const token = getToken('userToken');
     const { name, slug, tripID } = this.state;
 
-    axios.post('/api/trips/id', {
+    try {
+      const res = await axios.post('/api/trips/id', {
         tripID,
         name,
         slug
-    }, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-    .then(res => {
-        if (res.data.errors || res.data.errmsg) {
-            this.setState({ status: res.data.message });
-        } else {
-            this.setState({
-                updated: true,
-                status: 'Trip updated!'
-            })
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
         }
-    })
-    .catch(e => {
-        console.log(e);
-        this.setState({ status: 'Error updating trip.' });
-    })
+      })
+      if (res.data.errors || res.data.errmsg) {
+        this.setState({ status: res.data.message });
+      } else {
+        this.setState({
+          updated: true,
+          status: 'Trip updated!'
+        })
+      }
+    } catch(e) {
+      console.log(e);
+      this.setState({ status: 'Error updating trip.' });
+    }
   }
   
   render() {

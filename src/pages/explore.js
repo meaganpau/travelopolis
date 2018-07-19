@@ -17,15 +17,14 @@ class Explore extends Component {
         this.getJournals(10);
     }
 
-    getJournals = qty => {
-        axios.get(`/api/journals/${qty}`)
-            .then(res => {
-                this.setState({ journals: res.data })
-            })
-            .catch(e => {
-                console.log(e);
-                this.setState({ status: 'Error getting users' })
-            })
+    getJournals = async qty => {
+        try {
+            const res = await axios.get(`/api/journals/${qty}`)
+            this.setState({ journals: res.data })
+        } catch(e) {
+            console.log(e);
+            this.setState({ status: 'Error getting users' })
+        }
     }
 
     render() {

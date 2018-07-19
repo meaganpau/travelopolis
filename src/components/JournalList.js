@@ -4,43 +4,41 @@ import axios from 'axios';
 
 class Journal extends Component {
   state = {
-    journals: null,
+    journals: [],
     tripSlug: '',
-    trip: null,
+    trip: {},
     status: 'Loading...',
     userSlug: '',
-    user: null
+    user: {}
   }
 
-  getTripID = tripSlug => {
-    axios.get(`/api/trips/slug/${tripSlug}`)
-      .then(res => {
-        if (res.data.length) {
-          this.setState({ trip: res.data[0] });
-          this.getJournalData(this.state.trip._id)
-        } else {
-          this.setState({ status: 'No trips found' });
-        }
-      })
-      .catch (e => {
-        console.log(e);
-        this.setState({ status: e });
-      });
+  getTripID = async tripSlug => {
+    try {
+      const res = await axios.get(`/api/trips/slug/${tripSlug}`)
+      if (res.data.length) {
+        this.setState({ trip: res.data[0] });
+        this.getJournalData(this.state.trip._id)
+      } else {
+        this.setState({ status: 'No trips found' });
+      }
+    } catch (e) {
+      console.log(e);
+      this.setState({ status: e });
+    };
   }
 
-  getJournalData = tripID => {
-    axios.get(`/api/journals/tripid/${tripID}`)
-      .then(res => {
-        if (res.data.length) {
-          this.setState({ journals: res.data });
-        } else {
-          this.setState({ status: 'No journals found.' });
-        }
-      })
-      .catch (e => {
-        console.log(e);
-        this.setState({ status: e });
-      });
+  getJournalData = async tripID => {
+    try {
+      const res = await axios.get(`/api/journals/tripid/${tripID}`)
+      if (res.data.length) {
+        this.setState({ journals: res.data });
+      } else {
+        this.setState({ status: 'No journals found.' });
+      }
+    } catch (e) {
+      console.log(e);
+      this.setState({ status: e });
+    };
   }
 
   componentDidMount() {
@@ -54,31 +52,24 @@ class Journal extends Component {
     })
   }
 
-  getUserData = userSlug => {
-    axios.get(`/api/users/slug/${userSlug}`)
-      .then(res => {
-        console.log(res);
-          if (res.data) {
-              this.setState({ user: res.data[0] });
-              this.getTrips(this.state.user._id);
-          }
-      })
-      .catch (e => {
-          console.log(e);
-          this.setState({ status: 'Error loading user.' });
-      });
+  getUserData = async userSlug => {
+    try {
+      const res = await axios.get(`/api/users/slug/${userSlug}`)
+      if (res.data) {
+          this.setState({ user: res.data[0] });
+      }
+    } catch (e) {
+      console.log(e);
+      this.setState({ status: 'Error loading user.' });
+    };
   }
 
   render() {
     const { trip, journals, status, user, userSlug } = this.state;
-    console.log(user);
     return (
       <div>
         {trip && user ? 
-          <div>            
-            <h1>{trip.name}</h1>
-            <h2>{user.firstName} {user.lastName}</h2>
-          </div>
+          <h1>{trip.name} by {user.firstName} {user.lastName}</h1>
         : null} 
         {journals ? 
           journals.map(journal => (
