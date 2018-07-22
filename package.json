@@ -6,7 +6,7 @@
     "@tinymce/tinymce-react": "^2.2.5",
     "axios": "^0.18.0",
     "bcrypt": "^3.0.0",
-    "dotenv": "^6.0.0",
+    "config": "^1.30.0",
     "express": "^4.16.3",
     "jsonwebtoken": "^8.3.0",
     "mongoose": "^5.1.5",
@@ -22,7 +22,8 @@
     "eject": "react-scripts eject",
     "server": "nodemon lib/server.js --ignore src/",
     "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
-    "seeds": "node lib/seeds/index.js"
+    "seeds": "node lib/seeds/index.js",
+    "heroku-postbuild": "cd src && npm install --only=dev && npm install && npm run build"
   },
   "proxy": "http://localhost:8080",
   "devDependencies": {
