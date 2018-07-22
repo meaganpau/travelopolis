@@ -6,7 +6,8 @@ import { setToken } from '../services/tokenServices';
 class LoginPage extends Component {
     state = {
         email: '',
-        password: ''
+        password: '',
+        status: ''
     }
 
     handleSubmit = async e => {
@@ -15,9 +16,13 @@ class LoginPage extends Component {
         try {
             const res = await axios.post('/api/login', { email, password });
             setToken('userToken', res.data.token);
-            this.props.getCurrentUser();
+            await this.props.getCurrentUser();
+            this.setState({ status: this.props.status })
         } catch (e) {
-            console.log(e);
+            const { status, data } = e.response;
+            if (status !== 200) {
+              this.setState({ status: data.err })
+            }
         }
     } 
 
@@ -38,6 +43,7 @@ class LoginPage extends Component {
                     <input type="password" placeholder="Password" name="password" onChange={this.handleChange}/>
                     <input type="submit" value="Login" />
                 </form>
+                {this.state.status ? <p>{this.state.status}</p> : null}
             </React.Fragment>
         )
     }

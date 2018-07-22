@@ -7,11 +7,12 @@ import Explore from './pages/Explore';
 import Register from './pages/Register';
 import TripListing from "./routes/TripListing";
 import AdminRoutes from "./routes/AdminRoutes";
-import { getToken } from './services/tokenServices'
+import { getToken, removeToken } from './services/tokenServices'
 
 class App extends Component {
   state = {
     user: null,
+    status: ''
   };
 
   setUser = user => {
@@ -32,31 +33,36 @@ class App extends Component {
           }
         });
         this.setUser(res.data.user);
-      } catch (e) {
-        console.log(e);
+      } catch (e) { 
+        removeToken('userToken');
+        const { status, data } = e.response;
+        if (status !== 200) {
+          this.setState({ status: data.err })
+        }
       }
     }
   };
 
   render() {
+    const { user, status } = this.state;
     return (
       <Router>
           <Switch>
             <Route exact path="/" component={Homepage}/>
             <Route exact path="/login" render={() => (
-              this.state.user ? (
-                <Redirect to={{pathname: '/admin', state: { user: this.state.user }}} />
+              user ? (
+                <Redirect to={{pathname: '/admin', state: { user }}} />
               ) : (
-                <LoginPage getCurrentUser={this.getCurrentUser}/>)
-            )}/>
+                <LoginPage getCurrentUser={this.getCurrentUser} status={status}/>
+            ))}/>
             <Route exact path={'/explore'} component={Explore} />      
             <Route exact path={'/register'} render={() => 
-              this.state.user ? <Redirect to={{pathname: '/admin', state: { user: this.state.user }}} />
+              user ? <Redirect to={{pathname: '/admin', state: { user }}} />
               : <Register setUser={this.setUser}/>} 
             />     
             <Route path={'/admin'} render={props => 
-              this.state.user ? 
-                <AdminRoutes user={this.state.user} setUser={this.setUser} {...props}/>
+              user ? 
+                <AdminRoutes user={user} setUser={this.setUser} {...props}/>
               : <Redirect to='/login' />
             } />
             <Route path={'/:userSlug'} component={TripListing}/>
