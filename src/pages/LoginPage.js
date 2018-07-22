@@ -15,8 +15,8 @@ class LoginPage extends Component {
         const { email, password } = this.state;
         try {
             const res = await axios.post('/api/login', { email, password });
-            await this.props.getCurrentUser();
             setToken('userToken', res.data.token);
+            await this.props.getCurrentUser();
             this.setState({ status: this.props.status })
         } catch (e) {
             const { status, data } = e.response;
