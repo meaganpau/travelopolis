@@ -92,7 +92,9 @@ class AddTrip extends Component {
         try {
             const res = await axios.get(`/api/trips/user/${userID}`)
             if (res.data.length) {
-              this.setState({ trips: res.data });
+              this.setState({ trips: res.data }, () => {
+                  this.setState({ trip: this.state.trips[0]._id })
+              });
             } else {
               this.setState({ status: 'No trips found.' });
             }
