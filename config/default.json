@@ -1,8 +1,0 @@
-{
-    "PORT": 8080,
-    "TINYMCE_API_KEY": "l7cj16c6ogw6qliwdw0raotb8c7rn35yf587ad1ertzdc965",
-    "MONGODB_URI": "mongodb://localhost:27017/tripJournals",
-    "TOKEN_SECRET": "IAMASECRETWOWOWOW",
-    "MLAB_USER": "heroku_zr407jpb",
-    "MLAB_ACCOUNT": "heroku_zr407jpb"
-}
