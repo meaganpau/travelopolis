@@ -50,11 +50,11 @@ class App extends Component {
           <Switch>
             <Route exact path="/" component={Homepage}/>
             <Route exact path="/login" render={() => (
-              user ? (
+              user ? 
                 <Redirect to={{pathname: '/admin', state: { user }}} />
-              ) : (
+              : 
                 <LoginPage getCurrentUser={this.getCurrentUser} status={status}/>
-            ))}/>
+            )}/>
             <Route exact path={'/explore'} component={Explore} />      
             <Route exact path={'/register'} render={() => 
               user ? <Redirect to={{pathname: '/admin', state: { user }}} />
