@@ -6,11 +6,11 @@ import { getToken } from '../../services/tokenServices'
 
 class Journal extends Component {
   state = {
-    journalID: null,
-    user: null,
+    journalID: '',
+    user: false,
     status: 'Loading...',
     title: '',
-    updatedJournal: null,
+    updatedJournal: false,
     slug: ''
   }
 
@@ -79,12 +79,39 @@ class Journal extends Component {
     }
   }
 
-    handleChange = e => {
-        const { name, value } = e.target;
-        this.setState({ 
-            [name]: value
-        })
-    }
+  handleChange = e => {
+      const { name, value } = e.target;
+      this.setState({ 
+          [name]: value
+      })
+  }
+
+  handleDelete = async e => {    
+    e.preventDefault();
+    const { journalID, title, trip } = this.state;
+    if (window.confirm(`Are you sure you want to delete ${title}?`)) {
+      const token = getToken('userToken');
+      if (token) {
+        try {
+          const res = await axios.delete(`/api/journals/delete/${journalID}`, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          })
+          if (res.data.errors || res.data.errmsg) {
+            this.setState({ status: res.data.message });
+          } else {
+            this.props.history.push({
+              pathname: `/admin/trip/${trip._id}`,
+              deleted: title
+            })
+          }
+        } catch(e) {
+          console.log(e);
+        }
+      }
+    }  
+  }
 
   render() {
     const { title, content, status, updatedJournal, slug, user, trip } = this.state;
@@ -104,6 +131,9 @@ class Journal extends Component {
             <input type="submit" value="Save"/>
           </form>
         : `${status}`}
+          <form onSubmit={this.handleDelete}>
+            <input type="submit" value="Delete"/>
+          </form>
       </div>
     )
   }

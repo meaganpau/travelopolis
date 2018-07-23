@@ -3,11 +3,11 @@ import { Link } from 'react-router-dom';
 
 class JournalCard extends Component {
     state = {
-        title: null,
-        author_name: null,
-        author_url: null,
-        date: null,
-        url: null
+        title: '',
+        author_name: '',
+        author_url: '',
+        date: '',
+        url: ''
     }
 
     componentDidMount() {

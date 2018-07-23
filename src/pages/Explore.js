@@ -3,13 +3,10 @@ import Menu from '../components/Menu';
 import JournalCard from '../components/JournalCard';
 import axios from 'axios';
 
-// show cards of journals with username and trip name
-
 class Explore extends Component {
 
     state = {
-        journals: null,
-        users: null,
+        journals: [],
         status: 'Loading...'
     }
 
@@ -33,7 +30,7 @@ class Explore extends Component {
             <div>
                 <Menu />
                 <h1>Explore</h1>
-                {journals ? 
+                {journals.length > 0 ? 
                     <ul>
                         {journals.map(journal => <JournalCard {...journal} key={journal._id} />)}
                     </ul>
