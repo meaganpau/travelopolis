@@ -8,6 +8,8 @@
     "bcrypt": "^3.0.0",
     "config": "^2.0.0",
     "dotenv": "^6.0.0",
+    "emotion": "^9.2.6",
+    "emotion-theming": "^9.2.6",
     "express": "^4.16.3",
     "jsonwebtoken": "^8.3.0",
     "mongoose": "^5.1.5",

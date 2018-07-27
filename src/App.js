@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import axios from 'axios';
+import { ThemeProvider } from 'emotion-theming'
+import theme from './styles/theme'
+import GlobalStyles from './styles/global'
 import LoginPage from './pages/LoginPage';
 import Homepage from './pages/Home';
 import Explore from './pages/Explore';
@@ -8,6 +11,9 @@ import Register from './pages/Register';
 import TripListing from "./routes/TripListing";
 import AdminRoutes from "./routes/AdminRoutes";
 import { getToken, removeToken } from './services/tokenServices'
+
+// eslint-disable-next-line
+GlobalStyles; 
 
 class App extends Component {
   state = {
@@ -46,28 +52,32 @@ class App extends Component {
   render() {
     const { user, status } = this.state;
     return (
-      <Router>
-          <Switch>
-            <Route exact path="/" component={Homepage}/>
-            <Route exact path="/login" render={() => (
-              user ? 
-                <Redirect to={{pathname: '/admin', state: { user }}} />
-              : 
-                <LoginPage getCurrentUser={this.getCurrentUser} status={status}/>
-            )}/>
-            <Route exact path={'/explore'} component={Explore} />      
-            <Route exact path={'/register'} render={() => 
-              user ? <Redirect to={{pathname: '/admin', state: { user }}} />
-              : <Register setUser={this.setUser}/>} 
-            />     
-            <Route path={'/admin'} render={props => 
-              user ? 
-                <AdminRoutes user={user} setUser={this.setUser} {...props}/>
-              : <Redirect to='/login' />
-            } />
-            <Route path={'/:userSlug'} component={TripListing}/>
-          </Switch>  
-      </Router>
+      <React.Fragment>
+        <ThemeProvider theme={theme}>
+          <Router>
+              <Switch>
+                <Route exact path="/" component={Homepage}/>
+                <Route exact path="/login" render={() => (
+                  user ? 
+                    <Redirect to={{pathname: '/admin', state: { user }}} />
+                  : 
+                    <LoginPage getCurrentUser={this.getCurrentUser} status={status}/>
+                )}/>
+                <Route exact path={'/explore'} component={Explore} />      
+                <Route exact path={'/register'} render={() => 
+                  user ? <Redirect to={{pathname: '/admin', state: { user }}} />
+                  : <Register setUser={this.setUser}/>} 
+                />     
+                <Route path={'/admin'} render={props => 
+                  user ? 
+                    <AdminRoutes user={user} setUser={this.setUser} {...props}/>
+                  : <Redirect to='/login' />
+                } />
+                <Route path={'/:userSlug'} component={TripListing}/>
+              </Switch>  
+          </Router>
+        </ThemeProvider>
+      </React.Fragment>
     );
   }
 }

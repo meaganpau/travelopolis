@@ -21,10 +21,10 @@ class Journals extends Component {
     const { tripSlug, userSlug } = this.state;
 
     return (
-      <div>
-          <Route exact path={`/${userSlug}/${tripSlug}`} component={props => <GetJournals userSlug={userSlug} tripSlug={tripSlug} {...props}/>}/>
-          <Route path={`/${userSlug}/${tripSlug}/:journal`} component={props => <JournalSingle trip={tripSlug} userSlug={userSlug} {...props} />}/>
-      </div>
+      <React.Fragment>
+          <Route exact path={`/${userSlug}/${tripSlug}`} component={props => <GetJournals userSlug={userSlug} tripSlug={tripSlug} {...this.props}/>}/>
+          <Route path={`/${userSlug}/${tripSlug}/:journal`} component={props => <JournalSingle trip={tripSlug} userSlug={userSlug} {...this.props} />}/>
+      </React.Fragment>
     )
   }
 }

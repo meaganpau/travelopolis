@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import Header from '../components/Header'
 
 class Journal extends Component {
   state = {
@@ -30,6 +31,7 @@ class Journal extends Component {
     };
   }
 
+
   componentDidMount() {
     const { userSlug, match } = this.props;
     this.setState({ 
@@ -54,6 +56,7 @@ class Journal extends Component {
 
     return (
       <React.Fragment>
+        <Header {...this.props}/>
         <Breadcrumbs />
         { journal.title ? 
           <article>
