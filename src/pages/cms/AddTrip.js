@@ -53,13 +53,13 @@ class AddTrip extends Component {
     }
 
     render() {
-        const { name, status, newTripURL } = this.state;
+        const { name, status, newTripURL, newTrip } = this.state;
 
         return(
             <div>
                 {status ? 
                     <React.Fragment>
-                        <Link to='/admin/add_journal'>Add Journal</Link>
+                        <Link to={{ pathname: '/admin/add_journal', state: newTrip._id }}>Add Journal</Link>
                         <Link to='/admin'>Back to Admin</Link>
                         <p>{status}</p>                 
                         { newTripURL ? <Link to={`${newTripURL}`}>View {name}</Link>: null }

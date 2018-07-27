@@ -5,8 +5,8 @@ import JournalListing from "../routes/JournalListing";
 
 const Trips = () => (
     <React.Fragment>
-        <Route exact path='/:userSlug' component={GetTrips}/>
-        <Route path='/:userSlug/:trip' render={props => <JournalListing {...props}/>}/>
+        <Route exact path=':userSlug' component={GetTrips}/>
+        <Route path=':userSlug/:trip' render={props => <JournalListing {...props}/>}/>
     </React.Fragment>
 )
 

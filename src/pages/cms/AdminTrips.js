@@ -125,7 +125,7 @@ class Journals extends Component {
   }
 
   render() {
-    const { journals, name, status, slug, deleted } = this.state;
+    const { journals, name, status, slug, deleted, tripID } = this.state;
     return (
       <div>
         <form onSubmit={this.handleFormSubmit}>
@@ -140,7 +140,7 @@ class Journals extends Component {
           </form>
         {deleted ? <p>{deleted}</p> : null}
         {status ? <p>{status}</p> : null}
-        <Link to='/admin/add_journal'>Add Journal</Link>
+      <Link to={{ pathname: '/admin/add_journal', state: tripID }}>Add Journal</Link>
         {journals ? 
           journals.map(journal => (
             <li key={journal._id}>

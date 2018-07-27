@@ -10,7 +10,7 @@ class AddTrip extends Component {
         title: '',
         slug: '',
         content: '',
-        trip: {},
+        trip: '',
         trips: [],
         status: '', 
         newJournal: {},
@@ -83,7 +83,8 @@ class AddTrip extends Component {
     }
 
     componentDidMount() {
-        this.setState({ user: this.props.user }, () => {
+        const { user, location } = this.props;
+        this.setState({ user: user, trip: location.state }, () => {
             this.getTrips(this.state.user._id)
         })
     }
@@ -92,9 +93,7 @@ class AddTrip extends Component {
         try {
             const res = await axios.get(`/api/trips/user/${userID}`)
             if (res.data.length) {
-              this.setState({ trips: res.data }, () => {
-                  this.setState({ trip: this.state.trips[0]._id })
-              });
+              this.setState({ trips: res.data });
             } else {
               this.setState({ status: 'No trips found.' });
             }
@@ -116,7 +115,7 @@ class AddTrip extends Component {
     }
 
     createSelectItems = trips =>
-        trips.map( trip => 
+        trips.map(trip => 
             <option key={trip._id} value={trip._id}>
                 {trip.name}
             </option>
@@ -127,7 +126,7 @@ class AddTrip extends Component {
     }
 
     render() {
-        const { trips, status, newJournalURL, title, content } = this.state;
+        const { trips, status, newJournalURL, title, content, trip } = this.state;
         return(
             <div>
                 {status ? 
@@ -138,7 +137,7 @@ class AddTrip extends Component {
                     :
                     <form onSubmit={this.handleFormSubmit}>
                         { trips ?
-                            <select id="select-trip" onChange={this.onDropdownSelected} label="Select Trip">
+                            <select id="select-trip" onChange={this.onDropdownSelected} label="Select Trip" value={trip ? trip : trips[0]}>
                                 {this.createSelectItems(trips)}
                             </select>
                         : null }

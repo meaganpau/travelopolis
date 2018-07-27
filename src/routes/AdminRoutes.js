@@ -1,5 +1,5 @@
 import React from "react";
-import { Route } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import AdminAddTrip from '../pages/cms/AddTrip';
 import AdminAddJournal from '../pages/cms/AddJournal';
 import AdminUser from '../pages/cms/User';
