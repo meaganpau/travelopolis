@@ -6,7 +6,7 @@ const Global =
         box-sizing: border-box;
       }
     
-      html {
+      html, input {
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         font-size: 16px;

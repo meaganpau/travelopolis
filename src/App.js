@@ -8,6 +8,7 @@ import LoginPage from './pages/LoginPage';
 import Homepage from './pages/Home';
 import Explore from './pages/Explore';
 import Register from './pages/Register';
+import MainBackground from './components/MainBackground';
 import TripListing from "./routes/TripListing";
 import AdminRoutes from "./routes/AdminRoutes";
 import { getToken, removeToken } from './services/tokenServices'
@@ -52,8 +53,8 @@ class App extends Component {
   render() {
     const { user, status } = this.state;
     return (
-      <React.Fragment>
-        <ThemeProvider theme={theme}>
+      <ThemeProvider theme={theme}>
+        <MainBackground>
           <Router>
               <Switch>
                 <Route exact path="/" component={Homepage}/>
@@ -66,7 +67,7 @@ class App extends Component {
                 <Route exact path={'/explore'} component={Explore} />      
                 <Route exact path={'/register'} render={() => 
                   user ? <Redirect to={{pathname: '/admin', state: { user }}} />
-                  : <Register setUser={this.setUser}/>} 
+                  : <Register/>} 
                 />     
                 <Route path={'/admin'} render={props => 
                   user ? 
@@ -76,8 +77,8 @@ class App extends Component {
                 <Route path={'/:userSlug'} component={TripListing}/>
               </Switch>  
           </Router>
-        </ThemeProvider>
-      </React.Fragment>
+        </MainBackground>
+      </ThemeProvider>
     );
   }
 }
