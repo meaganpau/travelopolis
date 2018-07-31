@@ -24,7 +24,7 @@ class Admin extends Component {
             <div>
                 { Object.keys(user).length ? 
                     <React.Fragment>
-                        <h1>Hello {user.firstName}</h1>
+                        <h1>Hello, {user.firstName}!</h1>
                         <Trips user={user}/>
                     </React.Fragment>
                     : null

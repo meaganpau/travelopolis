@@ -77,10 +77,10 @@ class Register extends Component {
                             <p className="error">{ error }</p>
                             : null
                         }
-                        <Link to="/login" className="underline-link">Back to login</Link>
+                        <Link to="/" className="underline-link">Back to login</Link>
                     </form>
                 : 
-                    <Link to="/login" className="btn-main">Login here</Link>                        
+                    <Link to="/" className="btn-main">Login here</Link>                        
                 }
             </React.Fragment>
         )

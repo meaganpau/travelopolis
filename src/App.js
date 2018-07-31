@@ -5,7 +5,6 @@ import { ThemeProvider } from 'emotion-theming'
 import theme from './styles/theme'
 import GlobalStyles from './styles/global'
 import LoginPage from './pages/LoginPage';
-import Homepage from './pages/Home';
 import Explore from './pages/Explore';
 import Register from './pages/Register';
 import MainBackground from './components/MainBackground';
@@ -57,8 +56,7 @@ class App extends Component {
         <MainBackground>
           <Router>
               <Switch>
-                <Route exact path="/" component={Homepage}/>
-                <Route exact path="/login" render={() => (
+                <Route exact path="/" render={() => (
                   user ? 
                     <Redirect to={{pathname: '/admin', state: { user }}} />
                   : 
@@ -72,7 +70,7 @@ class App extends Component {
                 <Route path={'/admin'} render={props => 
                   user ? 
                     <AdminRoutes user={user} setUser={this.setUser} {...props}/>
-                  : <Redirect to='/login' />
+                  : <Redirect to='/' />
                 } />
                 <Route path={'/:userSlug'} component={TripListing}/>
               </Switch>  

@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'react-emotion';
+import { Link } from 'react-router-dom';
 import FormContainer from './FormContainer'
 
 const ImageBackground = styled('div')`
@@ -29,6 +30,24 @@ const Header = styled('div')`
         font-weight: 500;
         margin: 0;
     }
+
+    a {
+        color: #fff;
+        border: 2px solid #fff;
+        border-radius: 3px;
+        padding: 10px 50px;
+        text-decoration: none;
+        margin: 20px 0;
+        display: inline-block;
+        letter-spacing: 0.7px;
+        font-size: 18px;
+        transition: 0.15s all ease;
+
+        &:hover {
+            background: #fff;
+            color: ${props => props.theme.color.main}
+        }
+    }
 `
 
 const MainContainer = styled('div')`
@@ -41,6 +60,7 @@ const FormPage = props =>
             <Header>
                 <h1>Travelopolis</h1>
                 <h2>Keep a log of your travel memories</h2>
+                <Link to="/explore">Explore</Link>
             </Header>
         </ImageBackground>
         <FormContainer
