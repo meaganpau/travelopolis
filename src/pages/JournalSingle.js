@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Header from '../components/Header'
+import BodyBackground from '../components/BodyBackground'
+import ContentContainer from '../components/ContentContainer'
 
 class Journal extends Component {
   state = {
@@ -11,7 +13,8 @@ class Journal extends Component {
       content: ''
     },
     status: 'Loading...',
-    trip: {}
+    trip: {},
+    userSlug: ''
   }
 
   getJournal = async journalSlug => {
@@ -55,16 +58,18 @@ class Journal extends Component {
     )
 
     return (
-      <React.Fragment>
+      <BodyBackground>
         <Header {...this.props}/>
-        <Breadcrumbs />
-        { journal.title ? 
-          <article>
-            <h1>{title}</h1>
-            <p dangerouslySetInnerHTML={{__html: content}} />
-          </article>
-        : <p>{status}</p> }
-      </React.Fragment>
+        <ContentContainer>
+          <Breadcrumbs />
+          { journal.title ? 
+            <article>
+              <h1>{title}</h1>
+              <p dangerouslySetInnerHTML={{__html: content}} />
+            </article>
+          : <p>{status}</p> }
+        </ContentContainer>
+      </BodyBackground>
     )
   }
 }
