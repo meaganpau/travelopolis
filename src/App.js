@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
-import axios from 'axios';
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { ThemeProvider } from 'emotion-theming'
 import theme from './styles/theme'
 import GlobalStyles from './styles/global'
@@ -10,75 +9,26 @@ import Register from './pages/Register';
 import MainBackground from './components/MainBackground';
 import TripListing from "./routes/TripListing";
 import AdminRoutes from "./routes/AdminRoutes";
-import { getToken, removeToken } from './services/tokenServices'
+import AppContext from "./AppContext"
 
 // eslint-disable-next-line
 GlobalStyles; 
 
-class App extends Component {
-  state = {
-    user: null,
-    status: ''
-  };
-
-  setUser = user => {
-    this.setState({ user })
-  }
-
-  componentDidMount() {
-    this.getCurrentUser();
-  }
-
-  getCurrentUser = async () => {
-    const token = getToken('userToken');
-    if (token) {
-      try {
-        const res = await axios.get('/api/users/current', {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        this.setUser(res.data.user);
-      } catch (e) { 
-        removeToken('userToken');
-        const { status, data } = e.response;
-        if (status !== 200) {
-          this.setState({ status: data.err })
-        }
-      }
-    }
-  };
-
-  render() {
-    const { user, status } = this.state;
-    return (
-      <ThemeProvider theme={theme}>
-        <MainBackground>
-          <Router>
-              <Switch>
-                <Route exact path="/" render={() => (
-                  user ? 
-                    <Redirect to={{pathname: '/admin', state: { user }}} />
-                  : 
-                    <LoginPage getCurrentUser={this.getCurrentUser} status={status}/>
-                )}/>
-                <Route exact path={'/explore'} render={() => <Explore user={user}/>} />      
-                <Route exact path={'/register'} render={() => 
-                  user ? <Redirect to={{pathname: '/admin', state: { user }}} />
-                  : <Register/>} 
-                />     
-                <Route path={'/admin'} render={props => 
-                  user ? 
-                    <AdminRoutes user={user} setUser={this.setUser} {...props}/>
-                  : <Redirect to='/' />
-                } />
-                <Route path={'/:userSlug'} component={TripListing}/>
-              </Switch>  
-          </Router>
-        </MainBackground>
-      </ThemeProvider>
-    );
-  }
-}
+const App = () => 
+  <AppContext>
+    <ThemeProvider theme={theme}>
+      <MainBackground>
+        <Router>
+            <Switch>
+              <Route exact path="/" component={LoginPage} />
+              <Route exact path={'/explore'} component={Explore} />      
+              <Route exact path={'/register'} component={Register}/>
+              <Route path={'/admin'} component={AdminRoutes} />
+              <Route path={'/:userSlug'} component={TripListing}/>
+            </Switch>  
+        </Router>
+      </MainBackground>
+    </ThemeProvider>
+  </AppContext>
 
 export default App;

@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { setToken } from '../services/tokenServices';
 
 class LoginForm extends Component {
     state = {
@@ -13,17 +11,7 @@ class LoginForm extends Component {
     handleSubmit = async e => {
         e.preventDefault();
         const { email, password } = this.state;
-        try {
-            const res = await axios.post('/api/login', { email, password });
-            setToken('userToken', res.data.token);
-            await this.props.getCurrentUser();
-            this.setState({ status: this.props.status })
-        } catch (e) {
-            const { status, data } = e.response;
-            if (status !== 200) {
-              this.setState({ status: data.err })
-            }
-        }
+        this.props.login(email, password);
     } 
 
     handleChange = e => {

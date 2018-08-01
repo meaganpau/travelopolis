@@ -1,29 +1,35 @@
 import React from "react";
-import { Route } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import AdminAddTrip from '../pages/cms/AddTrip';
 import AdminAddJournal from '../pages/cms/AddJournal';
 import AdminUser from '../pages/cms/User';
-import AdminTrip from '../pages/cms/AdminTrips';
+import AdminTrip from '../pages/cms/AdminTrip';
 import AdminJournal from '../pages/cms/UpdateJournal';
 import Admin from '../pages/cms/Admin';
 import Header from '../components/Header';
-import AdminContentContainer from '../components/cms/AdminContentContainer';
+import InnerContainer from '../components/InnerContainer';
+import { AppContext } from "../AppContext"
 
-const AdminRoutes = props => {
-    const { user, setUser } = props;
-    return (
-        <React.Fragment>
-            <Header user={user} setUser={setUser}/>
-            <AdminContentContainer>
-                <Route exact path='/admin' render={appProps => <Admin user={user} {...appProps} />}/>
-                <Route exact path={'/admin/add_trip'} render={appProps => <AdminAddTrip user={user} {...appProps} /> } />      
-                <Route exact path={'/admin/add_journal'} render={appProps => <AdminAddJournal user={user} {...appProps} /> } />      
-                <Route exact path={'/admin/trip/:trip'} render={appProps => <AdminTrip user={user} {...appProps} /> } /> 
-                <Route exact path={'/admin/journal/:journal'} render={appProps => <AdminJournal user={user} {...appProps} /> } />
-                <Route exact path={'/admin/user/:user'} render={appProps => <AdminUser user={user} {...appProps} /> } />
-            </AdminContentContainer>
-        </React.Fragment>
-    )
-}
+const AdminRoutes = () =>
+    <AppContext.Consumer>
+        {context => {
+            return(
+                context.user && context.isAuthenticated ? 
+                    <React.Fragment>
+                        <Header />
+                        <InnerContainer>
+                            <Route exact path='/admin' component={Admin} />
+                            <Route exact path='/admin/add_trip' component={AdminAddTrip} /> 
+                            <Route exact path='/admin/add_journal' component={AdminAddJournal} /> 
+                            <Route exact path='/admin/trip/:trip' component={AdminTrip} /> 
+                            <Route exact path='/admin/journal/:journal' component={AdminJournal} />
+                            <Route exact path='/admin/user/:user' component={AdminUser} />
+                        </InnerContainer>
+                    </React.Fragment>
+                : 
+                <Redirect to='/' />
+            )
+        }}
+    </AppContext.Consumer>
 
 export default AdminRoutes;

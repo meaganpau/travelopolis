@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { format } from 'date-fns';
 import styled from 'react-emotion';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+import { format } from 'date-fns';
 import { getToken } from '../../services/tokenServices'
-import Card from '../../components/cms/Card'
-import CreateNewCard from '../../components/cms/CreateNewCard'
-import DoubleTitle from '../../components/DoubleTitle';
+import Card from '../Card'
+import DoubleTitle from '../DoubleTitle';
+import CreateNewCard from './CreateNewCard'
 
 const MyLink = ({...props}) => <Link {...props}>{props.children}</Link>;
 

@@ -35,17 +35,17 @@ const DropdownContainer = styled('ul')`
 const DropdownMenu = props => {
     const logout = () => {
         removeToken('userToken');
-        props.setUser(null);
+        props.logout();
     };
 
     return (
         <DropdownContainer show={props.show}>
             <li>
-                <img src="../images/settings.svg" alt="Settings icon"/>
+                <img src="/images/settings.svg" alt="Settings icon"/>
                 My Account
             </li>
             <li onClick={logout}>
-                <img src="../images/logout.svg" alt="Log out icon"/>
+                <img src="/images/logout.svg" alt="Log out icon"/>
                 Log out
             </li>
         </DropdownContainer>

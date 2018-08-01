@@ -25,6 +25,22 @@ const Article = styled('article')`
   margin: 0 auto;
 `
 
+const BreadcrumbContainer = styled('div')`
+  img {
+    margin: 0 15px;
+    transform: translateY(-3px);
+  }
+
+  a {
+    text-decoration: none;
+    color: ${props => props.theme.color.font};
+
+    &:hover {
+      border-bottom: 2px solid ${props => props.theme.color.font};
+    }
+  }
+`
+
 class Journal extends Component {
   state = {
     journalSlug: '',
@@ -34,7 +50,8 @@ class Journal extends Component {
     },
     status: 'Loading...',
     trip: {},
-    userSlug: ''
+    userSlug: '',
+    user: {}
   }
 
   getJournal = async journalSlug => {
@@ -61,21 +78,34 @@ class Journal extends Component {
       userSlug
     }, () =>{
       this.getJournal(this.state.journalSlug);
+      this.getUserData(this.state.userSlug);
     });
   }
 
+  getUserData = async userSlug => {
+    try {
+      const res = await axios.get(`/api/users/slug/${userSlug}`)
+      if (res.data) {
+          this.setState({ user: res.data[0] });
+      }
+    } catch (e) {
+      console.log(e);
+      this.setState({ status: 'Error loading user.' });
+    };
+  }
+
   render() {
-    const { journal, userSlug, trip, status } = this.state;
+    const { journal, userSlug, trip, status, user } = this.state;
     const { title, content, date } = journal;
 
     const JournalDate = format(date, 'MM/DD/YYYY')
     
     const Breadcrumbs = () => (
-      <div>
-        <Link to={`/${userSlug}`}>{userSlug}</Link>
+      <BreadcrumbContainer>
+        <Link to={`/${userSlug}`}>{`${user.firstName} ${user.lastName}`}</Link>
         <img src="../../images/left-chevron.svg" alt="Left"/>
         <Link to={`/${userSlug}/${trip.slug}`}>{trip.name}</Link>
-      </div>
+      </BreadcrumbContainer>
     )
 
     return (
@@ -86,6 +116,7 @@ class Journal extends Component {
           { journal.title ? 
             <Article>
               <DoubleTitle>{title}</DoubleTitle>
+              <Date>{`By: ${user.firstName} ${user.lastName}`}</Date>
               <Date>{JournalDate}</Date>
               <Text dangerouslySetInnerHTML={{__html: content}} />
             </Article>

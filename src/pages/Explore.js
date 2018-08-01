@@ -1,21 +1,39 @@
 import React, { Component } from 'react';
-import Header from '../components/Header';
-import ContentContainer from '../components/ContentContainer'
-import JournalCard from '../components/JournalCard';
-import DoubleTitle from '../components/DoubleTitle';
+import { Link } from 'react-router-dom';
+import styled from 'react-emotion';
 import axios from 'axios';
+import Header from '../components/Header';
+import InnerContainer from '../components/InnerContainer'
+import DoubleTitle from '../components/DoubleTitle';
+import Card from '../components/Card';
+
+const MyLink = ({...props}) => <Link {...props}>{props.children}</Link>;
+
+const JournalList = styled('ul')`
+    padding: 0;
+    margin-top: 30px;
+    list-style: none;
+    display: grid;
+    grid-template-columns: 303px 303px 303px;
+    grid-gap: 45px 60px;
+    justify-content: space-between;
+
+    li {
+        display: inline-block;
+    }
+`
+
+const JournalLink = styled(MyLink)`
+    text-decoration: none;
+`
 
 class Explore extends Component {
     state = {
         journals: [],
         status: 'Loading...',
-        user: null
     }
 
     componentDidMount() {
-        if (this.props.user) {
-            this.setState({ user: this.props.user })
-        }
         this.getJournals(10);
     }
 
@@ -30,19 +48,25 @@ class Explore extends Component {
     }
 
     render() {
-        const { journals, user } = this.state;
+        const { journals } = this.state;
         return(
             <React.Fragment>
-                <Header user={user}/>
-                <ContentContainer>
+                <Header/>
+                <InnerContainer>
                     <DoubleTitle>Explore</DoubleTitle>
                     {journals.length > 0 ? 
-                        <ul>
-                            {journals.map(journal => <JournalCard {...journal} key={journal._id} />)}
-                        </ul>
+                        <JournalList>
+                            {journals.map(journal =>
+                                <li key={journal._id}>
+                                    <JournalLink to={`/${journal.trip.user.slug}/${journal.trip.slug}/${journal.slug}`}>
+                                        <Card name={journal.title} subtext={`By: ${journal.trip.user.firstName} ${journal.trip.user.lastName}`}/>
+                                    </JournalLink>
+                                </li>
+                            )}
+                        </JournalList>
                     : null
                     }
-                </ContentContainer>
+                </InnerContainer>
             </React.Fragment>
         )
     }

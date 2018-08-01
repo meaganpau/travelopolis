@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from 'axios';
 import styled from 'react-emotion';
 import { Link } from 'react-router-dom';
+import { AppContext } from '../../AppContext'
 import { getToken } from '../../services/tokenServices'
 import TinyMCE from '../../components/TinyMCE';
 import DoubleTitle from '../../components/DoubleTitle';
@@ -28,7 +29,6 @@ const DeleteButton = styled('input')`
 class Journal extends Component {
   state = {
     journalID: '',
-    user: false,
     status: 'Loading...',
     title: '',
     updatedJournal: false,
@@ -36,11 +36,8 @@ class Journal extends Component {
   }
 
   componentDidMount() {
-    const { match, user } = this.props;
-    this.setState({ 
-      journalID: match.params.journal, 
-      user 
-    }, () => {
+    const { match } = this.props;
+    this.setState({ journalID: match.params.journal }, () => {
       this.getJournalContent(this.state.journalID)
     })
   }
@@ -135,16 +132,22 @@ class Journal extends Component {
   }
 
   render() {
-    const { title, content, status, updatedJournal, slug, user, trip } = this.state;
+    const { title, content, status, updatedJournal, slug, trip } = this.state;
     return (
       <React.Fragment>
         <DoubleTitle>Update Journal</DoubleTitle>
-        {updatedJournal ? 
-          <div>
-            <p>{status}</p>
-            <Link to={`/${user.slug}/${trip.slug}/${slug}`}>Preview {title}</Link>
-          </div>
-        : null}
+        <AppContext.Consumer>
+          { context => {
+            return (
+              updatedJournal ? 
+                <div>
+                  <p>{status}</p>
+                  <Link to={`/${context.user.slug}/${trip.slug}/${slug}`}>Preview {title}</Link>
+                </div>
+              : null
+            )}
+          }
+        </AppContext.Consumer>
         {title ? 
           <form onSubmit={this.handleFormSubmit}>
             <label htmlFor="title">Title</label>

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styled from 'react-emotion'
 import { Link } from 'react-router-dom'
 import DropdownMenu from './cms/DropdownMenu'
+import { AppContext } from '../AppContext'
 
 const HeaderContainer = styled('div')`
     display: flex;
@@ -53,19 +54,64 @@ const HeaderLink = styled(MyLink)`
     position: relative;
 `
 
+const ExploreButton = styled(MyLink)`
+    color: ${props => props.theme.color.font};
+    border: 2px solid ${props => props.theme.color.main};
+    text-decoration: none;
+    padding: 5px 30px;
+    border-radius: 8px;
+    margin-right: 50px;
+    transition: 0.15s all ease;
+
+    &:hover {
+        border: 2px solid ${props => props.theme.color.accent1};
+    }
+`
+
+const LoginButton = styled(MyLink)`
+    color: ${props => props.theme.color.font};
+    border: 2px solid ${props => props.theme.color.main};
+    text-decoration: none;
+    padding: 5px 30px;
+    border-radius: 8px;
+    transition: 0.15s all ease;
+    letter-spacing: 0.5px;
+
+    &:hover {
+        border: 2px solid ${props => props.theme.color.font};
+    }
+`
+
+const RegisterButton = styled(MyLink)`
+    color: ${props => props.theme.color.font};
+    background: ${props => props.theme.color.main};
+    text-decoration: none;
+    padding: 5px 30px;
+    border-radius: 8px;
+    transition: 0.15s all ease;
+    border: 2px solid ${props => props.theme.color.main};
+    width: 150px;
+    text-align: center;
+    letter-spacing: 0.5px;
+
+    &:hover {
+        background: ${props => props.theme.color.font};    
+        border: 2px solid ${props => props.theme.color.font};
+        color: #fff;
+    }
+`
+
+const Divider = styled('span')`
+    font-weight: 300;
+    font-family: 'Helvetica Neue';
+    margin: 0 20px;
+    font-size: 20px;
+    color: #d8d8d8;
+`
+
 class Header extends Component {
     state = {
-        user: '',
         dropdown: false
-    }
-
-    componentDidMount() {
-        if (this.props.user) {
-            const { user } = this.props;
-            this.setState({
-                user
-            })
-        }
     }
 
     handleClick = e => {
@@ -76,7 +122,7 @@ class Header extends Component {
     }
 
     render() {
-        const { user, dropdown } = this.state;
+        const { dropdown } = this.state;
         return (
             <HeaderContainer>
                 <InnerContainer>
@@ -85,25 +131,30 @@ class Header extends Component {
                         <AppName>Travelopolis</AppName>
                     </HeaderLink>
                 </InnerContainer>
-                { user ? 
-                    <React.Fragment>
-                        <InnerContainer>
-                            <Link to="/explore">Explore</Link>
-                            <p>Hello, {user.firstName}!</p>
-                            <DropdownMenuTrigger onClick={this.handleClick}>
-                                <img src="../images/user.svg" alt="User icon" className="user-icon"/>
-                                <img src="../images/down-chevron.svg" alt="Down chevron"/>
-                            </DropdownMenuTrigger>
-                        </InnerContainer>
-                        <DropdownMenu setUser={this.props.setUser} show={dropdown}/>
-                    </React.Fragment>
-                : 
-                    <InnerContainer>
-                        <Link to="/register">Register</Link>
-                        |
-                        <Link to="/">Login</Link>
-                    </InnerContainer>
-                }
+                <AppContext.Consumer>
+                    { context => {
+                        return(
+                            context.user && context.user.firstName ?
+                            <React.Fragment>
+                                <InnerContainer>
+                                    <ExploreButton to="/explore">Explore</ExploreButton>
+                                    <p>Hello, {context.user.firstName}!</p>
+                                    <DropdownMenuTrigger onClick={this.handleClick}>
+                                        <img src="/images/user.svg" alt="User icon" className="user-icon"/>
+                                        <img src="/images/down-chevron.svg" alt="Down chevron"/>
+                                    </DropdownMenuTrigger>
+                                </InnerContainer>
+                                <DropdownMenu logout={context.logout} show={dropdown}/>
+                            </React.Fragment>
+                            : 
+                            <InnerContainer>
+                                <RegisterButton to="/register">Register</RegisterButton>
+                                <Divider>|</Divider>
+                                <LoginButton to="/">Login</LoginButton>
+                            </InnerContainer>
+                        )
+                    }}
+                </AppContext.Consumer>
             </HeaderContainer>
         )
     }

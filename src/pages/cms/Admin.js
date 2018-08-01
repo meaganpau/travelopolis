@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import Trips from './Trips';
+import Trips from '../../components/cms/Trips';
+import { AppContext } from "../../AppContext"
 
 class Admin extends Component {
     state = {
-        user: {},
         deleted: ''
     }
     
@@ -11,21 +11,23 @@ class Admin extends Component {
         if (this.props.location.hasOwnProperty('deleted')) {
             const { deleted } = this.props.location;
             this.setState({
-              deleted: `"${deleted}" and relateed journals have been deleted.`
+                deleted: `"${deleted}" and relateed journals have been deleted.`
             })
-          }
-        this.setState({ user: this.props.user })
+        }
     }
 
     render() {
-        const { user, deleted } = this.state;
+        const { deleted } = this.state;
         return (
             <React.Fragment>
-                { Object.keys(user).length ? 
-                    <Trips user={user}/>
-                    : null
-                }
-                {deleted ? <p>{deleted}</p> : null}
+                <AppContext.Consumer>
+                    { context => {
+                        return (
+                            <Trips user={context.user} />
+                        )
+                    }}
+                </AppContext.Consumer>
+                { deleted ? <p>{deleted}</p> : null }
             </React.Fragment>
         )
     }
