@@ -1,16 +1,21 @@
 import React, { Component } from 'react';
-import Menu from '../components/Menu';
+import Header from '../components/Header';
+import ContentContainer from '../components/ContentContainer'
 import JournalCard from '../components/JournalCard';
+import DoubleTitle from '../components/DoubleTitle';
 import axios from 'axios';
 
 class Explore extends Component {
-
     state = {
         journals: [],
-        status: 'Loading...'
+        status: 'Loading...',
+        user: null
     }
 
     componentDidMount() {
+        if (this.props.user) {
+            this.setState({ user: this.props.user })
+        }
         this.getJournals(10);
     }
 
@@ -25,18 +30,20 @@ class Explore extends Component {
     }
 
     render() {
-        const { journals } = this.state;
+        const { journals, user } = this.state;
         return(
-            <div>
-                <Menu />
-                <h1>Explore</h1>
-                {journals.length > 0 ? 
-                    <ul>
-                        {journals.map(journal => <JournalCard {...journal} key={journal._id} />)}
-                    </ul>
-                : null
-                }
-            </div>
+            <React.Fragment>
+                <Header user={user}/>
+                <ContentContainer>
+                    <DoubleTitle>Explore</DoubleTitle>
+                    {journals.length > 0 ? 
+                        <ul>
+                            {journals.map(journal => <JournalCard {...journal} key={journal._id} />)}
+                        </ul>
+                    : null
+                    }
+                </ContentContainer>
+            </React.Fragment>
         )
     }
 }

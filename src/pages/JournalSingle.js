@@ -1,9 +1,29 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
+import { format } from 'date-fns'
+import styled from 'react-emotion';
 import axios from 'axios';
 import Header from '../components/Header'
-import BodyBackground from '../components/BodyBackground'
+import DoubleTitle from '../components/DoubleTitle'
 import ContentContainer from '../components/ContentContainer'
+
+const Date = styled('p')`
+  font-size: 14px;
+  letter-spacing: 1px;
+`
+
+const Text = styled('div')`
+    font-family: 'Avenir Next', 'Helvetica Neue', sans-serif;
+    letter-spacing: 0.3px;
+    font-size: 18px;
+    font-weight: 500;
+    margin-top: 50px;
+`
+
+const Article = styled('article')`
+  max-width: 800px;
+  margin: 0 auto;
+`
 
 class Journal extends Component {
   state = {
@@ -34,7 +54,6 @@ class Journal extends Component {
     };
   }
 
-
   componentDidMount() {
     const { userSlug, match } = this.props;
     this.setState({ 
@@ -47,29 +66,32 @@ class Journal extends Component {
 
   render() {
     const { journal, userSlug, trip, status } = this.state;
-    const { title, content } = journal;
+    const { title, content, date } = journal;
+
+    const JournalDate = format(date, 'MM/DD/YYYY')
     
     const Breadcrumbs = () => (
       <div>
-        <Link to={`/`}>Home</Link> >&nbsp;
-        <Link to={`/${userSlug}`}>{userSlug}</Link> >&nbsp;
+        <Link to={`/${userSlug}`}>{userSlug}</Link>
+        <img src="../../images/left-chevron.svg" alt="Left"/>
         <Link to={`/${userSlug}/${trip.slug}`}>{trip.name}</Link>
       </div>
     )
 
     return (
-      <BodyBackground>
-        <Header {...this.props}/>
+      <React.Fragment>
+        <Header />
         <ContentContainer>
           <Breadcrumbs />
           { journal.title ? 
-            <article>
-              <h1>{title}</h1>
-              <p dangerouslySetInnerHTML={{__html: content}} />
-            </article>
+            <Article>
+              <DoubleTitle>{title}</DoubleTitle>
+              <Date>{JournalDate}</Date>
+              <Text dangerouslySetInnerHTML={{__html: content}} />
+            </Article>
           : <p>{status}</p> }
         </ContentContainer>
-      </BodyBackground>
+      </React.Fragment>
     )
   }
 }

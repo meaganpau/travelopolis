@@ -39,7 +39,6 @@ const Global =
           url(./fonts/Futura-Medium.svg#webfont) format('svg');
         font-weight: 500;    
       }
-    }
   `
 
 export default Global;

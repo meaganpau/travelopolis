@@ -1,7 +1,32 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { format } from 'date-fns';
+import styled from 'react-emotion';
 import axios from 'axios';
 import { getToken } from '../../services/tokenServices'
+import Card from '../../components/cms/Card'
+import CreateNewCard from '../../components/cms/CreateNewCard'
+import DoubleTitle from '../../components/DoubleTitle';
+
+const MyLink = ({...props}) => <Link {...props}>{props.children}</Link>;
+
+const TripList = styled('ul')`
+    padding: 0;
+    margin-top: 30px;
+    list-style: none;
+    display: grid;
+    grid-template-columns: 303px 303px 303px;
+    grid-gap: 45px 60px;
+    justify-content: space-between;
+
+    li {
+        display: inline-block;
+    }
+`
+
+const Triplink = styled(MyLink)`
+    text-decoration: none;
+`
 
 class Trips extends Component {
     state = {
@@ -22,7 +47,7 @@ class Trips extends Component {
             if (res.data.length) {
                 this.setState({ trips: res.data });
             } else {
-                this.setState({ status: 'No trips found.' });
+                this.setState({ status: 'Looks like you don\'t have any trips yet!' });
             }
 
         } catch (e) {
@@ -32,26 +57,37 @@ class Trips extends Component {
     }
 
     componentDidMount() {
-
         this.setState({ user: this.props.user}, () => { 
             this.getTrips(this.state.user._id);
         })
     }
 
     render() {
+        const { trips, status } = this.state;
         return (
-            <div>
-                <Link to='/admin/add_trip'>Add Trip</Link>
-                <ul>
-                    {this.state.trips !== '' ?
-                        this.state.trips.map(trip => (
-                            <li key={trip._id}>
-                                <Link to={`/admin/trip/${trip._id}`}>{trip.name}</Link>
-                            </li>
-                        )) 
-                    : `${this.state.status}`}
-                </ul>
-            </div>
+            <React.Fragment>
+                <DoubleTitle>Trips</DoubleTitle>
+                <TripList>
+                    <li>
+                        <Triplink to='/admin/add_trip'>
+                            <CreateNewCard name="+" subtext="Create New"/>
+                        </Triplink>
+                    </li>
+                    {trips !== '' ?
+                        trips.map(trip => {
+                            const { _id, name, date } = trip;
+                            const creationDate = format(date, 'MM/DD/YYYY');
+                            return (
+                                <li key={_id}>
+                                    <Triplink to={`/admin/trip/${_id}`}>
+                                        <Card key={_id} name={name} subtext={`Created: ${creationDate}`}/>
+                                    </Triplink>
+                                </li>
+                            )}
+                        ) 
+                    : `${status}`}
+                </TripList>
+            </React.Fragment>
         )
     }
 };

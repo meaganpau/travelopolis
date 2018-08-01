@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import TinyMCE from '../../components/TinyMCE';
+import DoubleTitle from '../../components/DoubleTitle';
 import { getToken } from '../../services/tokenServices'
 
 class AddTrip extends Component {
@@ -128,7 +129,8 @@ class AddTrip extends Component {
     render() {
         const { trips, status, newJournalURL, title, content, trip } = this.state;
         return(
-            <div>
+            <React.Fragment>
+                <DoubleTitle>Create Journal</DoubleTitle>
                 {status ? 
                     <div>
                         <p>{status}</p>
@@ -141,13 +143,15 @@ class AddTrip extends Component {
                                 {this.createSelectItems(trips)}
                             </select>
                         : null }
-                        <input type="text" onChange={this.handleChange} placeholder="Title" name="title"/>
-                        <input type="text" onChange={this.handleChange} placeholder="Slug" name="slug"/>
+                        <label for="title">Title</label>
+                        <input type="text" onChange={this.handleChange} name="title" id="title"/>
+                        <label for="slug">Slug</label>
+                        <input type="text" onChange={this.handleChange} name="slug" id="slug"/>
                         <TinyMCE value={content} onEditorChange={this.handleEditorChange}/>
                         <input type="submit" value="Save"/>
                     </form>
                 }
-            </div>
+            </React.Fragment>
         )
     }
 }

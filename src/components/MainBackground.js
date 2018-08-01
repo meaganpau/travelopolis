@@ -2,7 +2,8 @@ import React from 'react';
 import styled from 'react-emotion'
 
 const Container = styled ('div')`
-  background: ${props => props.theme.color.background}
+  background: ${props => props.theme.color.background};
+  min-height: 100vh;
 `
 
 const MainBackground = props =>

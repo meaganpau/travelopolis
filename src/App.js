@@ -62,7 +62,7 @@ class App extends Component {
                   : 
                     <LoginPage getCurrentUser={this.getCurrentUser} status={status}/>
                 )}/>
-                <Route exact path={'/explore'} component={Explore} />      
+                <Route exact path={'/explore'} render={() => <Explore user={user}/>} />      
                 <Route exact path={'/register'} render={() => 
                   user ? <Redirect to={{pathname: '/admin', state: { user }}} />
                   : <Register/>} 

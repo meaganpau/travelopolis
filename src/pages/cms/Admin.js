@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Trips from './Trips';
-import LogoutButton from '../../components/LogoutButton'
 
 class Admin extends Component {
     state = {
@@ -21,17 +20,13 @@ class Admin extends Component {
     render() {
         const { user, deleted } = this.state;
         return (
-            <div>
+            <React.Fragment>
                 { Object.keys(user).length ? 
-                    <React.Fragment>
-                        <h1>Hello, {user.firstName}!</h1>
-                        <Trips user={user}/>
-                    </React.Fragment>
+                    <Trips user={user}/>
                     : null
                 }
                 {deleted ? <p>{deleted}</p> : null}
-                <LogoutButton setUser={this.props.setUser} />
-            </div>
+            </React.Fragment>
         )
     }
 }

@@ -1,8 +1,29 @@
 import React, { Component } from "react";
 import axios from 'axios';
+import styled from 'react-emotion';
 import { Link } from 'react-router-dom';
-import TinyMCE from '../../components/TinyMCE';
 import { getToken } from '../../services/tokenServices'
+import TinyMCE from '../../components/TinyMCE';
+import DoubleTitle from '../../components/DoubleTitle';
+
+const SaveButton = styled('input')`
+  background: ${props => props.theme.color.main};
+  font-size: 14px;
+  letter-spacing: 1px;
+  border-radius: 8px;
+  padding: 8px;
+  border: none;
+  width: 180px;
+`
+
+const DeleteButton = styled('input')`
+  font-size: 14px;
+  letter-spacing: 1px;
+  border-radius: 8px;
+  padding: 8px;
+  border: 2px solid ${props => props.theme.color.font};
+  width: 180px;
+`
 
 class Journal extends Component {
   state = {
@@ -116,7 +137,8 @@ class Journal extends Component {
   render() {
     const { title, content, status, updatedJournal, slug, user, trip } = this.state;
     return (
-      <div>
+      <React.Fragment>
+        <DoubleTitle>Update Journal</DoubleTitle>
         {updatedJournal ? 
           <div>
             <p>{status}</p>
@@ -125,16 +147,18 @@ class Journal extends Component {
         : null}
         {title ? 
           <form onSubmit={this.handleFormSubmit}>
-            <input onChange={this.handleChange} placeholder="Title" name="title" value={title}/>
-            <input onChange={this.handleChange} placeholder="Slug" name="slug" value={slug}/>
-            <TinyMCE value={content} onEditorChange={this.handleEditorChange} />
-            <input type="submit" value="Save"/>
+            <label htmlFor="title">Title</label>
+            <input onChange={this.handleChange} name="title" id="title" value={title}/>
+            <label htmlFor="slug">Slug</label>
+            <input onChange={this.handleChange} name="slug" id="slug" value={slug}/>
+            <SaveButton type="submit" value="Save"/>
+            <TinyMCE value={content} onEditorChange={this.handleEditorChange} id="content"/>
           </form>
         : `${status}`}
           <form onSubmit={this.handleDelete}>
-            <input type="submit" value="Delete"/>
+            <DeleteButton type="submit" value="Delete"/>
           </form>
-      </div>
+      </React.Fragment>
     )
   }
 }

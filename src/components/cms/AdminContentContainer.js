@@ -2,8 +2,9 @@ import React from 'react';
 import styled from 'react-emotion';
 
 const MainContainer = styled('div')`
-    background: ${props => props.theme.color.background};
-    min-height: 100vh;
+    padding: 30px 100px;
+    max-width: 1229px;
+    margin: 0 auto;
 `
 
 const Container = props => (
