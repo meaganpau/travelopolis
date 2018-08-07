@@ -68,7 +68,7 @@ class Journal extends Component {
         this.setState({ trip: res.data[0] });
         this.getJournalData(this.state.trip._id)
       } else {
-        this.setState({ status: 'No trips found' });
+        this.setState({ status: `No trips created yet.` });
       }
     } catch (e) {
       console.log(e);
@@ -82,7 +82,7 @@ class Journal extends Component {
       if (res.data.length) {
         this.setState({ journals: res.data });
       } else {
-        this.setState({ status: 'No journals found.' });
+        this.setState({ status: `Looks like ${this.state.user.firstName} hasn't written any journals yet 🙁. Check back later!` });
       }
     } catch (e) {
       console.log(e);
@@ -104,8 +104,10 @@ class Journal extends Component {
   getUserData = async userSlug => {
     try {
       const res = await axios.get(`/api/users/slug/${userSlug}`)
-      if (res.data) {
+      if (res.data[0]) {
           this.setState({ user: res.data[0] });
+      } else {
+        this.setState({ status: 'User not found.' });
       }
     } catch (e) {
       console.log(e);
@@ -119,17 +121,19 @@ class Journal extends Component {
       <React.Fragment>
         <Header />
         <ContentContainer>
-          <BreadcrumbContainer>
-            <Link to={`/${userSlug}`}>
-              <img src="../../images/left-chevron.svg" alt="Left"/>
-              <span>Back to {`${user.firstName} ${user.lastName}`}</span>
-            </Link>
-          </BreadcrumbContainer>
+          {user.firstName ? 
+            <BreadcrumbContainer>
+              <Link to={`/${userSlug}`}>
+                <img src="../../images/left-chevron.svg" alt="Left"/>
+                <span>{`${user.firstName} ${user.lastName}`}</span>
+              </Link>
+            </BreadcrumbContainer>
+          : null}
           <InnerContainer>
-            {trip && user ? 
+            {trip ? 
               <DoubleTitle>{trip.name}</DoubleTitle>
             : null} 
-            {journals ? 
+            {journals.length ? 
               <JournalList>
                 {journals.map(journal => {
                   const date = format(journal.date, 'MM/DD/YYYY');
@@ -141,7 +145,7 @@ class Journal extends Component {
                     </li>
                 )})}
               </JournalList>
-              : `${status}`}
+              : <p>{status}</p>}
           </InnerContainer>
         </ContentContainer>
       </React.Fragment>

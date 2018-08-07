@@ -1,6 +1,16 @@
 import React from 'react';
 import styled from 'react-emotion';
+import { Link } from 'react-router-dom';
 import { removeToken } from "../../services/tokenServices";
+
+const MyLink = ({...props}) => <Link {...props}>{props.children}</Link>;
+
+const AccountLink = styled(MyLink)`
+    text-decoration: none;
+    color: ${props => props.theme.color.font};
+    display: flex;
+    align-items: center;
+`
 
 const DropdownContainer = styled('ul')`
     display: ${props => props.show ? 'block' : 'none'};
@@ -19,6 +29,7 @@ const DropdownContainer = styled('ul')`
         padding: 20px 30px;
         display: flex;
         align-items: center;
+        width: 100%;
 
         &:hover {
             background: rgba(193, 193, 193, 0.5);
@@ -40,10 +51,12 @@ const DropdownMenu = props => {
 
     return (
         <DropdownContainer show={props.show}>
-            <li>
-                <img src="/images/settings.svg" alt="Settings icon"/>
-                My Account
-            </li>
+            <AccountLink to="/account">
+                <li>
+                        <img src="/images/settings.svg" alt="Settings icon"/>
+                        My Account
+                </li>
+            </AccountLink>
             <li onClick={logout}>
                 <img src="/images/logout.svg" alt="Log out icon"/>
                 Log out

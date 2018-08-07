@@ -30,9 +30,10 @@ export default class AppProvider extends Component {
         try {
             const res = await axios.post('/api/login', { email, password });
             setToken('userToken', res.data.token);
-            await this.getCurrentUser();
+            return await this.getCurrentUser();
         } catch (e) {
-            console.log(e);
+            console.log(e.response);
+            return e.response.data.err;
         }
     }
 
@@ -55,10 +56,10 @@ export default class AppProvider extends Component {
                 const { status, data } = e.response;
                 if (status !== 200) {
                     this.setState({ 
-                        status: data.err,
                         finishedLoading: true
                     })  
                 }
+                return data.err;
             }
         } else {
             this.setState({ 

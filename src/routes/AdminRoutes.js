@@ -19,11 +19,11 @@ const AdminRoutes = () =>
                         <Header />
                         <InnerContainer>
                             <Route exact path='/admin' component={Admin} />
-                            <Route exact path='/admin/add_trip' component={AdminAddTrip} /> 
-                            <Route exact path='/admin/add_journal' component={AdminAddJournal} /> 
+                            <Route exact path='/admin/add_trip' render={props => <AdminAddTrip user={context.user} {...props}/> } /> 
+                            <Route exact path='/admin/add_journal' render={props => <AdminAddJournal user={context.user} {...props}/> } /> 
                             <Route exact path='/admin/trip/:trip' component={AdminTrip} /> 
                             <Route exact path='/admin/journal/:journal' component={AdminJournal} />
-                            <Route exact path='/admin/user/:user' component={AdminUser} />
+                            {/* <Route exact path='/admin/user/:user' component={AdminUser} /> */}
                         </InnerContainer>
                     </React.Fragment>
                 : 

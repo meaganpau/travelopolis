@@ -1,7 +1,82 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { getToken } from '../../services/tokenServices'
+import axios from 'axios';
+import styled from 'react-emotion';
+import DoubleTitle from '../../components/DoubleTitle'
+
+const MyLink = ({...props}) => <Link {...props}>{props.children}</Link>;
+
+const YellowButton = styled('input')`
+    color: ${props => props.theme.color.font};
+    background: ${props => props.theme.color.main};
+    text-decoration: none;
+    padding: 5px 30px;
+    border-radius: 8px;
+    transition: 0.15s all ease;
+    border: 2px solid ${props => props.theme.color.main};
+    width: 150px;
+    text-align: center;
+    letter-spacing: 0.5px;
+    margin-left: 12px;
+    margin-top: 20px;
+
+    &:hover {
+        background: transparent;    
+        border: 2px solid ${props => props.theme.color.main};
+    }
+`
+
+const YellowLink = YellowButton.withComponent(MyLink);
+
+const Form = styled('form')`
+    margin: 20px auto;
+`
+
+const Input = styled('input')`
+    display: block;
+    width: 50%;
+    min-width: 250px;
+    padding: 10px 20px;
+    border: solid 0.5px ${props => props.theme.color.inputBorder};
+    border-radius: 3px;
+    font-size: 18px;
+`
+
+const Label = styled('label')`
+    display: inline-block;
+    margin-bottom: 5px;
+    font-size: 18px;
+
+    span {
+        color: ${props => props.theme.color.error}
+    }
+`
+
+const Fieldset = styled('fieldset')`
+    border: 0;
+`
+
+const GreyButton = styled(MyLink)`
+    border: 2px solid ${props => props.theme.color.font};
+    background: ${props => props.theme.color.font};
+    color: #fff;
+    text-decoration: none;
+    padding: 5px 30px;
+    border-radius: 8px;
+    margin-left: 20px;
+    transition: 0.15s all ease;
+    
+    &:hover {
+        color: ${props => props.theme.color.font};
+        background: transparent;
+    }
+`
+
+const Status = styled('p')`
+    margin-left: 12px;
+    margin-bottom: 30px;
+`
 
 class AddTrip extends Component {
     state = {
@@ -56,22 +131,28 @@ class AddTrip extends Component {
         const { name, status, newTripURL, newTrip } = this.state;
 
         return(
-            <div>
+            <React.Fragment>
+                <DoubleTitle>Create A Trip</DoubleTitle>
                 {status ? 
                     <React.Fragment>
-                        <Link to={{ pathname: '/admin/add_journal', state: newTrip._id }}>Add Journal</Link>
-                        <Link to='/admin'>Back to Admin</Link>
-                        <p>{status}</p>                 
-                        { newTripURL ? <Link to={`${newTripURL}`}>View {name}</Link>: null }
+                        <Status>{status}</Status>                 
+                        { newTripURL ? <YellowLink to={`${newTripURL}`}>View {name}</YellowLink>: null }
+                        <GreyButton to={{ pathname: '/admin/add_journal', state: newTrip._id }}>Add Journal</GreyButton>
                     </React.Fragment>
                     :
-                    <form onSubmit={this.handleSubmit}>
-                        <input type="text" onChange={this.handleChange} placeholder="Trip Name" name="name"/>
-                        <input type="text" onChange={this.handleChange} placeholder="Trip Slug" name="slug"/>
-                        <input type="submit" value="Create Trip"/>                        
-                    </form>
+                    <Form onSubmit={this.handleSubmit}>
+                        <Fieldset>
+                            <Label htmlFor="name">Trip name<span>*</span></Label>
+                            <Input type="text" onChange={this.handleChange} name="name" id="name" maxLength="50" required />
+                        </Fieldset>
+                        <Fieldset>
+                            <Label htmlFor="slug">Trip slug<span>*</span></Label>
+                            <Input type="text" onChange={this.handleChange} name="slug" id="slug" maxLength="50" required />
+                        </Fieldset>
+                        <YellowButton type="submit" value="Create Trip"/>                        
+                    </Form>
                 }
-            </div>
+            </React.Fragment>
         )
     }
 }

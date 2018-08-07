@@ -60,11 +60,26 @@ const ExploreButton = styled(MyLink)`
     text-decoration: none;
     padding: 5px 30px;
     border-radius: 8px;
-    margin-right: 50px;
     transition: 0.15s all ease;
 
     &:hover {
         border: 2px solid ${props => props.theme.color.accent1};
+    }
+`
+
+const AdminButton = styled(MyLink)`
+    color: ${props => props.theme.color.font};
+    border: 2px solid ${props => props.theme.color.font};
+    text-decoration: none;
+    padding: 5px 30px;
+    border-radius: 8px;
+    margin-right: 50px;
+    transition: 0.15s all ease;
+
+    &:hover {
+        border: 2px solid ${props => props.theme.color.font};
+        background: ${props => props.theme.color.font};
+        color: #fff;
     }
 `
 
@@ -106,7 +121,7 @@ const Divider = styled('span')`
     font-family: 'Helvetica Neue';
     margin: 0 20px;
     font-size: 20px;
-    color: #d8d8d8;
+    color: ${props => props.theme.color.inputBorder};
 `
 
 class Header extends Component {
@@ -138,6 +153,8 @@ class Header extends Component {
                             <React.Fragment>
                                 <InnerContainer>
                                     <ExploreButton to="/explore">Explore</ExploreButton>
+                                    <Divider>|</Divider>
+                                    <AdminButton to="/admin">Admin</AdminButton>
                                     <p>Hello, {context.user.firstName}!</p>
                                     <DropdownMenuTrigger onClick={this.handleClick}>
                                         <img src="/images/user.svg" alt="User icon" className="user-icon"/>

@@ -10,6 +10,7 @@ import MainBackground from './components/MainBackground';
 import TripListing from "./routes/TripListing";
 import AdminRoutes from "./routes/AdminRoutes";
 import AppContext from "./AppContext"
+import NotFound from './pages/404'
 
 // eslint-disable-next-line
 GlobalStyles; 
@@ -23,6 +24,7 @@ const App = () =>
               <Route exact path="/" component={LoginPage} />
               <Route exact path={'/explore'} component={Explore} />      
               <Route exact path={'/register'} component={Register}/>
+              <Route exact path="/404" component={NotFound} />
               <Route path={'/admin'} component={AdminRoutes} />
               <Route path={'/:userSlug'} component={TripListing}/>
             </Switch>  

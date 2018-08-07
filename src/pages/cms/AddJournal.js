@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { format } from 'date-fns';
+import { getToken } from '../../services/tokenServices'
 import TinyMCE from '../../components/TinyMCE';
 import DoubleTitle from '../../components/DoubleTitle';
-import { getToken } from '../../services/tokenServices'
 
-class AddTrip extends Component {
+class AddJournal extends Component {
     state = {
         user: {},
         title: '',
@@ -144,9 +145,9 @@ class AddTrip extends Component {
                             </select>
                         : null }
                         <label for="title">Title</label>
-                        <input type="text" onChange={this.handleChange} name="title" id="title"/>
+                        <input type="text" onChange={this.handleChange} name="title" id="title" maxLength="50"/>
                         <label for="slug">Slug</label>
-                        <input type="text" onChange={this.handleChange} name="slug" id="slug"/>
+                        <input type="text" onChange={this.handleChange} name="slug" id="slug" maxLength="50"/>
                         <TinyMCE value={content} onEditorChange={this.handleEditorChange}/>
                         <input type="submit" value="Save"/>
                     </form>
@@ -156,4 +157,4 @@ class AddTrip extends Component {
     }
 }
 
-export default AddTrip
+export default AddJournal

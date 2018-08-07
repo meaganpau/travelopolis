@@ -1,11 +1,11 @@
 import React from "react";
 import { Route } from 'react-router-dom';
-import GetTrips from "../components/TripsList";
+import TripsList from "../pages/Trips";
 import JournalListing from "../routes/JournalListing";
 
 const Trips = () => (
     <React.Fragment>
-        <Route exact path='/:userSlug' component={GetTrips}/>
+        <Route exact path='/:userSlug' component={TripsList}/>
         <Route path='/:userSlug/:trip' component={JournalListing}/>
     </React.Fragment>
 )

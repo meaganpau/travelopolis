@@ -37,6 +37,10 @@ const Form = styled('div')`
         margin-left: 10px;
         margin-top: 20px;
         text-align: left;
+
+        span {
+            color: ${props => props.theme.color.error};
+        }
     }
 
     input {

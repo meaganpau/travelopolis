@@ -62,16 +62,16 @@ class Register extends Component {
                 }
                 { !newUser ? 
                     <form onSubmit={this.handleSubmit}>
-                        <label htmlFor="firstName">First Name</label>
-                        <input type="text" onChange={this.handleChange} name="firstName" id="firstName" required />
-                        <label htmlFor="lastName">Last Name</label>
-                        <input type="text" onChange={this.handleChange} name="lastName" id="lastName" required />
-                        <label htmlFor="email">Email address</label>
-                        <input type="email" onChange={this.handleChange} name="email" id="email" className={fieldError === 'email' ? 'field-error' : ''}required />
-                        <label htmlFor="password">Password</label>
-                        <input type="password" onChange={this.handleChange} name="password" id="password" required />
-                        <label htmlFor="slug">Slug</label>
-                        <input type="text" onChange={this.handleChange} name="slug" id="slug" required />
+                        <label htmlFor="firstName">First Name<span>*</span></label>
+                        <input type="text" onChange={this.handleChange} name="firstName" id="firstName" maxLength="50" required />
+                        <label htmlFor="lastName">Last Name<span>*</span></label>
+                        <input type="text" onChange={this.handleChange} name="lastName" id="lastName" maxLength="50" required />
+                        <label htmlFor="email">Email address<span>*</span></label>
+                        <input type="email" onChange={this.handleChange} name="email" id="email" className={fieldError === 'email' ? 'field-error' : ''} maxLength="50" required />
+                        <label htmlFor="password">Password<span>*</span></label>
+                        <input type="password" onChange={this.handleChange} name="password" id="password" maxLength="50" required />
+                        <label htmlFor="slug">Slug<span>*</span></label>
+                        <input type="text" onChange={this.handleChange} name="slug" id="slug" maxLength="50" required />
                         <input type="submit" value="Register" className="btn-main" />
                         { error ? 
                             <p className="error">{ error }</p>

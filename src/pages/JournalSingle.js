@@ -25,10 +25,24 @@ const Article = styled('article')`
   margin: 0 auto;
 `
 
+const Author = styled('p')`
+  font-size: 14px;
+
+  a {
+    text-decoration: none;
+    color: ${props => props.theme.color.font};
+    border-bottom: 1px solid ${props => props.theme.color.font};
+  }
+`
+
 const BreadcrumbContainer = styled('div')`
   img {
-    margin: 0 15px;
+    margin-right: 10px;
     transform: translateY(-3px);
+
+    &:not(:first-of-type) {
+      margin-left: 10px;
+    }
   }
 
   a {
@@ -39,6 +53,11 @@ const BreadcrumbContainer = styled('div')`
       border-bottom: 2px solid ${props => props.theme.color.font};
     }
   }
+`
+
+const MetaContainer = styled('div')`
+  display: flex;
+  justify-content: space-between;
 `
 
 class Journal extends Component {
@@ -99,15 +118,20 @@ class Journal extends Component {
     const { title, content, date } = journal;
 
     const JournalDate = format(date, 'MM/DD/YYYY')
-    
-    const Breadcrumbs = () => (
-      <BreadcrumbContainer>
-        <Link to={`/${userSlug}`}>{`${user.firstName} ${user.lastName}`}</Link>
-        <img src="../../images/left-chevron.svg" alt="Left"/>
-        <Link to={`/${userSlug}/${trip.slug}`}>{trip.name}</Link>
-      </BreadcrumbContainer>
-    )
 
+    const Breadcrumbs = () => {
+      if (userSlug && user.firstName && trip.slug){
+        return (
+          <BreadcrumbContainer>
+            <img src="../../images/left-chevron.svg" alt="Left"/>
+            <Link to={`/${userSlug}`}>{`${user.firstName} ${user.lastName}`}</Link>
+            <img src="../../images/left-chevron.svg" alt="Left"/>
+            <Link to={`/${userSlug}/${trip.slug}`}>{trip.name}</Link>
+          </BreadcrumbContainer>
+        )
+      }
+      return null;
+    }
     return (
       <React.Fragment>
         <Header />
@@ -116,8 +140,10 @@ class Journal extends Component {
           { journal.title ? 
             <Article>
               <DoubleTitle>{title}</DoubleTitle>
-              <Date>{`By: ${user.firstName} ${user.lastName}`}</Date>
-              <Date>{JournalDate}</Date>
+              <MetaContainer>
+                <Author>By: {<Link to={`/${userSlug}`}>{user.firstName} {user.lastName}</Link>}</Author>
+                <Date>{JournalDate}</Date>
+              </MetaContainer>
               <Text dangerouslySetInnerHTML={{__html: content}} />
             </Article>
           : <p>{status}</p> }

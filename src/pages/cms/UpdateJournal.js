@@ -151,9 +151,9 @@ class Journal extends Component {
         {title ? 
           <form onSubmit={this.handleFormSubmit}>
             <label htmlFor="title">Title</label>
-            <input onChange={this.handleChange} name="title" id="title" value={title}/>
+            <input onChange={this.handleChange} name="title" id="title" value={title} maxLength="50" required />
             <label htmlFor="slug">Slug</label>
-            <input onChange={this.handleChange} name="slug" id="slug" value={slug}/>
+            <input onChange={this.handleChange} name="slug" id="slug" value={slug} maxLength="50" required />
             <SaveButton type="submit" value="Save"/>
             <TinyMCE value={content} onEditorChange={this.handleEditorChange} id="content"/>
           </form>
