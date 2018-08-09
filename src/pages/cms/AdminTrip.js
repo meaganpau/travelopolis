@@ -240,6 +240,7 @@ const TripButton = styled(MyLink)`
   &:hover {
       background: transparent;    
       border: 2px solid ${props => props.theme.color.accent2};
+      color: ${props => props.theme.color.font};
   }
 `
 
@@ -381,7 +382,11 @@ class Journals extends Component {
           if (res.data.errors || res.data.errmsg) {
             this.setState({ status: res.data.message });
           } else {
-            this.setState({ deleted: title });
+            const { journals } = this.state;
+            this.setState({ 
+              deleted: title,
+              journals: journals.filter(journal => journal._id !== id)
+            });
           }
         } catch(e) {
           console.log(e);
@@ -416,8 +421,7 @@ class Journals extends Component {
         accessor: d => d,
         Cell: props => <DeleteJournal onClick={this.handleJournalDelete} title={props.value.title} id={props.value._id}>Delete</DeleteJournal>
       }
-    ]
-    
+    ];
     return (
       <React.Fragment>
         <BreadcrumbContainer>
@@ -432,7 +436,7 @@ class Journals extends Component {
           </FormFlex>
           { status || deleted ? 
             <SuccessContainer>
-              <Status>{status || deleted}</Status>
+              <Status>{status || `Deleted - ${deleted}`}</Status>
             </SuccessContainer>
           : null}
           <Form onSubmit={this.handleFormSubmit}>
@@ -450,7 +454,7 @@ class Journals extends Component {
           </Form>
           <Container>
             <CreateJournal to={{ pathname: '/admin/add_journal', state: tripID }}>Create Journal</CreateJournal>
-            <TripButton to={`/${user.slug}/${slug}`}>View Trip</TripButton>
+            <TripButton to={`/${user.slug}/${slug}`}>View Journals</TripButton>
             {journals.length ? 
               <ReactTable
                 data={journals}

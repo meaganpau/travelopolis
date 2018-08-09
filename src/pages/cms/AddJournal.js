@@ -206,9 +206,7 @@ class AddJournal extends Component {
 
     getCurrentTrip = () => {
         const { trip, trips } = this.state;
-        const currentTrip = trips.filter(obj => {
-            return obj._id === trip;
-        })
+        const currentTrip = trips.filter(obj => obj._id === trip)
         this.setState({ currentTrip: currentTrip[0] })
     }
 

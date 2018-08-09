@@ -66,7 +66,7 @@ class Trips extends Component {
         const { trips, status } = this.state;
         return (
             <React.Fragment>
-                <DoubleTitle>Trips</DoubleTitle>
+                <DoubleTitle>My Trips</DoubleTitle>
                 <TripList>
                     <li>
                         <Triplink to='/admin/add_trip'>

@@ -154,7 +154,7 @@ class Header extends Component {
                                 <InnerContainer>
                                     <ExploreButton to="/explore">Explore</ExploreButton>
                                     <Divider>|</Divider>
-                                    <AdminButton to="/admin">Admin</AdminButton>
+                                    <AdminButton to="/admin">My Trips</AdminButton>
                                     <p>Hello, {context.user.firstName}!</p>
                                     <DropdownMenuTrigger onClick={this.handleClick}>
                                         <img src="/images/user.svg" alt="User icon" className="user-icon"/>
