@@ -7,6 +7,7 @@ import Header from '../components/Header';
 import ContentContainer from '../components/ContentContainer';
 import DoubleTitle from '../components/DoubleTitle';
 import Card from '../components/Card';
+import Footer from '../components/Footer';
 
 const MyLink = ({...props}) => <Link {...props}>{props.children}</Link>;
 
@@ -148,6 +149,7 @@ class Journal extends Component {
               : <p>{status}</p>}
           </InnerContainer>
         </ContentContainer>
+        <Footer />
       </React.Fragment>
     )
   }

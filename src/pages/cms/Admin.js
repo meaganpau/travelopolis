@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Trips from '../../components/cms/Trips';
 import { AppContext } from "../../AppContext"
+import InnerContainer from '../../components/InnerContainer';
 
 class Admin extends Component {
     state = {
@@ -19,7 +20,7 @@ class Admin extends Component {
     render() {
         const { deleted } = this.state;
         return (
-            <React.Fragment>
+            <InnerContainer>
                 <AppContext.Consumer>
                     { context => {
                         return (
@@ -28,7 +29,7 @@ class Admin extends Component {
                     }}
                 </AppContext.Consumer>
                 { deleted ? <p>{deleted}</p> : null }
-            </React.Fragment>
+            </InnerContainer>
         )
     }
 }

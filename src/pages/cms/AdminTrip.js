@@ -7,6 +7,9 @@ import ReactTable from "react-table";
 import 'react-table/react-table.css'
 import { getToken } from "../../services/tokenServices";
 import DoubleTitle from '../../components/DoubleTitle';
+import InnerContainer from '../../components/InnerContainer';
+import BreadcrumbContainer from '../../components/cms/BreadcrumbContainer';
+import SuccessContainer from '../../components/cms/SuccessContainer';
 
 const MyLink = ({...props}) => <Link {...props}>{props.children}</Link>;
 
@@ -90,8 +93,9 @@ const UpdateTrip = styled('input')`
 
     &:hover {
         background: transparent;    
-        border: 2px solid ${props => props.theme.color.main};
+        border: 2px solid ${props => props.theme.color.accent1};
         color: ${props => props.theme.color.font};
+        cursor: pointer;
     }
 `
 
@@ -99,7 +103,7 @@ const CreateJournal = styled(MyLink)`
     color: ${props => props.theme.color.font};
     background: ${props => props.theme.color.main};
     text-decoration: none;
-    padding: 5px 30px;
+    padding: 8px 30px;
     border-radius: 8px;
     transition: 0.15s all ease;
     border: 2px solid ${props => props.theme.color.main};
@@ -179,7 +183,8 @@ const DeleteJournal = styled('button')`
     background: transparent;
     transition: 0.15s all ease;
     line-height: 1.35;
-
+    font-size: 14px;
+    
     &: hover {
       background: ${props => props.theme.color.error};
       border: 2px solid ${props => props.theme.color.error};
@@ -194,6 +199,7 @@ const EditButton = styled(MyLink)`
     padding: 5px 30px;
     transition: 0.15s all ease;
     text-decoration: none;
+    font-size: 14px;
     border: 2px solid ${props => props.theme.color.accent2};
 
     &:hover {
@@ -209,12 +215,32 @@ const ViewButton = styled(MyLink)`
     padding: 5px 30px;
     transition: 0.15s all ease;
     text-decoration: none;
+    font-size: 14px;
     border: 2px solid ${props => props.theme.color.accent1};
 
     &:hover {
       background: transparent;
       color: ${props => props.theme.color.accent1};
     }
+`
+
+const TripButton = styled(MyLink)`
+  color: #fff;
+  background: ${props => props.theme.color.accent2};
+  text-decoration: none;
+  padding: 8px 30px;
+  border-radius: 8px;
+  transition: 0.15s all ease;
+  border: 2px solid ${props => props.theme.color.accent2};
+  width: 150px;
+  text-align: center;
+  letter-spacing: 0.5px;
+  margin-left: 10px;
+
+  &:hover {
+      background: transparent;    
+      border: 2px solid ${props => props.theme.color.accent2};
+  }
 `
 
 class Journals extends Component {
@@ -307,7 +333,7 @@ class Journals extends Component {
         this.setState({ status: res.data.message });
       } else {
         this.setState({
-          status: 'Trip updated!'
+          status: 'Trip updated! 💃'
         })
       }
     } catch(e) {
@@ -394,38 +420,47 @@ class Journals extends Component {
     
     return (
       <React.Fragment>
-        <FormFlex>
-          <DoubleTitle>Journals: {name}</DoubleTitle>
-          <DeleteButton onSubmit={this.handleDelete}>
-              <input type="submit" value="Delete Trip"/>
-          </DeleteButton>
-        </FormFlex>
-        {deleted ? <Status>{deleted}</Status> : null}
-        {status ? <Status>{status}</Status> : null}
-        <Form onSubmit={this.handleFormSubmit}>
+        <BreadcrumbContainer>
+          <Link to={`/admin`}><img src="../../images/left-chevron.svg" alt="Left"/> Back to Trips</Link>
+        </BreadcrumbContainer>
+        <InnerContainer>
           <FormFlex>
-            <Fieldset>
-              <Label htmlFor="name">Trip Name<span>*</span></Label>
-              <Input onChange={this.handleChange} name="name" value={name} id="name" maxLength="50" required />
-            </Fieldset>
-            <Fieldset>
-              <Label htmlFor="slug">Trip Slug<span>*</span></Label>
-              <Input onChange={this.handleChange} name="slug" value={slug} id="slug" maxLength="50" required />
-            </Fieldset>
-            <UpdateTrip type="submit" value="Update Trip"/>
+            <DoubleTitle>Journals: {name}</DoubleTitle>
+            <DeleteButton onSubmit={this.handleDelete}>
+                <input type="submit" value="Delete Trip"/>
+            </DeleteButton>
           </FormFlex>
-        </Form>
-        <Container>
-          <CreateJournal to={{ pathname: '/admin/add_journal', state: tripID }}>Create Journal</CreateJournal>
-          {journals.length ? 
-            <ReactTable
-              data={journals}
-              columns={columns}
-              defaultPageSize={10}
-              className="-striped -highlight"
-            />
-          : <Status>{journalStatus}</Status>}
-        </Container>
+          { status || deleted ? 
+            <SuccessContainer>
+              <Status>{status || deleted}</Status>
+            </SuccessContainer>
+          : null}
+          <Form onSubmit={this.handleFormSubmit}>
+            <FormFlex>
+              <Fieldset>
+                <Label htmlFor="name">Trip Name<span>*</span></Label>
+                <Input onChange={this.handleChange} name="name" value={name} id="name" maxLength="50" required />
+              </Fieldset>
+              <Fieldset>
+                <Label htmlFor="slug">Trip Slug<span>*</span></Label>
+                <Input onChange={this.handleChange} name="slug" value={slug} id="slug" maxLength="50" required />
+              </Fieldset>
+              <UpdateTrip type="submit" value="Update Trip"/>
+            </FormFlex>
+          </Form>
+          <Container>
+            <CreateJournal to={{ pathname: '/admin/add_journal', state: tripID }}>Create Journal</CreateJournal>
+            <TripButton to={`/${user.slug}/${slug}`}>View Trip</TripButton>
+            {journals.length ? 
+              <ReactTable
+                data={journals}
+                columns={columns}
+                defaultPageSize={10}
+                className="-striped -highlight"
+              />
+            : <p>{journalStatus}</p>}
+          </Container>
+        </InnerContainer>
       </React.Fragment>
     )
   }

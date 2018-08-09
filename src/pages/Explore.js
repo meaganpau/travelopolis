@@ -6,6 +6,7 @@ import Header from '../components/Header';
 import InnerContainer from '../components/InnerContainer'
 import DoubleTitle from '../components/DoubleTitle';
 import Card from '../components/Card';
+import Footer from '../components/Footer';
 
 const MyLink = ({...props}) => <Link {...props}>{props.children}</Link>;
 
@@ -67,6 +68,7 @@ class Explore extends Component {
                     : null
                     }
                 </InnerContainer>
+                <Footer/>
             </React.Fragment>
         )
     }

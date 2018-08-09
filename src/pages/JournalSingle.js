@@ -6,6 +6,7 @@ import axios from 'axios';
 import Header from '../components/Header'
 import DoubleTitle from '../components/DoubleTitle'
 import ContentContainer from '../components/ContentContainer'
+import Footer from '../components/Footer'
 
 const Date = styled('p')`
   font-size: 14px;
@@ -148,6 +149,7 @@ class Journal extends Component {
             </Article>
           : <p>{status}</p> }
         </ContentContainer>
+        <Footer />
       </React.Fragment>
     )
   }

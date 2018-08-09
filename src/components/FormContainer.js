@@ -19,6 +19,10 @@ const Container = styled('div')`
             color: ${props => props.theme.color.main};
         }
     }
+
+    footer {
+        position: absolute;
+    }
 `
     
 const Form = styled('div')`

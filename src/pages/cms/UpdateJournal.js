@@ -6,24 +6,74 @@ import { AppContext } from '../../AppContext'
 import { getToken } from '../../services/tokenServices'
 import TinyMCE from '../../components/TinyMCE';
 import DoubleTitle from '../../components/DoubleTitle';
+import InnerContainer from '../../components/InnerContainer';
+import SuccessContainer from '../../components/cms/SuccessContainer';
+import BreadcrumbContainer from '../../components/cms/BreadcrumbContainer';
 
 const SaveButton = styled('input')`
   background: ${props => props.theme.color.main};
-  font-size: 14px;
   letter-spacing: 1px;
   border-radius: 8px;
   padding: 8px;
   border: none;
   width: 180px;
+  border: 2px solid transparent;    
+  transition: 0.15s all ease;
+  margin-top: 20px;
+  float: right;
+
+  &:hover {
+    background: ${props => props.theme.color.accent1};
+    color: #fff;
+  }
 `
 
 const DeleteButton = styled('input')`
   font-size: 14px;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
   border-radius: 8px;
-  padding: 8px;
+  padding: 5px;
   border: 2px solid ${props => props.theme.color.font};
-  width: 180px;
+  width: 110px;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: 0.15s all ease;
+
+  &:hover {
+    background: ${props => props.theme.color.error};    
+    border: 2px solid ${props => props.theme.color.error};
+    color: #fff;
+  }
+`
+
+const Form = styled('form')`
+  margin-top: 20px;
+
+  fieldset {
+    padding: 0;
+    border: none;
+    width: 48%;
+
+    input {
+      width: 100%;
+      padding: 10px 20px;
+      border: solid 0.5px ${props => props.theme.color.inputBorder};
+      border-radius: 3px;
+      font-size: 18px;
+    }
+  }
+`
+
+const MetaContainer = styled('div')`
+  display: flex;  
+  justify-content: space-between;
+  margin-bottom: 20px;
+`
+
+const TitleSection = styled('div')`
+  position: relative;
 `
 
 class Journal extends Component {
@@ -32,7 +82,8 @@ class Journal extends Component {
     status: 'Loading...',
     title: '',
     updatedJournal: false,
-    slug: ''
+    slug: '', 
+    trip: ''
   }
 
   componentDidMount() {
@@ -88,7 +139,7 @@ class Journal extends Component {
         } else {
           this.setState({
             updatedJournal: res.data, 
-            status: 'Journal updated!'
+            status: 'Journal updated! 🤗'
           })
         }
       } catch(e) {
@@ -135,32 +186,48 @@ class Journal extends Component {
     const { title, content, status, updatedJournal, slug, trip } = this.state;
     return (
       <React.Fragment>
-        <DoubleTitle>Update Journal</DoubleTitle>
-        <AppContext.Consumer>
-          { context => {
-            return (
-              updatedJournal ? 
-                <div>
-                  <p>{status}</p>
-                  <Link to={`/${context.user.slug}/${trip.slug}/${slug}`}>Preview {title}</Link>
-                </div>
-              : null
-            )}
-          }
-        </AppContext.Consumer>
-        {title ? 
-          <form onSubmit={this.handleFormSubmit}>
-            <label htmlFor="title">Title</label>
-            <input onChange={this.handleChange} name="title" id="title" value={title} maxLength="50" required />
-            <label htmlFor="slug">Slug</label>
-            <input onChange={this.handleChange} name="slug" id="slug" value={slug} maxLength="50" required />
-            <SaveButton type="submit" value="Save"/>
-            <TinyMCE value={content} onEditorChange={this.handleEditorChange} id="content"/>
-          </form>
-        : `${status}`}
-          <form onSubmit={this.handleDelete}>
-            <DeleteButton type="submit" value="Delete"/>
-          </form>
+        <BreadcrumbContainer>
+          {trip ? <Link to={`/admin/trip/${trip._id}`}><img src="../../images/left-chevron.svg" alt="Left"/> Back to {trip.name}</Link> : null}
+        </BreadcrumbContainer>
+        <InnerContainer>
+          <TitleSection>
+            <DoubleTitle>Update Journal</DoubleTitle>
+            { title ? 
+              <form onSubmit={this.handleDelete}>
+                <DeleteButton type="submit" value="Delete"/>
+              </form>
+            : null }
+          </TitleSection>
+          <AppContext.Consumer>
+            { context => {
+              return (
+                updatedJournal ? 
+                  <SuccessContainer>
+                    <p>{status} <Link to={`/${context.user.slug}/${trip.slug}/${slug}`}>View {title}</Link></p>
+                  </SuccessContainer>
+                : null
+              )}
+            }
+          </AppContext.Consumer>
+          {title ? 
+            <React.Fragment>
+              <Form onSubmit={this.handleFormSubmit}>
+                <MetaContainer>
+                  <fieldset>
+                    <label htmlFor="title">Title</label>
+                    <input onChange={this.handleChange} name="title" id="title" value={title} maxLength="50" required />
+                  </fieldset>
+                  <fieldset>
+                    <label htmlFor="slug">Slug</label>
+                    <input onChange={this.handleChange} name="slug" id="slug" value={slug} maxLength="50" required />
+                  </fieldset>
+                </MetaContainer>
+                <TinyMCE value={content} onEditorChange={this.handleEditorChange} id="content"/>
+                <SaveButton type="submit" value="Save"/>
+              </Form>
+            </React.Fragment>
+          : `${status}`}
+        </InnerContainer>
       </React.Fragment>
     )
   }

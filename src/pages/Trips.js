@@ -6,6 +6,7 @@ import Header from '../components/Header';
 import TripsList from '../components/TripsList'
 import ContentContainer from '../components/ContentContainer';
 import DoubleTitle from '../components/DoubleTitle';
+import Footer from '../components/Footer';
 
 const InnerContainer = styled('article')`
   max-width: 1029px;
@@ -78,6 +79,7 @@ class Trip extends Component {
                     {user ? <TripsList userId={user._id} userSlug={user.slug} /> : status }
                 </InnerContainer>
                 </ContentContainer>
+                <Footer />
             </React.Fragment>
         )
     }

@@ -7,7 +7,6 @@ import AdminTrip from '../pages/cms/AdminTrip';
 import AdminJournal from '../pages/cms/UpdateJournal';
 import Admin from '../pages/cms/Admin';
 import Header from '../components/Header';
-import InnerContainer from '../components/InnerContainer';
 import { AppContext } from "../AppContext"
 
 const AdminRoutes = () =>
@@ -17,14 +16,12 @@ const AdminRoutes = () =>
                 context.user && context.isAuthenticated ? 
                     <React.Fragment>
                         <Header />
-                        <InnerContainer>
-                            <Route exact path='/admin' component={Admin} />
-                            <Route exact path='/admin/add_trip' render={props => <AdminAddTrip user={context.user} {...props}/> } /> 
-                            <Route exact path='/admin/add_journal' render={props => <AdminAddJournal user={context.user} {...props}/> } /> 
-                            <Route exact path='/admin/trip/:trip' component={AdminTrip} /> 
-                            <Route exact path='/admin/journal/:journal' component={AdminJournal} />
-                            {/* <Route exact path='/admin/user/:user' component={AdminUser} /> */}
-                        </InnerContainer>
+                        <Route exact path='/admin' component={Admin} />
+                        <Route exact path='/admin/add_trip' render={props => <AdminAddTrip user={context.user} {...props}/> } /> 
+                        <Route exact path='/admin/add_journal' render={props => <AdminAddJournal user={context.user} {...props}/> } /> 
+                        <Route exact path='/admin/trip/:trip' component={AdminTrip} /> 
+                        <Route exact path='/admin/journal/:journal' component={AdminJournal} />
+                        {/* <Route exact path='/admin/user/:user' component={AdminUser} /> */}
                     </React.Fragment>
                 : 
                 <Redirect to='/' />
