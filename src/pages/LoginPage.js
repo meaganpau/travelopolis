@@ -25,8 +25,8 @@ const LoginPage = props =>
                     context.user && context.isAuthenticated ? <Redirect to='/admin' />
                     : 
                     <FormPage
-                    form={<LoginForm login={context.login}/>}
-                    bottomContent={<Link to="/register" className="underline-link">Create account</Link>}
+                        form={<LoginForm login={context.login}/>}
+                        bottomContent={<Link to="/register" className="underline-link">Create account</Link>}
                     />
                 )
             }}

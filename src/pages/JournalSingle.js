@@ -19,6 +19,11 @@ const Text = styled('div')`
     font-size: 18px;
     font-weight: 500;
     margin-top: 50px;
+    word-break: break-word;
+
+    img {
+      max-width: 100%;
+    }
 `
 
 const Article = styled('article')`

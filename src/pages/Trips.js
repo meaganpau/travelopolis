@@ -67,17 +67,17 @@ class Trip extends Component {
             <React.Fragment>
                 <Header />
                 <ContentContainer>
-                <BreadcrumbContainer>
-                    <Link to="/explore">
-                        <img src="../../images/left-chevron.svg" alt="Left"/>
-                        <span>Explore</span>
-                    </Link>
-                </BreadcrumbContainer>
-                <InnerContainer>
-                    <Title />
-                    { notFound ? <Redirect to="/404" /> : null }
-                    {user ? <TripsList userId={user._id} userSlug={user.slug} /> : status }
-                </InnerContainer>
+                    <BreadcrumbContainer>
+                        <Link to="/explore">
+                            <img src="../../images/left-chevron.svg" alt="Left"/>
+                            <span>Explore</span>
+                        </Link>
+                    </BreadcrumbContainer>
+                    <InnerContainer>
+                        <Title />
+                        { notFound ? <Redirect to="/404" /> : null }
+                        {user ? <TripsList userId={user._id} userSlug={user.slug} /> : status }
+                    </InnerContainer>
                 </ContentContainer>
                 <Footer />
             </React.Fragment>
