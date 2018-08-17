@@ -130,10 +130,15 @@ class Header extends Component {
     }
 
     handleClick = e => {
-        e.preventDefault();
         this.setState(prevState => ({
             dropdown: !prevState.dropdown
-        }))
+        }), () => document.body.addEventListener('click', this.handleDocumentClick))
+    }
+    
+    handleDocumentClick = e => {
+        this.setState({
+            dropdown: false
+        }, () => document.body.removeEventListener('click', this.handleDocumentClick))
     }
 
     render() {

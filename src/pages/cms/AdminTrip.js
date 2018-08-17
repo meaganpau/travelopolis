@@ -125,6 +125,10 @@ const Input = styled('input')`
     border: solid 0.5px ${props => props.theme.color.inputBorder};
     border-radius: 3px;
     font-size: 18px;
+
+    &.field-error {
+      border: 2px solid ${props => props.theme.color.error};
+    }
 `
 
 const Label = styled('label')`
@@ -241,6 +245,19 @@ const TripButton = styled(MyLink)`
       background: transparent;    
       border: 2px solid ${props => props.theme.color.accent2};
       color: ${props => props.theme.color.font};
+      position: absolute;
+      transform: translateY(-10px);
+  }
+`
+
+const ErrorMessage = styled('p')`
+  display: ${props => props.display};
+  color: ${props => props.theme.color.error};
+  position: absolute;
+  margin: 10px;
+
+  img {
+    margin-right: 10px;
   }
 `
 
@@ -253,7 +270,9 @@ class Journals extends Component {
     slug: '',
     deleted: '',
     user: {}, 
-    journalStatus: 'Loading...'
+    journalStatus: 'Loading...',
+    fieldError: '', 
+    errorMessage: ''
   }
 
   componentDidMount() {
@@ -321,7 +340,7 @@ class Journals extends Component {
     const { name, slug, tripID } = this.state;
 
     try {
-      const res = await axios.post('/api/trips/id', {
+      await axios.post('/api/trips/id', {
         tripID,
         name,
         slug
@@ -330,16 +349,16 @@ class Journals extends Component {
           Authorization: `Bearer ${token}`
         }
       })
-      if (res.data.errors || res.data.errmsg) {
-        this.setState({ status: res.data.message });
-      } else {
-        this.setState({
-          status: 'Trip updated! 💃'
-        })
-      }
+      this.setState({
+        status: 'Trip updated! 💃',
+        fieldError: '',
+        errorMessage: ''
+      })
     } catch(e) {
-      console.log(e);
-      this.setState({ status: 'Error updating trip.' });
+      this.setState({ 
+        errorMessage: e.response.data.message,
+        fieldError: e.response.data.field
+      })
     }
   }
   
@@ -396,7 +415,8 @@ class Journals extends Component {
   }
 
   render() {
-    const { journals, name, status, slug, deleted, tripID, user, journalStatus } = this.state;
+    const { journals, name, status, slug, deleted, tripID, user, journalStatus, fieldError, errorMessage } = this.state;
+    
     const columns = [{
         Header: 'Title',
         accessor: 'title',
@@ -422,10 +442,11 @@ class Journals extends Component {
         Cell: props => <DeleteJournal onClick={this.handleJournalDelete} title={props.value.title} id={props.value._id}>Delete</DeleteJournal>
       }
     ];
+
     return (
       <React.Fragment>
         <BreadcrumbContainer>
-          <Link to={`/admin`}><img src="../../images/left-chevron.svg" alt="Left"/> Back to Trips</Link>
+          <Link to={`/admin`}><img src="../../images/left-chevron.svg" alt="Left"/> Back to My Trips</Link>
         </BreadcrumbContainer>
         <InnerContainer>
           <FormFlex>
@@ -434,12 +455,12 @@ class Journals extends Component {
                 <input type="submit" value="Delete Trip"/>
             </DeleteButton>
           </FormFlex>
-          { status || deleted ? 
-            <SuccessContainer>
-              <Status>{status || `Deleted - ${deleted}`}</Status>
-            </SuccessContainer>
-          : null}
           <Form onSubmit={this.handleFormSubmit}>
+            { status || deleted ? 
+              <SuccessContainer>
+                <Status>{status || `Deleted - ${deleted}`}</Status>
+              </SuccessContainer>
+            : null}
             <FormFlex>
               <Fieldset>
                 <Label htmlFor="name">Trip Name<span>*</span></Label>
@@ -447,7 +468,8 @@ class Journals extends Component {
               </Fieldset>
               <Fieldset>
                 <Label htmlFor="slug">Trip Slug<span>*</span></Label>
-                <Input onChange={this.handleChange} name="slug" value={slug} id="slug" maxLength="50" required />
+                <Input onChange={this.handleChange} name="slug" value={slug} id="slug" maxLength="50" required className={fieldError === 'slug' ? 'field-error' : ''} />
+                <ErrorMessage display={fieldError === 'slug' ? 'block' : 'none'}><img src="../../images/error.svg"/>{ errorMessage }</ErrorMessage>
               </Fieldset>
               <UpdateTrip type="submit" value="Update Trip"/>
             </FormFlex>
