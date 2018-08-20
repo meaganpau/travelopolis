@@ -10,6 +10,7 @@ const Card = styled('div') `
     border: solid 7px transparent;
     position: relative;
     border: solid 7px ${props => props.theme.color.font};
+    background: #fff;
 
     &:hover {
         border: solid 7px ${props => props.theme.color.main};
