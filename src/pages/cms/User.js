@@ -4,7 +4,6 @@ import styled from 'react-emotion';
 import Footer from '../../components/Footer'
 import ContentContainer from '../../components/ContentContainer';
 import DoubleTitle from '../../components/DoubleTitle';
-import { CLIENT_RENEG_LIMIT } from 'tls';
 
 const ErrorMessage = styled('span')`
     display: ${props => props.display};
@@ -42,10 +41,35 @@ const Form = styled('form')`
         &:disabled {
             background: #f0f0f0;
             color: #999;
+
+            &:hover {
+                cursor: not-allowed;
+            }
         }
 
         &.field-error {
             border: 2px solid ${props => props.theme.color.error};
+        }
+        
+        &[type="submit"] {
+            margin-top: 20px;
+            color: ${props => props.theme.color.font};
+            background: ${props => props.theme.color.main};
+            text-decoration: none;
+            padding: 5px 30px;
+            border-radius: 8px;
+            transition: 0.15s all ease;
+            border: 2px solid ${props => props.theme.color.main};
+            width: 150px;
+            text-align: center;
+            letter-spacing: 0.5px;
+
+            &:hover {
+                background: ${props => props.theme.color.font};    
+                border: 2px solid ${props => props.theme.color.font};
+                color: #fff;
+                cursor: pointer;
+            }
         }
     }
 
@@ -131,7 +155,7 @@ class AccountPage extends Component {
                 <ContentContainer>
                     <InnerContainer>
                         <DoubleTitle>My Account</DoubleTitle>
-                        { updatedUser ? <p>Successfully updated user. 🙌</p> : 
+                        { updatedUser ? <p>Successfully updated user. <span role="img" aria-label="hands up emoji">🙌</span></p> : 
                         <React.Fragment>
                             <p>Your old password is required to make any changes.</p>
                             <Form onSubmit={this.handleSubmit}>
@@ -149,9 +173,9 @@ class AccountPage extends Component {
                                 <input type="email" onChange={this.handleChange} name="email" id="email" maxLength="50" value={email} disabled />
                                 <label htmlFor="password">New Password</label>
                                 <input type="password" onChange={this.handleChange} name="password" id="password" maxLength="50" value={password} />
-                                <label htmlFor="old_password">Old Password<span>*</span><ErrorMessage display={fieldError === 'old_password' ? 'inline' : 'none'}><img src="../../images/error.svg"/> Your old password is incorrect.</ErrorMessage></label>
+                                <label htmlFor="old_password">Old Password<span>*</span><ErrorMessage display={fieldError === 'old_password' ? 'inline' : 'none'}><img src="../../images/error.svg" alt="Error"/> Your old password is incorrect.</ErrorMessage></label>
                                 <input type="password" onChange={this.handleChange} name="old_password" id="old_password" maxLength="50" value={old_password} required className={fieldError === 'old_password' ? 'field-error' : ''} />
-                                <label htmlFor="slug">Slug<span>*</span><ErrorMessage display={fieldError === 'slug' ? 'inline' : 'none'}><img src="../../images/error.svg"/> This slug is already in use.</ErrorMessage></label>
+                                <label htmlFor="slug">Slug<span>*</span><ErrorMessage display={fieldError === 'slug' ? 'inline' : 'none'}><img src="../../images/error.svg" alt="Error" /> This slug is already in use.</ErrorMessage></label>
                                 <input type="text" onChange={this.handleChange} name="slug" id="slug" maxLength="50" value={slug} required className={fieldError === 'slug' ? 'field-error' : ''} />
                                 <input type="submit" value="Update" className="btn-main" />
                             </Form>

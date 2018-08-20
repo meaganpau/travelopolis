@@ -56,7 +56,7 @@ const BreadcrumbContainer = styled('div')`
     color: ${props => props.theme.color.font};
 
     &:hover {
-      border-bottom: 2px solid ${props => props.theme.color.font};
+      border-bottom: 1px solid ${props => props.theme.color.font};
     }
   }
 `

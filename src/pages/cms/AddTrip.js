@@ -140,7 +140,7 @@ class AddTrip extends Component {
         return(
             <React.Fragment>
                 <BreadcrumbContainer>
-                    <Link to={`/admin`}><img src="../../images/left-chevron.svg" alt="Left"/> Back to My Trips</Link>
+                    <Link to={`/admin`}><img src="../../images/left-chevron.svg" alt="Left"/> <span>Back to My Trips</span></Link>
                 </BreadcrumbContainer>
                 <InnerContainer>
                     <DoubleTitle>Create A Trip</DoubleTitle>
