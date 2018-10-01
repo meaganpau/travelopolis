@@ -54,7 +54,7 @@ const MainContainer = styled('div')`
     display: flex;
 `
 
-const FormPage = props => 
+const FormPage = ({ form, bottomContent }) => 
     <MainContainer>
         <ImageBackground background="../images/giant-boat.svg">
             <Header>
@@ -64,8 +64,8 @@ const FormPage = props =>
             </Header>
         </ImageBackground>
         <FormContainer
-            form={props.form}
-            bottomContent={props.bottomContent}
+            form={form}
+            bottomContent={bottomContent}
         />
     </MainContainer>
 

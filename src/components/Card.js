@@ -63,16 +63,15 @@ const Card = styled('div') `
     }
 `
 
-const StyledCard = props => 
+const StyledCard = ({ cms, name, subtext}) => 
     <Card>
-        { props.cms ? 
+        {cms ? 
             <div className="hidden">
                 <p>Edit <img src="../images/edit.svg" alt="Edit"/></p>
             </div>
-        : null
-        }
-        <h3>{props.name}</h3>
-        <h4>{props.subtext}</h4>
+        : null }
+        <h3>{name}</h3>
+        <h4>{subtext}</h4>
     </Card>
 
 export default StyledCard;

@@ -7,9 +7,9 @@ const Container = styled ('div')`
   position: relative;
 `
 
-const MainBackground = props =>
+const MainBackground = ({ children }) =>
     <Container>
-        { props.children }
+        { children }
     </Container>
 
 export default MainBackground;

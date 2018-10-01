@@ -14,8 +14,8 @@ const Container = styled('div')`
 `
 
 const SuccessContainer = ({ children }) => 
-<Container>
-    {children}
-</Container>
+  <Container>
+      {children}
+  </Container>
 
 export default SuccessContainer;
