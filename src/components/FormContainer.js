@@ -103,15 +103,15 @@ const Logo = styled('div')`
     }
 `
 
-const FormContainer = props => 
+const FormContainer = ({ form, bottomContent }) => 
     <Container>
         <Logo>
             <img src="../images/logo-boat.svg" alt="Logo"/>
         </Logo>
         <Form>
-            {props.form}
+            {form}
         </Form>
-        {props.bottomContent}
+        {bottomContent}
     </Container>
 
 export default FormContainer;

@@ -38,10 +38,10 @@ const Card = styled('div') `
     }
 `
 
-const StyledCard = props => 
+const StyledCard = ({ name, subtext }) => 
     <Card>
-        <h3>{props.name}</h3>
-        <h4>{props.subtext}</h4>
+        <h3>{name}</h3>
+        <h4>{subtext}</h4>
     </Card>
 
 export default StyledCard;
