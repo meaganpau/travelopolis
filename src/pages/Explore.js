@@ -35,7 +35,7 @@ class Explore extends Component {
     }
 
     componentDidMount() {
-        this.getJournals(10);
+        this.getJournals(9);
     }
 
     getJournals = async qty => {

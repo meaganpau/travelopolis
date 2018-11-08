@@ -13,7 +13,13 @@ const Breadcrumbs = styled('div')`
     a {
       text-decoration: none;
       color: ${props => props.theme.color.font};
-    }
+
+      &:hover {
+          span {
+              border-bottom: 1px solid ${props => props.theme.color.font};
+          }
+      }
+    }    
 `
 
 const BreadcrumbContainer = ({ children }) =>

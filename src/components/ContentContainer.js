@@ -5,9 +5,9 @@ const MainContainer = styled('div')`
     padding: 30px 95px 100px;
 `
 
-const Container = props => (
+const Container = ({ children }) => (
     <MainContainer>
-        {props.children}
+        {children}
     </MainContainer>
 )
 

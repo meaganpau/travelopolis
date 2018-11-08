@@ -242,7 +242,7 @@ class AddJournal extends Component {
         return(
             <React.Fragment>
                 <BreadcrumbContainer>
-                    {currentTrip ? <Link to={`/admin/trip/${currentTrip._id}`}><img src="../../images/left-chevron.svg" alt="Left"/> Back to {currentTrip.name}</Link> : null}
+                    {currentTrip ? <Link to={`/admin/trip/${currentTrip._id}`}><img src="../../images/left-chevron.svg" alt="Left"/> <span>Back to {currentTrip.name}</span></Link> : null}
                 </BreadcrumbContainer>
                 <InnerContainer>
                     <DoubleTitle>Create Journal</DoubleTitle>

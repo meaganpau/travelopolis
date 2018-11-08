@@ -1,10 +1,10 @@
 import React from "react";
 import { Editor } from '@tinymce/tinymce-react';
 
-const TinyMce = props => (
+const TinyMce = ({ value, onEditorChange }) => (
     <Editor
-        value={props.value} 
-        onEditorChange={props.onEditorChange}
+        value={value} 
+        onEditorChange={onEditorChange}
         apiKey={process.env.REACT_APP_TINYMCE_API_KEY}
         init={{
             height: '40vh',

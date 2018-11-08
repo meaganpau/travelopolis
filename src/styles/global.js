@@ -4,6 +4,12 @@ const Global =
     injectGlobal`
       * {
         box-sizing: border-box;
+        ::selection {
+          background: #fdd835;
+        }
+        ::-moz-selection {
+          background: #fdd835;
+        }
       }
     
       html, input, button, select {

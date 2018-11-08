@@ -80,7 +80,7 @@ class Trips extends Component {
                             return (
                                 <li key={_id}>
                                     <Triplink to={`/admin/trip/${_id}`}>
-                                        <Card key={_id} name={name} subtext={`Created: ${creationDate}`}/>
+                                        <Card key={_id} name={name} subtext={`Created: ${creationDate}`} cms={true}/>
                                     </Triplink>
                                 </li>
                             )}

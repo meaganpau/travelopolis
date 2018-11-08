@@ -16,6 +16,11 @@ const Card = styled('div') `
 
     &:hover {
         border: solid 7px ${props => props.theme.color.font};
+
+        .hidden {
+            display: block;
+            position: absolute;
+        }
     }
 
     h3 {
@@ -23,7 +28,7 @@ const Card = styled('div') `
         font-size: 20px;
         letter-spacing: 2px;
         text-transform: uppercase;
-        margin-top: 30%;
+        margin-top: 32%;
     }
 
     h4 {
@@ -37,12 +42,36 @@ const Card = styled('div') `
         font-weight: 500;
         width: 100%;
     }
+
+    .hidden {
+        display: none;
+        color: #9f9f9f;
+        font-size: 14px;
+        letter-spacing: 1px;
+        top: 5px;
+        right: 30px;
+
+        p {
+            margin: 0;
+        }
+
+        img {
+            position: relative;
+            top: 12px;
+            right: -5px;
+        }
+    }
 `
 
-const StyledCard = props => 
+const StyledCard = ({ cms, name, subtext}) => 
     <Card>
-        <h3>{props.name}</h3>
-        <h4>{props.subtext}</h4>
+        {cms ? 
+            <div className="hidden">
+                <p>Edit <img src="../images/edit.svg" alt="Edit"/></p>
+            </div>
+        : null }
+        <h3>{name}</h3>
+        <h4>{subtext}</h4>
     </Card>
 
 export default StyledCard;

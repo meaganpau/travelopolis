@@ -21,7 +21,7 @@ const AdminRoutes = () =>
                         <Route exact path='/admin/add_journal' render={props => <AdminAddJournal user={context.user} {...props}/> } /> 
                         <Route exact path='/admin/trip/:trip' component={AdminTrip} /> 
                         <Route exact path='/admin/journal/:journal' component={AdminJournal} />
-                        {/* <Route exact path='/admin/user/:user' component={AdminUser} /> */}
+                        <Route exact path='/admin/account/' render={props => <AdminUser user={context.user} {...props} />}/>
                     </React.Fragment>
                 : 
                 <Redirect to='/' />

@@ -5,6 +5,8 @@ import axios from 'axios';
 import styled from 'react-emotion';
 import ReactTable from "react-table";
 import 'react-table/react-table.css'
+import SweetAlert from 'sweetalert-react';
+import 'sweetalert/dist/sweetalert.css';
 import { getToken } from "../../services/tokenServices";
 import DoubleTitle from '../../components/DoubleTitle';
 import InnerContainer from '../../components/InnerContainer';
@@ -125,6 +127,10 @@ const Input = styled('input')`
     border: solid 0.5px ${props => props.theme.color.inputBorder};
     border-radius: 3px;
     font-size: 18px;
+
+    &.field-error {
+      border: 2px solid ${props => props.theme.color.error};
+    }
 `
 
 const Label = styled('label')`
@@ -153,13 +159,14 @@ const DeleteButton = styled('form')`
     input {
       padding: 5px 30px;
       border-radius: 8px;
-      color: ${props => props.theme.color.error};
-      border: none;
+      color: ${props => props.theme.color.font};
+      border: 2px solid ${props => props.theme.color.font};
       background: transparent;
       transition: 0.15s all ease;
 
       &:hover {
           background: ${props => props.theme.color.error};
+          border: 2px solid ${props => props.theme.color.error};
           color: #fff;
       }
     }
@@ -232,7 +239,6 @@ const TripButton = styled(MyLink)`
   border-radius: 8px;
   transition: 0.15s all ease;
   border: 2px solid ${props => props.theme.color.accent2};
-  width: 150px;
   text-align: center;
   letter-spacing: 0.5px;
   margin-left: 10px;
@@ -241,6 +247,17 @@ const TripButton = styled(MyLink)`
       background: transparent;    
       border: 2px solid ${props => props.theme.color.accent2};
       color: ${props => props.theme.color.font};
+  }
+`
+
+const ErrorMessage = styled('p')`
+  display: ${props => props.display};
+  color: ${props => props.theme.color.error};
+  position: absolute;
+  margin: 10px;
+
+  img {
+    margin-right: 10px;
   }
 `
 
@@ -253,15 +270,18 @@ class Journals extends Component {
     slug: '',
     deleted: '',
     user: {}, 
-    journalStatus: 'Loading...'
+    journalStatus: 'Loading...',
+    fieldError: '', 
+    errorMessage: '',
+    showDeleteJournalModal: false,
+    showDeleteTripModal: false,
+    deleteTitle: ''
   }
 
   componentDidMount() {
     if (this.props.location.hasOwnProperty('deleted')) {
       const { deleted } = this.props.location;
-      this.setState({
-        deleted: `"${deleted}" deleted`
-      })
+      this.setState({ deleted })
     }
     const tripID = this.props.match.params.trip;
     this.setState({
@@ -321,7 +341,7 @@ class Journals extends Component {
     const { name, slug, tripID } = this.state;
 
     try {
-      const res = await axios.post('/api/trips/id', {
+      await axios.post('/api/trips/id', {
         tripID,
         name,
         slug
@@ -330,75 +350,95 @@ class Journals extends Component {
           Authorization: `Bearer ${token}`
         }
       })
-      if (res.data.errors || res.data.errmsg) {
-        this.setState({ status: res.data.message });
-      } else {
-        this.setState({
-          status: 'Trip updated! 💃'
-        })
-      }
+      this.setState({
+        status: 'Trip updated! 💃',
+        fieldError: '',
+        errorMessage: ''
+      })
     } catch(e) {
-      console.log(e);
-      this.setState({ status: 'Error updating trip.' });
+      this.setState({ 
+        errorMessage: e.response.data.message,
+        fieldError: e.response.data.field
+      })
     }
   }
   
-  handleDelete = async e => {    
-    e.preventDefault();
+  handleTripDelete = async () => {    
     const { tripID } = this.state;
-    if (window.confirm(`Are you sure you want to delete this trip? This will also delete all linked journals.`)) {
-      const token = getToken('userToken');
-      if (token) {
-        try {
-          const res = await axios.delete(`/api/trips/delete/${tripID}`, {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          })
-          if (res.data.errors || res.data.errmsg) {
-            this.setState({ status: res.data.message });
-          } else {
-            this.props.history.push(`/admin`);
+    const token = getToken('userToken');
+    this.hideDeleteTripModal();
+    if (token) {
+      try {
+        const res = await axios.delete(`/api/trips/delete/${tripID}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
           }
-        } catch(e) {
-          console.log(e);
+        })
+        if (res.data.errors || res.data.errmsg) {
+          this.setState({ status: res.data.message });
+        } else {
+          this.props.history.push(`/admin`);
         }
+      } catch(e) {
+        console.log(e);
       }
-    }  
+    }
   }
 
-  handleJournalDelete = async e => {    
+  handleTripDeleteClick = e => {
+    e.preventDefault();
+    this.setState({ showDeleteTripModal: true })
+  }
+
+  handleJournalDeleteClick = e => {
     e.preventDefault();
     const { title, id } = e.target;
-    if (window.confirm(`Are you sure you want to delete "${title}"?`)) {
-      const token = getToken('userToken');
-      if (token) {
-        try {
-          const res = await axios.delete(`/api/journals/delete/${id}`, {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          })
-          if (res.data.errors || res.data.errmsg) {
-            this.setState({ status: res.data.message });
-          } else {
-            const { journals } = this.state;
-            this.setState({ 
-              deleted: title,
-              journals: journals.filter(journal => journal._id !== id)
-            });
+    this.setState({ 
+      showDeleteJournalModal: true,
+      deleteTitle: title,
+      deleteId: id
+    })
+  }
+  
+  hideDeleteJournalModal = () => {
+    this.setState({ showDeleteJournalModal: false })
+  }
+  
+  hideDeleteTripModal = () => {
+    this.setState({ showDeleteTripModal: false })
+  }
+
+  handleJournalDelete = async () => {
+    const { deleteId, deleteTitle } = this.state;
+    const token = getToken('userToken');
+    this.hideDeleteJournalModal();
+    if (token) {
+      try {
+        const res = await axios.delete(`/api/journals/delete/${deleteId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
           }
-        } catch(e) {
-          console.log(e);
+        })
+        if (res.data.errors || res.data.errmsg) {
+          this.setState({ status: res.data.message });
+        } else {
+          const { journals } = this.state;
+          this.setState({ 
+            deleted: deleteTitle,
+            journals: journals.filter(journal => journal._id !== deleteId)
+          });
         }
+      } catch(e) {
+        console.log(e);
       }
-    }  
+    }
   }
 
   render() {
-    const { journals, name, status, slug, deleted, tripID, user, journalStatus } = this.state;
+    const { journals, name, status, slug, deleted, tripID, user, journalStatus, fieldError, errorMessage, deleteTitle, showDeleteJournalModal, showDeleteTripModal } = this.state;
+    
     const columns = [{
-        Header: 'Title',
+        Header: 'Journal Title',
         accessor: 'title',
         className: 'title',
         width: 400
@@ -419,27 +459,50 @@ class Journals extends Component {
         Header: '',
         id: 'delete',
         accessor: d => d,
-        Cell: props => <DeleteJournal onClick={this.handleJournalDelete} title={props.value.title} id={props.value._id}>Delete</DeleteJournal>
+        Cell: props => <DeleteJournal onClick={this.handleJournalDeleteClick} title={props.value.title} id={props.value._id}>Delete</DeleteJournal> 
       }
     ];
+
     return (
       <React.Fragment>
+        <SweetAlert
+          confirmButtonColor="#f00000"
+          show={showDeleteJournalModal}
+          title="Delete Journal"
+          text={`Are you sure you want to delete "${deleteTitle}"?`}
+          type="warning"
+          showCancelButton
+          onConfirm={this.handleJournalDelete}
+          onEscapeKey={this.hideDeleteJournalModal}
+          onCancel={this.hideDeleteJournalModal}
+        />
+        <SweetAlert
+          confirmButtonColor="#f00000"
+          show={showDeleteTripModal}
+          title="Delete Trip"
+          text={`Are you sure you want to delete "${name}"? \n This will also delete all linked journals.`}
+          type="warning"
+          showCancelButton
+          onConfirm={this.handleTripDelete}
+          onEscapeKey={this.hideDeleteTripModal}
+          onCancel={this.hideDeleteTripModal}
+        />
         <BreadcrumbContainer>
-          <Link to={`/admin`}><img src="../../images/left-chevron.svg" alt="Left"/> Back to Trips</Link>
+          <Link to={`/admin`}><img src="../../images/left-chevron.svg" alt="Left"/> <span>Back to My Trips</span></Link>
         </BreadcrumbContainer>
         <InnerContainer>
           <FormFlex>
-            <DoubleTitle>Journals: {name}</DoubleTitle>
-            <DeleteButton onSubmit={this.handleDelete}>
+            <DoubleTitle>{name}</DoubleTitle>
+            <DeleteButton onSubmit={this.handleTripDeleteClick}>
                 <input type="submit" value="Delete Trip"/>
             </DeleteButton>
           </FormFlex>
-          { status || deleted ? 
-            <SuccessContainer>
-              <Status>{status || `Deleted - ${deleted}`}</Status>
-            </SuccessContainer>
-          : null}
           <Form onSubmit={this.handleFormSubmit}>
+            { status || deleted ? 
+              <SuccessContainer>
+                <Status>{status || `"${deleted}" successfully deleted. 👋`}</Status>
+              </SuccessContainer>
+            : null}
             <FormFlex>
               <Fieldset>
                 <Label htmlFor="name">Trip Name<span>*</span></Label>
@@ -447,9 +510,10 @@ class Journals extends Component {
               </Fieldset>
               <Fieldset>
                 <Label htmlFor="slug">Trip Slug<span>*</span></Label>
-                <Input onChange={this.handleChange} name="slug" value={slug} id="slug" maxLength="50" required />
+                <Input onChange={this.handleChange} name="slug" value={slug} id="slug" maxLength="50" required className={fieldError === 'slug' ? 'field-error' : ''} />
+                <ErrorMessage display={fieldError === 'slug' ? 'block' : 'none'}><img src="../../images/error.svg" alt="Error"/>{ errorMessage }</ErrorMessage>
               </Fieldset>
-              <UpdateTrip type="submit" value="Update Trip"/>
+              <UpdateTrip type="submit" value="Update"/>
             </FormFlex>
           </Form>
           <Container>

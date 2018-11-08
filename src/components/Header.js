@@ -130,10 +130,15 @@ class Header extends Component {
     }
 
     handleClick = e => {
-        e.preventDefault();
         this.setState(prevState => ({
             dropdown: !prevState.dropdown
-        }))
+        }), () => document.body.addEventListener('click', this.handleDocumentClick))
+    }
+    
+    handleDocumentClick = e => {
+        this.setState({
+            dropdown: false
+        }, () => document.body.removeEventListener('click', this.handleDocumentClick))
     }
 
     render() {
@@ -147,9 +152,8 @@ class Header extends Component {
                     </HeaderLink>
                 </InnerContainer>
                 <AppContext.Consumer>
-                    { context => {
-                        return(
-                            context.user && context.user.firstName ?
+                    { context => 
+                        context.user && context.user.firstName ?
                             <React.Fragment>
                                 <InnerContainer>
                                     <ExploreButton to="/explore">Explore</ExploreButton>
@@ -163,14 +167,13 @@ class Header extends Component {
                                 </InnerContainer>
                                 <DropdownMenu logout={context.logout} show={dropdown}/>
                             </React.Fragment>
-                            : 
+                        : 
                             <InnerContainer>
                                 <RegisterButton to="/register">Register</RegisterButton>
                                 <Divider>|</Divider>
                                 <LoginButton to="/">Login</LoginButton>
                             </InnerContainer>
-                        )
-                    }}
+                    }
                 </AppContext.Consumer>
             </HeaderContainer>
         )

@@ -51,10 +51,10 @@ const DropdownMenu = props => {
 
     return (
         <DropdownContainer show={props.show}>
-            <AccountLink to="/account">
+            <AccountLink to="/admin/account">
                 <li>
-                        <img src="/images/settings.svg" alt="Settings icon"/>
-                        My Account
+                    <img src="/images/settings.svg" alt="Settings icon"/>
+                    My Account
                 </li>
             </AccountLink>
             <li onClick={logout}>

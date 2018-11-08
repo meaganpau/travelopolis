@@ -19,6 +19,11 @@ const Text = styled('div')`
     font-size: 18px;
     font-weight: 500;
     margin-top: 50px;
+    word-break: break-word;
+
+    img {
+      max-width: 100%;
+    }
 `
 
 const Article = styled('article')`
@@ -51,7 +56,7 @@ const BreadcrumbContainer = styled('div')`
     color: ${props => props.theme.color.font};
 
     &:hover {
-      border-bottom: 2px solid ${props => props.theme.color.font};
+      border-bottom: 1px solid ${props => props.theme.color.font};
     }
   }
 `

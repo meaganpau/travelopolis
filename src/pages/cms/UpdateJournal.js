@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import axios from 'axios';
 import styled from 'react-emotion';
 import { Link } from 'react-router-dom';
+import SweetAlert from 'sweetalert-react';
+import 'sweetalert/dist/sweetalert.css';
 import { AppContext } from '../../AppContext'
 import { getToken } from '../../services/tokenServices'
 import TinyMCE from '../../components/TinyMCE';
@@ -83,7 +85,8 @@ class Journal extends Component {
     title: '',
     updatedJournal: false,
     slug: '', 
-    trip: ''
+    trip: '',
+    showDeleteJournalModal: false
   }
 
   componentDidMount() {
@@ -155,45 +158,63 @@ class Journal extends Component {
       })
   }
 
-  handleDelete = async e => {    
+  hideDeleteJournalModal = () => {
+    this.setState({ showDeleteJournalModal: false })
+  }
+
+  handleDeleteClick = e => {
     e.preventDefault();
+    this.setState({ showDeleteJournalModal: true })
+  }
+
+  handleJournalDelete = async () => {
     const { journalID, title, trip } = this.state;
-    if (window.confirm(`Are you sure you want to delete ${title}?`)) {
-      const token = getToken('userToken');
-      if (token) {
-        try {
-          const res = await axios.delete(`/api/journals/delete/${journalID}`, {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          })
-          if (res.data.errors || res.data.errmsg) {
-            this.setState({ status: res.data.message });
-          } else {
-            this.props.history.push({
-              pathname: `/admin/trip/${trip._id}`,
-              deleted: title
-            })
+    const token = getToken('userToken');
+    this.hideDeleteJournalModal();
+    if (token) {
+      try {
+        const res = await axios.delete(`/api/journals/delete/${journalID}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
           }
-        } catch(e) {
-          console.log(e);
+        })
+        if (res.data.errors || res.data.errmsg) {
+          this.setState({ status: res.data.message });
+        } else {
+          this.props.history.push({
+            pathname: `/admin/trip/${trip._id}`,
+            deleted: title
+          })
         }
+      } catch(e) {
+        console.log(e);
       }
-    }  
+    }
   }
 
   render() {
-    const { title, content, status, updatedJournal, slug, trip } = this.state;
+    const { title, content, status, updatedJournal, slug, trip, showDeleteJournalModal } = this.state;
     return (
       <React.Fragment>
+        <SweetAlert
+          confirmButtonColor="#f00000"
+          show={showDeleteJournalModal}
+          title="Delete Journal"
+          text={`Are you sure you want to delete "${title}?"`}
+          type="warning"
+          showCancelButton
+          onConfirm={this.handleJournalDelete}
+          onEscapeKey={this.hideDeleteJournalModal}
+          onCancel={this.hideDeleteJournalModal}
+        />
         <BreadcrumbContainer>
-          {trip ? <Link to={`/admin/trip/${trip._id}`}><img src="../../images/left-chevron.svg" alt="Left"/> Back to {trip.name}</Link> : null}
+          {trip ? <Link to={`/admin/trip/${trip._id}`}><img src="../../images/left-chevron.svg" alt="Left"/> <span>Back to {trip.name}</span></Link> : null}
         </BreadcrumbContainer>
         <InnerContainer>
           <TitleSection>
             <DoubleTitle>Update Journal</DoubleTitle>
             { title ? 
-              <form onSubmit={this.handleDelete}>
+              <form onSubmit={this.handleDeleteClick}>
                 <DeleteButton type="submit" value="Delete"/>
               </form>
             : null }

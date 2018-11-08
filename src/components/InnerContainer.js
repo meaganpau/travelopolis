@@ -7,9 +7,9 @@ const MainContainer = styled('div')`
     margin: 0 auto;
 `
 
-const Container = props => (
+const Container = ({ children }) => (
     <MainContainer>
-        {props.children}
+        {children}
     </MainContainer>
 )
 

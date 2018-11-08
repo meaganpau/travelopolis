@@ -16,7 +16,8 @@ class Register extends Component {
         slug: '',
         status: '',
         error: '',
-        fieldError: ''
+        fieldError: '',
+        newUser: ''
     }
 
     handleChange = e => {
@@ -29,7 +30,6 @@ class Register extends Component {
     handleSubmit = async e => {
         e.preventDefault();
         const { email, password, firstName, lastName, slug } = this.state;
-
         try {
             const res = await axios.post('/api/users', {
                 email,
@@ -39,7 +39,7 @@ class Register extends Component {
                 slug
             })
             this.setState({ 
-                newUser: res.data.email, 
+                newUser: res.data, 
                 status: 'Registered successfully!'
             });
         } catch (e) {
