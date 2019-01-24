@@ -31,7 +31,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "server": "node_modules/.bin/nodemon lib/server.js --ignore src/",
+    "server": "nodemon lib/server.js --ignore src/",
     "start": "concurrently --kill-others-on-fail \"yarn run server\" \"yarn run client\"",
     "seeds": "node lib/seeds/index.js",
     "heroku-postbuild": "cd src && yarn install --only=dev && yarn install && yarn run build"
