@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import styled from 'react-emotion';
-import axios from 'axios';
-import Header from '../components/Header';
-import InnerContainer from '../components/InnerContainer'
-import DoubleTitle from '../components/DoubleTitle';
-import Card from '../components/Card';
-import Footer from '../components/Footer';
+import React, { Component } from "react"
+import { Link } from "react-router-dom"
+import styled from "@emotion/styled"
+import axios from "axios"
+import Header from "../components/Header"
+import InnerContainer from "../components/InnerContainer"
+import DoubleTitle from "../components/DoubleTitle"
+import Card from "../components/Card"
+import Footer from "../components/Footer"
 
-const MyLink = ({...props}) => <Link {...props}>{props.children}</Link>;
+const MyLink = ({ ...props }) => <Link {...props}>{props.children}</Link>
 
-const JournalList = styled('ul')`
+const JournalList = styled("ul")`
     padding: 0;
     margin-top: 30px;
     list-style: none;
@@ -31,47 +31,51 @@ const JournalLink = styled(MyLink)`
 class Explore extends Component {
     state = {
         journals: [],
-        status: 'Loading...',
+        status: "Loading...",
     }
 
     componentDidMount() {
-        this.getJournals(9);
+        this.getJournals(9)
     }
 
-    getJournals = async qty => {
+    getJournals = async (qty) => {
         try {
             const res = await axios.get(`/api/journals/${qty}`)
             this.setState({ journals: res.data })
-        } catch(e) {
-            console.log(e);
-            this.setState({ status: 'Error getting users' })
+        } catch (e) {
+            console.log(e)
+            this.setState({ status: "Error getting users" })
         }
     }
 
     render() {
-        const { journals } = this.state;
-        return(
+        const { journals } = this.state
+        return (
             <React.Fragment>
-                <Header/>
+                <Header />
                 <InnerContainer>
                     <DoubleTitle>Explore</DoubleTitle>
-                    {journals.length > 0 ? 
+                    {journals.length > 0 ? (
                         <JournalList>
-                            {journals.map(journal =>
+                            {journals.map((journal) => (
                                 <li key={journal._id}>
-                                    <JournalLink to={`/${journal.trip.user.slug}/${journal.trip.slug}/${journal.slug}`}>
-                                        <Card name={journal.title} subtext={`By: ${journal.trip.user.firstName} ${journal.trip.user.lastName}`}/>
+                                    <JournalLink
+                                        to={`/${journal.trip.user.slug}/${journal.trip.slug}/${journal.slug}`}
+                                    >
+                                        <Card
+                                            name={journal.title}
+                                            subtext={`By: ${journal.trip.user.firstName} ${journal.trip.user.lastName}`}
+                                        />
                                     </JournalLink>
                                 </li>
-                            )}
+                            ))}
                         </JournalList>
-                    : null
-                    }
+                    ) : null}
                 </InnerContainer>
-                <Footer/>
+                <Footer />
             </React.Fragment>
         )
     }
 }
 
-export default Explore;
+export default Explore

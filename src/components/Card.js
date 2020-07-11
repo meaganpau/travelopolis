@@ -1,7 +1,7 @@
-import React from 'react';
-import styled from 'react-emotion';
+import React from "react"
+import styled from "@emotion/styled"
 
-const Card = styled('div') `
+const Card = styled("div")`
     width: 303px;
     height: 347px;
     border-radius: 8px;
@@ -15,7 +15,7 @@ const Card = styled('div') `
     word-wrap: break-word;
 
     &:hover {
-        border: solid 7px ${props => props.theme.color.font};
+        border: solid 7px ${(props) => props.theme.color.font};
 
         .hidden {
             display: block;
@@ -24,7 +24,7 @@ const Card = styled('div') `
     }
 
     h3 {
-        color: ${props => props.theme.color.font};
+        color: ${(props) => props.theme.color.font};
         font-size: 20px;
         letter-spacing: 2px;
         text-transform: uppercase;
@@ -63,15 +63,18 @@ const Card = styled('div') `
     }
 `
 
-const StyledCard = ({ cms, name, subtext}) => 
+const StyledCard = ({ cms, name, subtext }) => (
     <Card>
-        {cms ? 
+        {cms ? (
             <div className="hidden">
-                <p>Edit <img src="../images/edit.svg" alt="Edit"/></p>
+                <p>
+                    Edit <img src="../images/edit.svg" alt="Edit" />
+                </p>
             </div>
-        : null }
+        ) : null}
         <h3>{name}</h3>
         <h4>{subtext}</h4>
     </Card>
+)
 
-export default StyledCard;
+export default StyledCard

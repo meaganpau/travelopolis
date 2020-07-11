@@ -1,13 +1,13 @@
-import React, { Component, createContext } from 'react'
-import axios from 'axios';
-import { setToken, getToken, removeToken } from './services/tokenServices'
+import React, { Component, createContext } from "react"
+import axios from "axios"
+import { setToken, getToken, removeToken } from "./services/tokenServices"
 
 export const AppContext = createContext({
-  user: null,
-  isAuthenticated: false,
-  finishedLoading: false,
-  login: () => {},
-  logout: () => {}
+    user: null,
+    isAuthenticated: false,
+    finishedLoading: false,
+    login: () => {},
+    logout: () => {},
 })
 
 export default class AppProvider extends Component {
@@ -18,58 +18,58 @@ export default class AppProvider extends Component {
             login: this.login,
             logout: this.logout,
             isAuthenticated: false,
-            finishedLoading: false
+            finishedLoading: false,
         }
     }
 
     async componentDidMount() {
-        await this.getCurrentUser();
+        await this.getCurrentUser()
     }
 
     login = async (email, password) => {
         try {
-            const res = await axios.post('/api/login', { email, password });
-            setToken('userToken', res.data.token);
-            return await this.getCurrentUser();
+            const res = await axios.post("/api/login", { email, password })
+            setToken("userToken", res.data.token)
+            return await this.getCurrentUser()
         } catch (e) {
-            console.log(e.response);
-            return e.response.data.err;
+            console.log(e.response)
+            return e.response.data.err
         }
     }
 
     getCurrentUser = async () => {
-        const token = getToken('userToken');
+        const token = getToken("userToken")
         if (token) {
             try {
-                const res = await axios.get('/api/users/current', {
+                const res = await axios.get("/api/users/current", {
                     headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-                this.setState({ 
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
+                this.setState({
                     user: res.data.user,
                     isAuthenticated: true,
-                    finishedLoading: true
+                    finishedLoading: true,
                 })
-            } catch (e) { 
-                removeToken('userToken');
-                const { status, data } = e.response;
+            } catch (e) {
+                removeToken("userToken")
+                const { status, data } = e.response
                 if (status !== 200) {
-                    this.setState({ 
-                        finishedLoading: true
-                    })  
+                    this.setState({
+                        finishedLoading: true,
+                    })
                 }
-                return data.err;
+                return data.err
             }
         } else {
-            this.setState({ 
-                finishedLoading: true
-            })   
+            this.setState({
+                finishedLoading: true,
+            })
         }
-    };
+    }
 
     componentDidUpdate = (prevProps, prevState) => {
-        const token = getToken('userToken')
+        const token = getToken("userToken")
         if (this.state.isAuthenticated !== prevState.isAuthenticated) {
             if (token) {
                 this.getCurrentUser()
@@ -77,15 +77,15 @@ export default class AppProvider extends Component {
         }
     }
 
-  logout = () => {
-    this.setState({ user: null })
-  }
+    logout = () => {
+        this.setState({ user: null })
+    }
 
-  render() {
-    return (
-      <AppContext.Provider value={this.state}>
-        {this.state.finishedLoading && this.props.children}
-      </AppContext.Provider>
-    )
-  }
+    render() {
+        return (
+            <AppContext.Provider value={this.state}>
+                {this.state.finishedLoading && this.props.children}
+            </AppContext.Provider>
+        )
+    }
 }

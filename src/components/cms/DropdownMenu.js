@@ -1,19 +1,19 @@
-import React from 'react';
-import styled from 'react-emotion';
-import { Link } from 'react-router-dom';
-import { removeToken } from "../../services/tokenServices";
+import React from "react"
+import styled from "@emotion/styled"
+import { Link } from "react-router-dom"
+import { removeToken } from "../../services/tokenServices"
 
-const MyLink = ({...props}) => <Link {...props}>{props.children}</Link>;
+const MyLink = ({ ...props }) => <Link {...props}>{props.children}</Link>
 
 const AccountLink = styled(MyLink)`
     text-decoration: none;
-    color: ${props => props.theme.color.font};
+    color: ${(props) => props.theme.color.font};
     display: flex;
     align-items: center;
 `
 
-const DropdownContainer = styled('ul')`
-    display: ${props => props.show ? 'block' : 'none'};
+const DropdownContainer = styled("ul")`
+    display: ${(props) => (props.show ? "block" : "none")};
     position: absolute;
     top: 100px;
     right: 50px;
@@ -43,22 +43,22 @@ const DropdownContainer = styled('ul')`
     }
 `
 
-const DropdownMenu = props => {
+const DropdownMenu = (props) => {
     const logout = () => {
-        removeToken('userToken');
-        props.logout();
-    };
+        removeToken("userToken")
+        props.logout()
+    }
 
     return (
         <DropdownContainer show={props.show}>
             <AccountLink to="/admin/account">
                 <li>
-                    <img src="/images/settings.svg" alt="Settings icon"/>
+                    <img src="/images/settings.svg" alt="Settings icon" />
                     My Account
                 </li>
             </AccountLink>
             <li onClick={logout}>
-                <img src="/images/logout.svg" alt="Log out icon"/>
+                <img src="/images/logout.svg" alt="Log out icon" />
                 Log out
             </li>
         </DropdownContainer>

@@ -1,7 +1,4 @@
-import { injectGlobal } from 'emotion';
-
-const Global = 
-    injectGlobal`
+const Global = `
       * {
         box-sizing: border-box;
         ::selection {
@@ -47,4 +44,4 @@ const Global =
       }
   `
 
-export default Global;
+export default Global

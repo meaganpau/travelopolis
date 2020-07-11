@@ -1,7 +1,7 @@
-import React from 'react';
-import styled from 'react-emotion';
+import React from "react"
+import styled from "@emotion/styled"
 
-const Container = styled('div')`
+const Container = styled("div")`
     margin: 12% auto 100px;
     position: relative;
     width: 600px;
@@ -11,12 +11,12 @@ const Container = styled('div')`
         letter-spacing: 0.7px;
         display: inline-block;
         margin-top: 30px;
-        color: ${props => props.theme.color.font};
+        color: ${(props) => props.theme.color.font};
         font-size: 16px;
         transition: 0.15s all ease;
-        
+
         &:hover {
-            color: ${props => props.theme.color.main};
+            color: ${(props) => props.theme.color.main};
         }
     }
 
@@ -24,9 +24,9 @@ const Container = styled('div')`
         position: absolute;
     }
 `
-    
-const Form = styled('div')`
-    border: solid 3.5px ${props => props.theme.color.font};
+
+const Form = styled("div")`
+    border: solid 3.5px ${(props) => props.theme.color.font};
     padding: 50px;
     background: #fff;
 
@@ -43,7 +43,7 @@ const Form = styled('div')`
         text-align: left;
 
         span {
-            color: ${props => props.theme.color.error};
+            color: ${(props) => props.theme.color.error};
         }
     }
 
@@ -51,17 +51,17 @@ const Form = styled('div')`
         display: block;
         width: 100%;
         padding: 10px 20px;
-        border: solid 0.5px ${props => props.theme.color.inputBorder};
+        border: solid 0.5px ${(props) => props.theme.color.inputBorder};
         border-radius: 3px;
         font-size: 18px;
 
         &.field-error {
-            border: 2px solid ${props => props.theme.color.error};
+            border: 2px solid ${(props) => props.theme.color.error};
         }
     }
 
     .error {
-        color: ${props => props.theme.color.error};
+        color: ${(props) => props.theme.color.error};
     }
 
     .btn-main {
@@ -70,27 +70,27 @@ const Form = styled('div')`
         font-size: 18px;
         width: 50%;
         margin: 40px auto 0;
-        background: ${props => props.theme.color.main};
+        background: ${(props) => props.theme.color.main};
         border: none;
         letter-spacing: 0.7px;
         transition: 0.15s all ease;
-        color: ${props => props.theme.color.font};
+        color: ${(props) => props.theme.color.font};
         text-decoration: none;
 
         &:hover {
             cursor: pointer;
-            background: ${props => props.theme.color.font};
+            background: ${(props) => props.theme.color.font};
             color: #fff;
         }
     }
 `
 
-const Logo = styled('div')`
+const Logo = styled("div")`
     position: absolute;
     top: -70px;
     left: 50%;
     transform: translateX(-50%);
-    background: ${props => props.theme.color.font};
+    background: ${(props) => props.theme.color.font};
     border-radius: 50%;
     height: 115px;
     width: 115px;
@@ -103,15 +103,14 @@ const Logo = styled('div')`
     }
 `
 
-const FormContainer = ({ form, bottomContent }) => 
+const FormContainer = ({ form, bottomContent }) => (
     <Container>
         <Logo>
-            <img src="../images/logo-boat.svg" alt="Logo"/>
+            <img src="../images/logo-boat.svg" alt="Logo" />
         </Logo>
-        <Form>
-            {form}
-        </Form>
+        <Form>{form}</Form>
         {bottomContent}
     </Container>
+)
 
-export default FormContainer;
+export default FormContainer

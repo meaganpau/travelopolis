@@ -1,12 +1,12 @@
-import React from 'react';
-import styled from 'react-emotion';
-import { Link, Redirect } from 'react-router-dom';
-import { AppContext } from '../AppContext';
-import FormPage from '../components/FormPage';
-import LoginForm from '../components/LoginForm'; 
-import Footer from '../components/Footer'; 
+import React from "react"
+import styled from "@emotion/styled"
+import { Link, Redirect } from "react-router-dom"
+import { AppContext } from "../AppContext"
+import FormPage from "../components/FormPage"
+import LoginForm from "../components/LoginForm"
+import Footer from "../components/Footer"
 
-const LoginContainer = styled('div')`
+const LoginContainer = styled("div")`
     position: relative;
 
     footer {
@@ -17,21 +17,26 @@ const LoginContainer = styled('div')`
     }
 `
 
-const LoginPage = props =>
+const LoginPage = (props) => (
     <LoginContainer>
         <AppContext.Consumer>
-            {context => {
-                return(
-                    context.user && context.isAuthenticated ? <Redirect to='/admin' />
-                    : 
+            {(context) => {
+                return context.user && context.isAuthenticated ? (
+                    <Redirect to="/admin" />
+                ) : (
                     <FormPage
-                        form={<LoginForm login={context.login}/>}
-                        bottomContent={<Link to="/register" className="underline-link">Create account</Link>}
+                        form={<LoginForm login={context.login} />}
+                        bottomContent={
+                            <Link to="/register" className="underline-link">
+                                Create account
+                            </Link>
+                        }
                     />
                 )
             }}
         </AppContext.Consumer>
         <Footer />
     </LoginContainer>
+)
 
-export default LoginPage;
+export default LoginPage

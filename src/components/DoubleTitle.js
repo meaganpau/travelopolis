@@ -1,8 +1,8 @@
-import React from 'react'
-import styled from 'react-emotion'
+import React from "react"
+import styled from "@emotion/styled"
 
-const Header = styled('h1')`
-    text-shadow: -3px 0 ${props => props.theme.color.main};
+const Header = styled("h1")`
+    text-shadow: -3px 0 ${(props) => props.theme.color.main};
     font-size: 48px;
     text-transform: uppercase;
     font-weight: bold;
@@ -11,9 +11,6 @@ const Header = styled('h1')`
     line-height: 1.2;
 `
 
-const DoubleTitle = ({ children }) => 
-    <Header>
-        { children }
-    </Header>
+const DoubleTitle = ({ children }) => <Header>{children}</Header>
 
-export default DoubleTitle;
+export default DoubleTitle

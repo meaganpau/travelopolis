@@ -1,23 +1,23 @@
-import React from 'react';
-import styled from 'react-emotion';
-import { Link } from 'react-router-dom';
-import FormContainer from './FormContainer'
+import React from "react"
+import styled from "@emotion/styled"
+import { Link } from "react-router-dom"
+import FormContainer from "./FormContainer"
 
-const ImageBackground = styled('div')`
-    background-image: url('${props => props.background}');
+const ImageBackground = styled("div")`
+    background-image: url('${(props) => props.background}');
     background-size: cover;
     background-repeat: no-repeat;
-    background-color: ${props => props.theme.color.main};
+    background-color: ${(props) => props.theme.color.main};
     color: #fff;
     min-height: 100vh;
     width: 40%;
 `
 
-const Header = styled('div')`
+const Header = styled("div")`
     padding-top: 40%;
     text-align: right;
     padding-right: 10%;
-    
+
     h1 {
         font-size: 56px;
         font-weight: bold;
@@ -45,16 +45,16 @@ const Header = styled('div')`
 
         &:hover {
             background: #fff;
-            color: ${props => props.theme.color.main}
+            color: ${(props) => props.theme.color.main};
         }
     }
 `
 
-const MainContainer = styled('div')`
+const MainContainer = styled("div")`
     display: flex;
 `
 
-const FormPage = ({ form, bottomContent }) => 
+const FormPage = ({ form, bottomContent }) => (
     <MainContainer>
         <ImageBackground background="../images/giant-boat.svg">
             <Header>
@@ -63,10 +63,8 @@ const FormPage = ({ form, bottomContent }) =>
                 <Link to="/explore">Explore</Link>
             </Header>
         </ImageBackground>
-        <FormContainer
-            form={form}
-            bottomContent={bottomContent}
-        />
+        <FormContainer form={form} bottomContent={bottomContent} />
     </MainContainer>
+)
 
-export default FormPage;
+export default FormPage
