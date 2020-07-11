@@ -3,24 +3,24 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@tinymce/tinymce-react": "^2.2.5",
-    "axios": "^0.18.0",
-    "bcrypt": "^3.0.0",
-    "config": "^2.0.0",
-    "date-fns": "^1.29.0",
-    "dotenv": "^6.0.0",
-    "emotion": "^9.2.6",
-    "emotion-theming": "^9.2.6",
-    "express": "^4.16.3",
-    "jsonwebtoken": "^8.3.0",
+    "@tinymce/tinymce-react": "^3.6.0",
+    "axios": "^0.19.2",
+    "bcrypt": "^5.0.0",
+    "config": "^3.3.1",
+    "date-fns": "^2.14.0",
+    "dotenv": "^8.2.0",
+    "emotion": "^10.0.27",
+    "emotion-theming": "^10.0.27",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "merge": ">=1.2.1",
-    "mongoose": "^5.1.5",
-    "react": "^16.4.0",
-    "react-dom": "^16.4.0",
-    "react-emotion": "^9.2.6",
-    "react-router-dom": "^4.3.1",
-    "react-scripts": "1.1.4",
-    "react-table": "^6.8.6",
+    "mongoose": "^5.9.23",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-emotion": "^10.0.0",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "3.4.1",
+    "react-table": "^7.2.2",
     "sweetalert-react": "^0.4.11"
   },
   "scripts": {
@@ -35,7 +35,19 @@
   },
   "proxy": "http://localhost:8080",
   "devDependencies": {
-    "concurrently": "^3.5.1",
-    "nodemon": "^1.17.5"
+    "concurrently": "^5.2.0",
+    "nodemon": "^2.0.4"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
