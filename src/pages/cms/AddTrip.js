@@ -124,6 +124,7 @@ class AddTrip extends Component {
             }
         } catch (e) {
             console.log(e)
+            this.setState({ status: (e.response && e.response.data && e.response.data.message) || "Something went wrong. Please try again." })
         }
     }
 

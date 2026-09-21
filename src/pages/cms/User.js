@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 import axios from "axios"
+import { getToken } from "../../services/tokenServices"
 import styled from "@emotion/styled"
 import Footer from "../../components/Footer"
 import ContentContainer from "../../components/ContentContainer"
@@ -122,19 +123,26 @@ class AccountPage extends Component {
 
     handleSubmit = async (e) => {
         e.preventDefault()
-        const { firstName, lastName, slug, _id, old_password } = this.state
+        const { firstName, lastName, slug, old_password } = this.state
 
         let password = this.state.password ? this.state.password : old_password
 
         try {
-            const res = await axios.post("/api/users/update", {
-                _id,
-                password,
-                old_password,
-                firstName,
-                lastName,
-                slug,
-            })
+            const res = await axios.post(
+                "/api/users/update",
+                {
+                    password,
+                    old_password,
+                    firstName,
+                    lastName,
+                    slug,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${getToken("userToken")}`,
+                    },
+                }
+            )
             this.setState({
                 updatedUser: res.data,
                 fieldError: "",

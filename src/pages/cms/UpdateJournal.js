@@ -2,8 +2,7 @@ import React, { Component } from "react"
 import axios from "axios"
 import styled from "@emotion/styled"
 import { Link } from "react-router-dom"
-import SweetAlert from "sweetalert-react"
-import "sweetalert/dist/sweetalert.css"
+import ConfirmDialog from "../../components/ConfirmDialog"
 import { AppContext } from "../../AppContext"
 import { getToken } from "../../services/tokenServices"
 import TinyMCE from "../../components/TinyMCE"
@@ -151,6 +150,7 @@ class Journal extends Component {
                 }
             } catch (e) {
                 console.log(e)
+                this.setState({ status: (e.response && e.response.data && e.response.data.message) || "Something went wrong. Please try again." })
             }
         }
     }
@@ -195,6 +195,7 @@ class Journal extends Component {
                 }
             } catch (e) {
                 console.log(e)
+                this.setState({ status: (e.response && e.response.data && e.response.data.message) || "Something went wrong. Please try again." })
             }
         }
     }
@@ -211,15 +212,11 @@ class Journal extends Component {
         } = this.state
         return (
             <React.Fragment>
-                <SweetAlert
-                    confirmButtonColor="#f00000"
+                <ConfirmDialog
                     show={showDeleteJournalModal}
                     title="Delete Journal"
                     text={`Are you sure you want to delete "${title}?"`}
-                    type="warning"
-                    showCancelButton
                     onConfirm={this.handleJournalDelete}
-                    onEscapeKey={this.hideDeleteJournalModal}
                     onCancel={this.hideDeleteJournalModal}
                 />
                 <BreadcrumbContainer>

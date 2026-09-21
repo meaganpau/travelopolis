@@ -5,8 +5,7 @@ import axios from "axios"
 import styled from "@emotion/styled"
 import ReactTable from "react-table-v6"
 import "react-table-v6/react-table.css"
-import SweetAlert from "sweetalert-react"
-import "sweetalert/dist/sweetalert.css"
+import ConfirmDialog from "../../components/ConfirmDialog"
 import { getToken } from "../../services/tokenServices"
 import DoubleTitle from "../../components/DoubleTitle"
 import InnerContainer from "../../components/InnerContainer"
@@ -388,6 +387,7 @@ class Journals extends Component {
                 }
             } catch (e) {
                 console.log(e)
+                this.setState({ status: (e.response && e.response.data && e.response.data.message) || "Something went wrong. Please try again." })
             }
         }
     }
@@ -442,6 +442,7 @@ class Journals extends Component {
                 }
             } catch (e) {
                 console.log(e)
+                this.setState({ status: (e.response && e.response.data && e.response.data.message) || "Something went wrong. Please try again." })
             }
         }
     }
@@ -516,26 +517,18 @@ class Journals extends Component {
 
         return (
             <React.Fragment>
-                <SweetAlert
-                    confirmButtonColor="#f00000"
+                <ConfirmDialog
                     show={showDeleteJournalModal}
                     title="Delete Journal"
                     text={`Are you sure you want to delete "${deleteTitle}"?`}
-                    type="warning"
-                    showCancelButton
                     onConfirm={this.handleJournalDelete}
-                    onEscapeKey={this.hideDeleteJournalModal}
                     onCancel={this.hideDeleteJournalModal}
                 />
-                <SweetAlert
-                    confirmButtonColor="#f00000"
+                <ConfirmDialog
                     show={showDeleteTripModal}
                     title="Delete Trip"
                     text={`Are you sure you want to delete "${name}"? \n This will also delete all linked journals.`}
-                    type="warning"
-                    showCancelButton
                     onConfirm={this.handleTripDelete}
-                    onEscapeKey={this.hideDeleteTripModal}
                     onCancel={this.hideDeleteTripModal}
                 />
                 <BreadcrumbContainer>

@@ -163,7 +163,11 @@ class AddJournal extends Component {
                 }
             } catch (e) {
                 console.log(e)
-                this.setState({ status: "Error creating journal." })
+                this.setState({
+                    status:
+                        (e.response && e.response.data && e.response.data.message) ||
+                        "Error creating journal.",
+                })
             }
         }
     }
