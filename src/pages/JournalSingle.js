@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import { Link } from "react-router-dom"
 import { formatDate } from "../util/helpers"
+import { cleanHtml } from "../util/sanitize"
 import styled from "@emotion/styled"
 import axios from "axios"
 import Header from "../components/Header"
@@ -163,7 +164,9 @@ class Journal extends Component {
                                 <Date>{formatDate(date)}</Date>
                             </MetaContainer>
                             <Text
-                                dangerouslySetInnerHTML={{ __html: content }}
+                                dangerouslySetInnerHTML={{
+                                    __html: cleanHtml(content),
+                                }}
                             />
                         </Article>
                     ) : (

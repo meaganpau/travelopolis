@@ -94,7 +94,7 @@ They live in a file called `.env` in the project's top-level folder. It is not c
 | `PORT` | Port for the Express API. Must match `"proxy"` in `package.json`. | `3050` |
 | `MONGODB_URI` | Where the database is. | `mongodb://127.0.0.1:27017/tripJournals` |
 | `TOKEN_SECRET` | Secret used to sign login tokens. Anyone who knows it can pretend to be any user, so keep it private and use a different one in production. | any long random string (`.env.example` has a command to make one) |
-| `REACT_APP_TINYMCE_API_KEY` | API key for the TinyMCE rich text editor, from https://www.tiny.cloud. It is baked into the built React app. | your key |
+| `REACT_APP_TINYMCE_API_KEY` | API key for the TinyMCE rich text editor, from https://www.tiny.cloud (a free account works). The editor is loaded from Tiny Cloud, so it won't work without a key, and your site's domains (and `localhost`) need to be listed as approved domains in your Tiny account. The key is baked into the built React app. | your key |
 
 The React dev server's port (3000) is set in the `client` script in `package.json`, not in `.env`. If both used `PORT`, the API and the React app would fight over the same port.
 
@@ -117,6 +117,7 @@ The server also still reads a `config/` folder (gitignored) if a value isn't in 
 - Creating, editing and deleting trips and journals needs a logged-in user, and you can only change **your own** trips and journals (a journal belongs to whoever owns its trip).
 - Public pages (`/api/users/slug/...`, trips and journals lists) never include email addresses or password hashes. Only `/api/users/current` returns the logged-in user's own email.
 - Passwords are hashed with bcrypt before they are saved.
+- Journal content is HTML, so it is cleaned with [DOMPurify](https://github.com/cure53/DOMPurify) (`src/util/sanitize.js`) every time it is shown. This stops anyone from saving scripts in a journal that would run in other people's browsers. Embedded videos are only allowed from YouTube and Vimeo.
 
 ## Checking for vulnerable packages
 

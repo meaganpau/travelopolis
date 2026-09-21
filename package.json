@@ -16,9 +16,10 @@
   "devDependencies": {
     "@emotion/core": "^10.0.28",
     "@emotion/styled": "^10.0.27",
-    "@tinymce/tinymce-react": "^3.14.0",
+    "@tinymce/tinymce-react": "^6.3.0",
     "axios": "^1.20.0",
     "concurrently": "^9.0.0",
+    "dompurify": "^3.4.15",
     "emotion-theming": "^10.0.27",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
